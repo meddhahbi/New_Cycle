@@ -17,8 +17,14 @@ app.use(express.urlencoded({
 });*/
 
 
+app.use('/',userRoute);
+
+
+
+
+
 //*test pour la connection de la base de données
-app.get('/',userRoute);
+//app.get('/',userRoute);
 
 
 
