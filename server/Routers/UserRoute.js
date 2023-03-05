@@ -25,7 +25,13 @@ route.post('/login',(req,res,next)=>{
 })
 
 
-
+// route.delete('/logout',(req,res,next)=>{
+//     userModel.logout(req.body.token)
+//     .then((res)=>res.status(200).json({
+//         msg:'Logout success'
+//     }))
+//     .catch((err)=>res.status(400).json({error:err}));
+// })
 
 
 

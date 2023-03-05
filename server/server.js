@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+require('dotenv').config();
 const userRoute = require('./Routers/UserRoute');
 
 //? reception et envoie de données avec le format json 
