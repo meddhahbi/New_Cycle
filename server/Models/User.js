@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-require('dotenv').config();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -18,10 +17,10 @@ let schemaUser = mongoose.Schema({
 
 
 
-var url = 'mongodb://localhost:27018/newCycle';
+//var url = 'mongodb://localhost:27018/newCycle';
 
 var User = mongoose.model('User',schemaUser);
-//var url = process.env.URL;
+var url = process.env.URL;
 
 var privateKey = "this is my secret key testjsdjsbdjdbdjbcjbkajdbqsjq"
 
@@ -108,3 +107,14 @@ exports.login=(email,password)=>{
     })
 }
 
+// exports.logout=(req,res,next)=>{
+//     req.logout((err)=>{
+//         if(err){
+//             console.log(err);
+//             res.status(500).send('An error occurred');
+//         }else{
+//                 res.clearCookie('connect.sid');
+//                 res.status(200).send('Logout successful');
+//         }
+//     });
+// }
