@@ -18,10 +18,10 @@ let schemaUser = mongoose.Schema({
 
 
 
-var url = 'mongodb://localhost:27018/newCycle';
+//var url = 'mongodb://localhost:27017/newCycle';
 
 var User = mongoose.model('User',schemaUser);
-//var url = process.env.URL;
+var url = process.env.URL;
 
 var privateKey = "this is my secret key testjsdjsbdjdbdjbcjbkajdbqsjq"
 

@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 const userRoute = require('./Routers/UserRoute');
+const passwordReset = require('./Routers/passwordReset')
+
 
 //? reception et envoie de données avec le format json 
 app.use(express.json());
@@ -18,6 +20,7 @@ app.use(express.urlencoded({
 
 
 app.use('/',userRoute);
+app.use('/api/password-reset',passwordReset);
 
 
 
