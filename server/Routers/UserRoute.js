@@ -1,5 +1,6 @@
 const route = require('express').Router();
 const userModel = require('../Models/User');
+const path = require('path');
 
 
 // route.get('/', (req,res,next)=>{
@@ -23,6 +24,39 @@ route.post('/login',(req,res,next)=>{
     }))
     .catch((err)=>res.status(400).json({error:err}));
 })
+
+
+
+// route.get('/verify/:userId/:uniqueString',(req,res,next)=>{
+//     userModel.verify(req.params.userId,req.params.uniqueString)
+//     .then((user)=>res.status(200).json({
+//         user:user,
+//         msg:'User Verification successfully'
+//     }))
+//     .catch((err)=>res.status(400).json({error:err}));
+// })
+
+
+
+
+
+//? Verified page route
+
+
+route.get('/verified', (req,res)=>{
+    res.sendFile(path.join(__dirname,"./../Utils/verified.html"));
+})
+
+
+
+// route.post('/verifyuser/:activationcode',(req,res,next)=>{
+//     userModel.verifyuser(req.params.activationcode)
+//     .then(()=>res.status(200).json({
+//         msg:'User Verification success',
+//     })).catch((err)=>res.status(400).json({error:err}));
+// })
+
+
 
 
 // route.delete('/logout',(req,res,next)=>{
