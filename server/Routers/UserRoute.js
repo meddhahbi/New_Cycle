@@ -25,6 +25,15 @@ route.post('/login',(req,res,next)=>{
     .catch((err)=>res.status(400).json({error:err}));
 })
 
+route.post('/clientLogin',(req,res,next)=>{
+    userModel.clentLogin(req.body.email,req.body.password)
+    .then((r)=>res.status(200).json({
+        token:r.token,
+        role:r.role
+    }))
+    .catch((err)=>res.status(400).json({error:err}));
+})
+
 
 
 // route.get('/verify/:userId/:uniqueString',(req,res,next)=>{

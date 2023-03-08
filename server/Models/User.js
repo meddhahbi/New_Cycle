@@ -251,7 +251,7 @@ exports.login=(email,password)=>{
                 reject("Veuillez vérifiez votre boite email pour l'activation");
             }else{
                 bcrypt.compare(password, user.password).then((same)=>{
-                    //console.log("same password");
+                    console.log("same password");
                         if(same){
                             //?send token
                             let token = jwt.sign({
@@ -273,6 +273,58 @@ exports.login=(email,password)=>{
                     mongoose.disconnect();
                     reject(err);
                 })
+            }
+        })
+    })
+}
+
+exports.clentLogin=(email,password)=>{
+    return new Promise((resolve, reject)=>{
+        mongoose.connect(url,{
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        }).then(()=>{
+            return User.findOne({ email:email})
+        }).then((user)=>{
+            if(!user){
+                mongoose.disconnect();
+                reject("this email does not exist");
+            }else if(user && bcrypt.compare(password, user.password) &&!user.isActive){
+
+                mongoose.disconnect();
+                reject("Veuillez vérifiez votre boite email pour l'activation");
+            }else{
+                let role = user.role;
+                if(user.role === "client"){
+                    // console.log(user)
+                    bcrypt.compare(password, user.password).then((same)=>{
+                        //console.log("same password");
+                            if(same){
+                                //?send token
+                                let token = jwt.sign({
+                                    id:user._id,
+                                    username:user.username
+                                },privateKey,{
+                                    expiresIn:'1h',
+                                })
+                                mongoose.disconnect();
+                                resolve({token, role});
+                                // resolve(role);
+                                // console.log(role)
+                                jwt.decode();
+                                // return user;
+    
+    
+                            }else{
+                                mongoose.disconnect();
+                                reject('invalid password')
+                            }
+                    }).catch((err)=>{
+                        mongoose.disconnect();
+                        reject(err);
+                    })
+                }
+                
             }
         })
     })
