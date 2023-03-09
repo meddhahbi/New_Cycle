@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { sendConfirmationEmail } = require('../Config/nodemailer');
+const { sendConfirmationEmail, sendResetPassword } = require('../Config/nodemailer');
 
 
 
@@ -175,10 +175,6 @@ var privateKey = "this is my secret key testjsdjsbdjdbdjbcjbkajdbqsjq"
 // }
 
 
-
-
-
-
 exports.register=(username,email,password,phone,postal,role)=>{
     return new Promise((resolve,reject)=>{
         mongoose.connect(url,{
@@ -190,7 +186,7 @@ exports.register=(username,email,password,phone,postal,role)=>{
             }).then((doc)=>{
                 if(doc){
                     mongoose.disconnect();
-                    reject('this email is exist');
+                    reject('this email exists');
                 }else{
                     const caractere = "123456789abcdefghijklmnopqrstuvwyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
                     let activationCode = "";
@@ -215,11 +211,6 @@ exports.register=(username,email,password,phone,postal,role)=>{
                             sendConfirmationEmail(user.email,user.activationCode);
                           //? verification mail method
                             //sendVerificationMail(resolve,res); 
-
-
-
-
-
                         }).catch((err)=>{
                             mongoose.disconnect();
                             reject(err);
@@ -279,6 +270,7 @@ exports.login=(email,password)=>{
 }
 
 
+
 //? Email verification
 // exports.verufyUser = (activationCode)=>{
 //     return new Promise((resolve,reject)=>{
@@ -304,16 +296,9 @@ exports.login=(email,password)=>{
 //                     });
 //                 }
 //             });
-//         });
-
-
-   
+//         });   
 //         });
 // };
-
-
-
-
 
 // exports.logout=(req,res,next)=>{
 //     req.logout((err)=>{
@@ -326,3 +311,55 @@ exports.login=(email,password)=>{
 //         }
 //     });
 // }
+
+
+exports.resetPassword=(email)=>{
+    return new Promise((resolve,reject)=>{
+        mongoose.connect(url,{
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        }).then(()=>{
+            return User.findOne({
+                email:email
+            }).then((doc)=>{
+                if(doc){
+                    //console.log(email);
+                    resolve(sendResetPassword(email));
+                    return true;
+                }else{
+                    mongoose.disconnect();
+                    reject('this email does not  exists');
+                }
+            })
+        })
+    })    
+}
+
+
+exports.updatePassword = async (_id, password) => {
+    try {
+      await mongoose.connect(url, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+      });
+      const user = await User.findById(_id);
+      if (!user) {
+        mongoose.disconnect();
+        throw new Error('User not found');
+      }
+      console.log(_id);
+      console.log(password);
+      const hashedPassword = await bcrypt.hash(password, 10);
+      console.log(hashedPassword);
+      user.password = hashedPassword;
+      const updatedUser = await user.save();
+      mongoose.disconnect();
+      return updatedUser;
+    } catch (err) {
+      console.log(err);
+      mongoose.disconnect();
+      throw new Error('Failed to update password');
+    }
+    
+  };
+  

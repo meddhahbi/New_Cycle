@@ -3,6 +3,7 @@ const userModel = require('../Models/User');
 const path = require('path');
 
 
+
 // route.get('/', (req,res,next)=>{
 //     userModel.testConnect().then((msg)=>res.send(msg)).catch((err)=>res.send(err))
 // })
@@ -16,6 +17,22 @@ route.post('/register',(req,res,next)=>{
     .catch((err)=>res.status(400).json({error:err}));
 })
 
+route.post('/resetPwd',(req,res,next)=>{
+    userModel.resetPassword(req.body.email)
+    .then((user)=>res.status(200).json({
+        msg:'Email sent successfully'
+    }))
+    .catch((err)=>res.status(400).json({error:err}));
+})  
+
+route.put('/updatePassword/:_id',(req,res,next)=>{
+    console.log(req.body);
+    userModel.updatePassword(req.params._id, req.body.password)
+    .then(()=>res.status(200).json({
+        msg:'password updated successfully'
+    }))
+    .catch((err)=>res.status(400).json({error:err}));
+});
 
 route.post('/login',(req,res,next)=>{
     userModel.login(req.body.email,req.body.password)
