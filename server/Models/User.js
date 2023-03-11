@@ -244,14 +244,17 @@ exports.login=(email,password)=>{
         }).then((user)=>{
             if(!user){
                 mongoose.disconnect();
-                reject("this email does not exist");
+                msg = "this email does not exist";
+                resolve([msg,"err"])
+                reject(msg);
             }else if(user && bcrypt.compare(password, user.password) &&!user.isActive){
 
                 mongoose.disconnect();
-                reject("Veuillez vérifiez votre boite email pour l'activation");
+                msg = "Please check your email for activation";
+                // resolve(message);
+                resolve([msg,"err"])
             }else{
                 bcrypt.compare(password, user.password).then((same)=>{
-                    console.log("same password");
                         if(same){
                             //?send token
                             let token = jwt.sign({
@@ -261,13 +264,18 @@ exports.login=(email,password)=>{
                                 expiresIn:'1h',
                             })
                             mongoose.disconnect();
-                            resolve(token);
+                            
+                    console.log("same password");
+                            resolve([token,"token"])
                             jwt.decode();
 
 
                         }else{
                             mongoose.disconnect();
-                            reject('invalid password')
+                            msg= 'invalid password'
+                            console.log(msg)
+                            resolve([msg,"err"])
+                            reject(ùsg)
                         }
                 }).catch((err)=>{
                     mongoose.disconnect();
@@ -277,6 +285,14 @@ exports.login=(email,password)=>{
         })
     })
 }
+
+const validate = (data) => {
+	const schema = Joi.object({
+		email: Joi.string().email().required().label("Email"),
+		password: Joi.string().required().label("Password"),
+	});
+	return schema.validate(data);
+};
 
 exports.clentLogin=(email,password)=>{
     return new Promise((resolve, reject)=>{

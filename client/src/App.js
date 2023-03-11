@@ -1,17 +1,46 @@
 import React from 'react';
 import { Route, Routes, Navigate } from "react-router-dom";
 import './App.css';
-import Login from "./Login";
+// import {Route, Routes } from 'react-router';
+import User from './Components/UserInterface/User';
+import Admin from './Components/AdminInterface/Admin';
+import Home from './Components/UserInterface/Pages/Home';
+import Login from './Components/UserInterface/Pages/Login';
+import PageNotFound from './Components/PageNotFound';
+import Register from './Components/UserInterface/Pages/Register';
+import Forgot from './Components/UserInterface/Pages/Forgot';
 
 function App() {
   return (
-    // <div>
-    //   welcome to app
-    // </div>
-    <Routes>
-			<Route path="/login" exact element={<Login />} />
-			<Route path="/" element={<Navigate replace to="/login" />} />
-		</Routes>
+    <div>
+     
+      <Routes>
+        <Route path="/" element={<User />}>
+
+          <Route index element={<Home />} />
+          <Route  path='/login' element={<Login />} />
+          <Route  path='/register' element={<Register />} />
+          <Route  path='/forgot' element={<Forgot />} />
+        
+        
+        </Route>
+      
+
+
+     
+        <Route path="/admin" element={<Admin />}>
+
+        
+        
+        </Route>
+     
+        <Route path='*' element={<PageNotFound/>}/> 
+     
+      </Routes>
+
+
+
+    </div>
   );
 }
 
