@@ -113,8 +113,13 @@ export default function Login(){
                             <form className="row g-4" onSubmit={handleSubmit}>
                                 <div className="col-12">
                                     <div className="form-floating theme-form-floating log-in-form">
+<<<<<<< HEAD
                                         <input type="email" name="email" className="form-control" id="email" onChange={handleChange} placeholder="Email Address" />
                                         <label for="email">Email Address</label>
+=======
+                                        <input type="email" className="form-control" id="email" placeholder="Email Address" />
+                                        <label htmlFor="email">Email Address</label>
+>>>>>>> 0fb087d264f1ede5ad2c76730f89583fc05756eb
                                     </div>
                                 </div>
 
@@ -122,7 +127,7 @@ export default function Login(){
                                     <div className="form-floating theme-form-floating log-in-form">
                                         <input type="password" name="password" className="form-control" id="password" onChange={handleChange}
                                             placeholder="Password" />
-                                        <label for="password">Password</label>
+                                        <label htmlFor="password">Password</label>
                                     </div>
                                 </div>
 
@@ -130,8 +135,13 @@ export default function Login(){
                                     <div className="forgot-box">
                                         <div className="form-check ps-0 m-0 remember-box">
                                             <input className="checkbox_animated check-box" type="checkbox"
+<<<<<<< HEAD
                                                 id="flexCheckDefault"/>
                                             <label className="form-check-label" for="flexCheckDefault">Remember me</label>
+=======
+                                                id="flexCheckDefault" />
+                                            <label className="form-check-label" htmlFor="flexCheckDefault">Remember me</label>
+>>>>>>> 0fb087d264f1ede5ad2c76730f89583fc05756eb
                                         </div>
                                     
                                         <Link className="forgot-password" to="/forgot">Forgot Password?</Link>
