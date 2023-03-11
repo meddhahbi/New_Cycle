@@ -22,7 +22,7 @@ export default function Forgot(){
                                     <div className="form-floating theme-form-floating log-in-form">
                                         <input type="email" className="form-control" id="email"
                                             placeholder="Email Address" />
-                                        <label for="email">Email Address</label>
+                                        <label htmlFor="email">Email Address</label>
                                     </div>
                                 </div>
 
