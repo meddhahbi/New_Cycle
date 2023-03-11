@@ -2,12 +2,14 @@ const express = require('express');
 const app = express();
 require('dotenv').config();
 const userRoute = require('./Routers/UserRoute');
+var cors = require('cors');
 
 //? reception et envoie de données avec le format json 
 app.use(express.json());
 app.use(express.urlencoded({
     extended: true
 }))
+app.use(cors()) // Use this after the variable declaration
 
 
 

@@ -17,7 +17,7 @@ let schemaUser = mongoose.Schema({
     postal:{ type: Number, required: true },
     isActive : {type:Boolean,default:false},
     activationCode:String,
-    role: { type: String, enum: ['client', 'admin', 'association'], default: 'client' }
+    role: { type: String, enum: ['client', 'admin'], default: 'client' }
 });
 
 

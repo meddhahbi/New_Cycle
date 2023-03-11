@@ -54,7 +54,7 @@ export default function Login(){
                                 <div className="col-12">
                                     <div className="form-floating theme-form-floating log-in-form">
                                         <input type="email" className="form-control" id="email" placeholder="Email Address" />
-                                        <label for="email">Email Address</label>
+                                        <label htmlFor="email">Email Address</label>
                                     </div>
                                 </div>
 
@@ -62,7 +62,7 @@ export default function Login(){
                                     <div className="form-floating theme-form-floating log-in-form">
                                         <input type="password" className="form-control" id="password"
                                             placeholder="Password" />
-                                        <label for="password">Password</label>
+                                        <label htmlFor="password">Password</label>
                                     </div>
                                 </div>
 
@@ -71,7 +71,7 @@ export default function Login(){
                                         <div className="form-check ps-0 m-0 remember-box">
                                             <input className="checkbox_animated check-box" type="checkbox"
                                                 id="flexCheckDefault" />
-                                            <label className="form-check-label" for="flexCheckDefault">Remember me</label>
+                                            <label className="form-check-label" htmlFor="flexCheckDefault">Remember me</label>
                                         </div>
                                     
                                         <Link className="forgot-password" to="/forgot">Forgot Password?</Link>
