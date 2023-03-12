@@ -20,4 +20,20 @@ module.exports.sendConfirmationEmail = (email,activationCode)=>{
         <a href="http://localhost:3000/confirm/${activationCode}">Cliquez ici</a>`,
         //<a href="http://localhost:3000/confirm/${activationCode}">Cliquez ici</a>
     }).catch((err)=>console.log(err));
+
+    
+}
+
+module.exports.sendResetPassword = (email,cnt)=>{
+    transpoter.sendMail({
+        from:process.env.AUTH_EMAIL,
+        to:email,
+        subject:"Password Reset",
+        html:`<h1>Confirmation Email</h1>
+        <h2>Bonjour</h2>
+        <p>Pour activer votre compte, veuillez cliquez sur ce lien</p>
+        ${cnt}`
+        
+       
+    }).catch((err)=>console.log(err));
 }
