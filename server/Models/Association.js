@@ -1,5 +1,7 @@
-
+const route = require('express').Router();
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 
 
@@ -44,6 +46,7 @@ exports.register=(name,email,password,phone,postal,docVerif)=>{
                             postal:postal,
                             docVerif:docVerif,
                         })
+                       // console.log(association);
                         association.save().then((association)=>{
                             mongoose.disconnect();
                             resolve(association);
@@ -61,3 +64,6 @@ exports.register=(name,email,password,phone,postal,docVerif)=>{
         })
     })
 }
+
+
+
