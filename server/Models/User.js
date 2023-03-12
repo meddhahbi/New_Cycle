@@ -240,49 +240,51 @@ exports.login=(email,password)=>{
         }).then(()=>{
             return User.findOne({ email:email})
         }).then((user)=>{
-            if(!user){
-                mongoose.disconnect();
-                msg = "this email does not exist";
-                resolve([msg,"err"])
-                reject(msg);
-            }else if(user && bcrypt.compare(password, user.password) &&!user.isActive){
-
-                mongoose.disconnect();
-                msg = "Please check your email for activation";
-                // resolve(message);
-                resolve([msg,"err"])
-            }else{
+            if(user){
                 bcrypt.compare(password, user.password).then((same)=>{
-                        if(same){
-                            //?send token
-                            let token = jwt.sign({
-                                id:user._id,
-                                username:user.username
-                            },privateKey,{
-                                expiresIn:'1h',
-                            })
+                    if(same){
+                        
+                        if(!user.isActive){
                             mongoose.disconnect();
-                            
-                    console.log("same password");
-                            resolve([token,"token", user.role])
-                            jwt.decode();
-
-
-                        }else{
-                            mongoose.disconnect();
-                            msg= 'invalid password'
-                            console.log(msg)
+                            msg = "Please check your email for activation";
+                            // resolve(message);
                             resolve([msg,"err"])
-                            reject(ùsg)
                         }
+                        //?send token
+                        let token = jwt.sign({
+                            id:user._id,
+                            username:user.username
+                        },privateKey,{
+                            expiresIn:'1h',
+                        })
+                        
+                        mongoose.disconnect();
+                        
+                        console.log("same password");
+                        jwt.decode();
+                        resolve([token,"token", user.role]);
+
+
+                    }else{
+                        mongoose.disconnect();
+                        msg= 'invalid password'
+                        resolve([msg,"err"])
+                        reject(ùsg)
+                    }
                 }).catch((err)=>{
                     mongoose.disconnect();
                     reject(err);
                 })
+            }else{
+                mongoose.disconnect();
+                msg = "this email does not exist";
+                resolve([msg,"err"])
             }
         })
     })
 }
+
+
 
 
 

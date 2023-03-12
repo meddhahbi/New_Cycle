@@ -19,6 +19,8 @@ let schemaAssociation = mongoose.Schema({
 var Association = mongoose.model('Association',schemaAssociation);
 var url = process.env.URL;
 
+var privateKey = "this is my secret key testjsdjsbdjdbdjbcjbkajdbqsjq"
+
 
 
 
@@ -80,7 +82,7 @@ exports.login=(email,password)=>{
                 mongoose.disconnect();
                 msg = "this email does not exist";
                 resolve([msg,"err"])
-                reject(msg);
+                // reject(msg);
             }else if(association && bcrypt.compare(password, association.password) &&!association.isActive){
 
                 mongoose.disconnect();
