@@ -30,7 +30,7 @@ var privateKey = "this is my secret key testjsdjsbdjdbdjbcjbkajdbqsjq"
 
 
 
-//? Send verification email
+//? Send verification email(test only)
 // const sendVerificationMail=({_id, email}, res)=>{
 //     const currentUrl = "http//localhost:3001";
 //     const uniqueString = uuidv4() + _id;
@@ -177,8 +177,6 @@ var privateKey = "this is my secret key testjsdjsbdjdbdjbcjbkajdbqsjq"
 
 
 
-
-
 exports.register=(username,email,password,phone,postal,role)=>{
     return new Promise((resolve,reject)=>{
         mongoose.connect(url,{
@@ -279,50 +277,60 @@ exports.login=(email,password)=>{
 }
 
 
-//? Email verification
-// exports.verufyUser = (activationCode)=>{
-//     return new Promise((resolve,reject)=>{
+
+exports.verifyUser=(activationCode)=>{
+    return new Promise((resolve, reject)=>{
+        mongoose.connect(url,{
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+            }).then(()=>{
+                return User.findOne({ activationCode:activationCode});
+            }).then((user)=>{
+                if(!user){
+                    mongoose.disconnect();
+                    reject("failed");
+                }else{
+                    user.isActive=true;
+                    user.save().then(()=>{
+                        mongoose.disconnect();
+                        resolve("success");
+                    }).catch((err)=>{
+                        mongoose.disconnect();
+                        reject(err);
+                    })
+                }
+            })
+    })
+}
+
+
+
+//? Email verification (test only)
+// exports.verifyUser=(activationCode)=>{
+//     return new Promise((resolve, reject)=>{
 //         mongoose.connect(url,{
 //             useNewUrlParser: true,
 //             useUnifiedTopology: true
 //         }).then(()=>{
-//             return User.find({activationCode})
-//             .then((doc)=>{
-//                 if(!doc){
-//                     mongoose.disconnect();
-//                     reject('Wrong activation code');
-//                 }else{
-//                     // doc.isActive = true;
-//                     // doc.save();
-//                     let user = User.findOne({
-//                         activationCode:activationCode,
-//                     });
-//                     user.isActive = true;
-//                     user.save().then(()=>{
-//                         mongoose.disconnect();
-//                         resolve(user);
-//                     });
-//                 }
-//             });
-//         });
-
-
-   
-//         });
-// };
-
-
-
-
-
-// exports.logout=(req,res,next)=>{
-//     req.logout((err)=>{
-//         if(err){
-//             console.log(err);
-//             res.status(500).send('An error occurred');
-//         }else{
-//                 res.clearCookie('connect.sid');
-//                 res.status(200).send('Logout successful');
-//         }
-//     });
+//             return User.updateOne({activationCode},{isActive:true});
+//         }).then((doc)=>{
+//             mongoose.disconnect();
+//             resolve(doc);
+//         }).catch((err)=>{
+//             mongoose.disconnect();
+//             reject(err);
+//         })
+// })
 // }
+
+
+
+
+
+
+
+
+
+
+
+

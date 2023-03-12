@@ -49,12 +49,11 @@ route.get('/verified', (req,res)=>{
 
 
 
-// route.post('/verifyuser/:activationcode',(req,res,next)=>{
-//     userModel.verifyuser(req.params.activationcode)
-//     .then(()=>res.status(200).json({
-//         msg:'User Verification success',
-//     })).catch((err)=>res.status(400).json({error:err}));
-// })
+route.post('/verifyuser/:activationCode',(req,res,next)=>{
+    userModel.verifyUser(req.params.activationCode)
+    .then((doc)=>res.status(200).json(doc))
+    .catch((err)=>res.status(400).json(err))
+});
 
 
 

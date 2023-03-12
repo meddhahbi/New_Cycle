@@ -8,11 +8,11 @@ import Login from './Components/UserInterface/Pages/Login';
 import PageNotFound from './Components/PageNotFound';
 import Register from './Components/UserInterface/Pages/Register';
 import Forgot from './Components/UserInterface/Pages/Forgot';
+import ActivationPage from './Components/ActivationPage';
 
 function App() {
   return (
     <div>
-     
       <Routes>
         <Route path="/" element={<User />}>
 
@@ -20,21 +20,23 @@ function App() {
           <Route  path='/login' element={<Login />} />
           <Route  path='/register' element={<Register />} />
           <Route  path='/forgot' element={<Forgot />} />
+      
         
         
         </Route>
       
 
 
-     
+
         <Route path="/admin" element={<Admin />}>
 
         
         
         </Route>
-     
+
         <Route path='*' element={<PageNotFound/>}/> 
-     
+        <Route path='/confirm/:activationCode' element={<ActivationPage />} />
+
       </Routes>
 
 
