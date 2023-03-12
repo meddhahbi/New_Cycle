@@ -1,7 +1,7 @@
 import { Outlet } from "react-router"
 
 
-export default function Associaction(){
+export default function Admin(){
 
 
     return <div>

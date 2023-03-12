@@ -18,6 +18,7 @@ route.post('/register',(req,res,next)=>{
 
 
 route.post('/login',(req,res,next)=>{
+    console.log("login")
     userModel.login(req.body.email,req.body.password)
     .then((token)=>res.status(200).json({
         token:token
