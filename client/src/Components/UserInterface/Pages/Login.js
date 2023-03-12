@@ -6,6 +6,8 @@ import styles from "./style/styles.module.css"
 
 
 export default function Login(){
+    
+    
     const [data, setData] = useState({ email: "", password: "" });
 	const [error, setError] = useState("");
 
@@ -39,6 +41,7 @@ export default function Login(){
             else{
                 console.log(res)
                 console.log(res.token[0])
+                localStorage.removeItem("error");
                 localStorage.setItem("token", res.token[0]);
                 if(res.token[2]==="client"){
                     window.location = "/";

@@ -3,6 +3,12 @@ import { Link } from "react-router-dom";
 
 
 export default function Navbar(){
+    const logout = (e)=>{
+        e.preventDefault();
+        console.log("logout");
+        localStorage.clear();
+        window.location = "/login"
+    }
     return <div>
 
 <header className="pb-md-4 pb-0">
@@ -247,25 +253,34 @@ export default function Navbar(){
                                             <div className="delivery-icon">
                                                 <i data-feather="user"></i>
                                             </div>
-                                            <div className="delivery-detail">
+                                            
+                                            {localStorage.getItem("token")?<div className="delivery-detail">
                                                 <h6>Hello,</h6>
                                                 <h5>My Account</h5>
-                                            </div>
+                                            </div>:<div className="delivery-detail">
+                                                <h6>Login/Sign Up</h6>
+                                            </div>}
+                                            
                                         </div>
 
                                         <div className="onhover-div onhover-div-login">
-                                            <ul className="user-box-name">
-                                                <li className="product-box-contain">
+                                            
+                                                
+                                                {!localStorage.getItem("token")?
+                                                <ul className="user-box-name"><li className="product-box-contain">
                                                     <i></i>
                                                 <Link to="/login">Log In</Link>
                                                 </li>
 
                                                 <li className="product-box-contain">
                                                 <Link to="/register">Register</Link>
-                                                </li>
+                                                </li></ul>
+                                                :<ul className="user-box-name"><form onSubmit={logout}>
+                                                <button  >Logout</button>
+                                                </form></ul>}
+                                                
 
                                             
-                                            </ul>
                                         </div>
                                     </li>
                                 </ul>
