@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 require('dotenv').config();
 const userRoute = require('./Routers/UserRoute');
+const associationRoute = require('./Routers/AssociationRoute');
 var cors = require('cors');
 
 //? reception et envoie de données avec le format json 
@@ -14,13 +15,14 @@ app.use(cors()) // Use this after the variable declaration
 
 
 
-//*une méthode de test
+//* Une méthode de test
 /*app.get('/',(req, res, next)=>{
     res.send('New Cycle');
 });*/
 
 
 app.use('/',userRoute);
+app.use('/association',userRoute);
 
 
 

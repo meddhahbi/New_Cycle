@@ -40,12 +40,10 @@ route.post('/login',(req,res,next)=>{
 
 
 
-//? Verified page route
-
-
-route.get('/verified', (req,res)=>{
-    res.sendFile(path.join(__dirname,"./../Utils/verified.html"));
-})
+//? Verified page route(static)
+// route.get('/verified', (req,res)=>{
+//     res.sendFile(path.join(__dirname,"./../Utils/verified.html"));
+// })
 
 
 

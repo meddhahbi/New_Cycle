@@ -170,7 +170,7 @@ export default function Register(){
                     <div className="log-in-box">
                         <div className="log-in-title">
                             <h3>Welcome To NewCycle</h3>
-                            <h4>Create New Account</h4>
+                            <h4>Create New Account ( i'm client )</h4>
                         </div>
 
                         <div className="input-box">
