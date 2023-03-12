@@ -22,7 +22,7 @@ app.use(cors()) // Use this after the variable declaration
 
 
 app.use('/',userRoute);
-app.use('/association',userRoute);
+app.use('/association',associationRoute);
 
 
 

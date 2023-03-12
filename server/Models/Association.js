@@ -1,5 +1,7 @@
 
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 
 
@@ -36,6 +38,7 @@ exports.register=(name,email,password,phone,postal,docVerif)=>{
                     reject('this email is exist');
                 }else{
                     bcrypt.hash(password,10).then((hashedPassword)=>{
+                        console.log(hashedPassword);
                         let association = new Association({
                             name:name,
                             email:email,
@@ -58,6 +61,59 @@ exports.register=(name,email,password,phone,postal,docVerif)=>{
                     })
                 }
             })
+        })
+    })
+}
+
+exports.login=(email,password)=>{
+    return new Promise((resolve, reject)=>{
+        console.log("login association")
+        mongoose.connect(url,{
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        }).then(()=>{
+            return Association.findOne({ email:email})
+        }).then((association)=>{
+            if(!association){
+                mongoose.disconnect();
+                msg = "this email does not exist";
+                resolve([msg,"err"])
+                reject(msg);
+            }else if(association && bcrypt.compare(password, association.password) &&!association.isActive){
+
+                mongoose.disconnect();
+                msg = "Please check your email for activation";
+                // resolve(message);
+                resolve([msg,"err"])
+            }else{
+                bcrypt.compare(password, association.password).then((same)=>{
+                        if(same){
+                            //?send token
+                            let token = jwt.sign({
+                                id:association._id,
+                                username:association.name
+                            },privateKey,{
+                                expiresIn:'1h',
+                            })
+                            mongoose.disconnect();
+                            
+                            console.log("same password");
+                            resolve([token,"token", association.role])
+                            jwt.decode();
+
+
+                        }else{
+                            mongoose.disconnect();
+                            msg= 'invalid password'
+                            console.log(msg)
+                            resolve([msg,"err"])
+                            reject(ùsg)
+                        }
+                }).catch((err)=>{
+                    mongoose.disconnect();
+                    reject(err);
+                })
+            }
         })
     })
 }
