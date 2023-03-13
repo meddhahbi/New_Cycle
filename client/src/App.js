@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import {Route, Routes } from 'react-router';
 import User from './Components/UserInterface/User';
@@ -8,8 +7,10 @@ import Login from './Components/UserInterface/Pages/Login';
 import PageNotFound from './Components/PageNotFound';
 import Register from './Components/UserInterface/Pages/Register';
 import Forgot from './Components/UserInterface/Pages/Forgot';
-import ActivationPage from './Components/ActivationPage';
+import ActivationPage from './Components/UserInterface/Pages/ActivationPage';
 import ResetPassword from './Components/UserInterface/Pages/resetPassword';
+import LoginAssociation from './Components/UserInterface/Pages/LoginAssociation';
+
 
 function App() {
   return (
@@ -22,6 +23,8 @@ function App() {
           <Route  path='/register' element={<Register />} />
           <Route  path='/forgot' element={<Forgot />} />
           <Route path="/reset/:id" element={<ResetPassword />}/>
+          <Route path='/confirm/:activationCode' element={<ActivationPage />} />
+          <Route path='/loginAssociation' element={<LoginAssociation />} />
       
         
         
@@ -38,7 +41,6 @@ function App() {
         </Route>
 
         <Route path='*' element={<PageNotFound/>}/> 
-        <Route path='/confirm/:activationCode' element={<ActivationPage />} />
 
       </Routes>
 
