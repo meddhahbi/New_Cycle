@@ -28,16 +28,6 @@ export default function Login(){
                 setError(res.token[0]);
                 console.log(error);
             }
-            // else if(res.token[1]=="err_pass"){
-            //     console.log(res.token[0])
-            //     localStorage.setItem("error", res.token[0]);
-            //     setError(res.token[0]);
-            //     console.log(error);
-            // }else if(res.token[1]=="err_check"){
-            //     localStorage.setItem("error", res.token[0]);
-            //     setError(res.token[0]);
-            //     console.log(error);
-            // }
             else{
                 console.log(res)
                 console.log(res.token[0])

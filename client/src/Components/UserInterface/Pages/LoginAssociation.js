@@ -23,7 +23,7 @@ export default function AssociationLogin(){
 			const { data: res } = await axios.post(url, data);
             // console.log(res.token[0])
 			
-            if(res.token[1]=="err"){
+            if(res.token[1]==="err"){
                 localStorage.setItem("error", res.token[0]);
                 setError(res.token[0]);
                 console.log(error);
