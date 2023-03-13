@@ -21,13 +21,13 @@ function App() {
           <Route  path='/login' element={<Login />} />
           <Route  path='/register' element={<Register />} />
           <Route  path='/forgot' element={<Forgot />} />
-          <Route path="/reset/:id" element={<ResetPassword />}/>
+          
       
         
         
         </Route>
   
-        
+        <Route path='/reset/:id' element={<ResetPassword />}/>
 
 
 
