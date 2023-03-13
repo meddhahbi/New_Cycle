@@ -101,10 +101,28 @@ export default function AssociationLogin(){
                 </div>
 
                 <div className="col-xxl-4 col-xl-5 col-lg-6 col-sm-8 mx-auto">
+                    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+                        <div className="container-fluid">
+                            <div className="collapse navbar-collapse" id="navbarNav">
+                                <ul className="navbar-nav">
+                                    <li className="nav-item">
+                                        <a className="nav-link active" >
+                                            <Link to="/login">Client</Link>
+                                        </a>
+                                    </li>
+                                    <li className="nav-item">
+                                        <a className="nav-link" >
+                                            <Link to="/loginAssociation">Association</Link>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </nav>
                     <div className="log-in-box">
                         <div className="log-in-title">
                             <h3>Welcome To NewCycle</h3>
-                            <h4>Log In Your Account ( i'm association )</h4>
+                            <h4>Log In Your Account ( As an association )</h4>
                         </div>
 
                         <div className="input-box">
