@@ -15,6 +15,9 @@ app.use(cors()) // Use this after the variable declaration
 
 
 
+//database connection
+// connection();
+
 
 //* Une méthode de test
 /*app.get('/',(req, res, next)=>{
@@ -35,6 +38,3 @@ app.use('/association',associationRoute);
 
 
 app.listen(3001, ()=>console.log('server run in port 3001'));
-
-//database connection
-connection();

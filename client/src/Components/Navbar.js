@@ -53,28 +53,28 @@ export default function Navbar(){
                                 <div className="dropdown theme-form-select">
                                     <button className="btn dropdown-toggle" type="button" id="select-language"
                                         data-bs-toggle="dropdown" aria-expanded="false">
-                                        <img src="../assets/images/country/united-states.png"
+                                        <img src="../../assets/images/User/country/united-states.png"
                                             className="img-fluid blur-up lazyload" alt="" />
                                         <span>English</span>
                                     </button>
                                     <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="select-language">
                                         <li>
                                             <a className="dropdown-item" href="#" id="english">
-                                                <img src="../assets/images/country/united-kingdom.png"
+                                                <img src="../../assets/User/images/country/united-kingdom.png"
                                                     className="img-fluid blur-up lazyload" alt="" />
                                                 <span>English</span>
                                             </a>
                                         </li>
                                         <li>
                                             <a className="dropdown-item" href="#" id="france">
-                                                <img src="../assets/images/country/germany.png"
+                                                <img src="../../assets/User/images/country/germany.png"
                                                     className="img-fluid blur-up lazyload" alt="" />
                                                 <span>Germany</span>
                                             </a>
                                         </li>
                                         <li>
                                             <a className="dropdown-item" href="#" id="chinese">
-                                                <img src="../assets/images/country/turkish.png"
+                                                <img src="../../assets/User/images/country/turkish.png"
                                                     className="img-fluid blur-up lazyload" alt="" />
                                                 <span>Turki</span>
                                             </a>
@@ -120,7 +120,7 @@ export default function Navbar(){
                                 </span>
                             </button>
                             <a href="index.html" className="web-logo nav-logo">
-                                <img src="../assets/images/User/logo/1.png" className="img-fluid blur-up lazyload" alt="" />
+                                <img src="../../assets/User/images/logo/1.png" className="img-fluid blur-up lazyload" alt="" />
                             </a>
 
                             <div className="middle-box">
@@ -168,17 +168,7 @@ export default function Navbar(){
                                             </div>
                                         </div>
                                     </li>
-                                    <li className="right-side">
-                                        <a href="contact-us.html" className="delivery-login-box">
-                                            <div className="delivery-icon">
-                                                <i data-feather="phone-call"></i>
-                                            </div>
-                                            <div className="delivery-detail">
-                                                <h6>24/7 Delivery</h6>
-                                                <h5>+91 888 104 2340</h5>
-                                            </div>
-                                        </a>
-                                    </li>
+                                    
                                     <li className="right-side">
                                         <a href="wishlist.html" className="btn p-0 position-relative header-wishlist">
                                             <i data-feather="heart"></i>
@@ -198,7 +188,7 @@ export default function Navbar(){
                                                     <li className="product-box-contain">
                                                         <div className="drop-cart">
                                                             <a href="product-left-thumbnail.html" className="drop-image">
-                                                                <img src="../assets/images/vegetable/product/1.png"
+                                                                <img src="../../assets/User/images/vegetable/product/1.png"
                                                                     className="blur-up lazyload" alt="" />
                                                             </a>
 
@@ -217,7 +207,7 @@ export default function Navbar(){
                                                     <li className="product-box-contain">
                                                         <div className="drop-cart">
                                                             <a href="product-left-thumbnail.html" className="drop-image">
-                                                                <img src="../assets/images/vegetable/product/2.png"
+                                                                <img src="../../assets/User/images/vegetable/product/2.png"
                                                                     className="blur-up lazyload" alt="" />
                                                             </a>
 

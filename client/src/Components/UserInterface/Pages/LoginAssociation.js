@@ -89,7 +89,9 @@ export default function AssociationLogin(){
 
 
         
-    {/* <section className="log-in-section background-image-2 section-b-space">
+
+   
+    <section className="log-in-section background-image-2 section-b-space">
         <div className="container-fluid-lg w-100">
             <div className="row">
                 <div className="col-xxl-6 col-xl-5 col-lg-6 d-lg-block d-none ms-auto">
@@ -101,13 +103,13 @@ export default function AssociationLogin(){
                 <div className="col-xxl-4 col-xl-5 col-lg-6 col-sm-8 mx-auto">
                     <div className="log-in-box">
                         <div className="log-in-title">
-                            <h3>Welcome To Fastkart</h3>
-                            <h4>Log In Your Account</h4>
+                            <h3>Welcome To NewCycle</h3>
+                            <h4>Log In Your Account ( i'm association )</h4>
                         </div>
 
                         <div className="input-box">
                             <form className="row g-4" onSubmit={handleSubmit}>
-                                <div className="col-12">
+                            <div className="col-12">
                                     <div className="form-floating theme-form-floating log-in-form">
 
                                         <input type="email" name="email" className="form-control" id="email" onChange={handleChange} placeholder="Email Address" />
@@ -176,7 +178,12 @@ export default function AssociationLogin(){
                 </div>
             </div>
         </div>
-    </section> */}
+    </section>
+
+
+
+
+
 
     </div>
 }

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { sendConfirmationEmail } = require('../Config/nodemailer');
+const { sendConfirmationEmail, sendResetPassword } = require('../Config/nodemailer');
 
 
 
@@ -346,6 +346,62 @@ exports.verifyUser=(activationCode)=>{
 //         })
 // })
 // }
+
+exports.resetPassword=(email)=>{
+    return new Promise((resolve,reject)=>{
+        mongoose.connect(url,{
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        }).then(()=>{
+            const user = User.findOne({ email: email });
+            return user.exec().then((doc)=>{  // add .exec() method call here
+                if(doc){
+                    console.log(doc._id);  // use doc instead of user
+                    const cnt = `http://localhost:3000/reset/${doc._id}`;  // use doc instead of user
+                    resolve(sendResetPassword(email,cnt));
+                    return true;
+                }else{
+                    mongoose.disconnect();
+                    reject('this email does not exist');
+                }
+            });
+        });
+    });    
+}
+
+
+
+
+
+
+
+
+
+exports.updatePassword = async (_id, password) => {
+    try {
+      await mongoose.connect(url, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+      });
+      const user = await User.findById(_id);
+      if (!user) {
+        mongoose.disconnect();
+        throw new Error('User not found');
+      }
+      console.log(_id);
+      const hashedPassword = await bcrypt.hash(password, 10);
+      console.log(hashedPassword);
+      user.password = hashedPassword;
+      const updatedUser = await user.save();
+      mongoose.disconnect();
+      return updatedUser;
+    } catch (err) {
+      console.log(err);
+      mongoose.disconnect();
+      throw new Error('Failed to update password');
+    }
+    
+  };
 
 
 
