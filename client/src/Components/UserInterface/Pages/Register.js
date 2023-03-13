@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
+import { Link } from "react-router-dom";
 
 
 
@@ -293,7 +294,8 @@ export default function Register(){
 
                         <div className="sign-up-box">
                             <h4>Already have an account?</h4>
-                            <a href="login.html">Log In</a>
+                            <Link to="/login">Log In</Link>
+                    
                         </div>
                     </div>
                 </div>
