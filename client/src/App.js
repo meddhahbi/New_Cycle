@@ -1,5 +1,5 @@
 import './App.css';
-import {Route, Routes } from 'react-router';
+import { Route, Routes } from 'react-router';
 import User from './Components/UserInterface/User';
 import Admin from './Components/AdminInterface/Admin';
 import Home from './Components/UserInterface/Pages/Home';
@@ -23,7 +23,6 @@ function App() {
           <Route  path='/register' element={<Register />} />
           <Route  path='/forgot' element={<Forgot />} />
           <Route path="/reset/:id" element={<ResetPassword />}/>
-          <Route path='/confirm/:activationCode' element={<ActivationPage />} />
           <Route path='/loginAssociation' element={<LoginAssociation />} />
       
         
@@ -39,6 +38,8 @@ function App() {
         
         
         </Route>
+
+        <Route path='/confirm/:activationCode' element={<ActivationPage />} />
 
         <Route path='*' element={<PageNotFound/>}/> 
 
