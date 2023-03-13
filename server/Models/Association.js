@@ -19,6 +19,7 @@ let schemaAssociation = mongoose.Schema({
 var Association = mongoose.model('Association',schemaAssociation);
 var url = process.env.URL;
 
+var privateKey = "this is my secret key testjsdjsbdjdbdjbcjbkajdbqsjq"
 
 
 
@@ -100,8 +101,13 @@ exports.login=(email,password)=>{
                             mongoose.disconnect();
                             
                             console.log("same password");
-                            resolve([token,"token", association.role])
+                            
+                            resolve([token,"token", association.role]);
                             jwt.decode();
+                            //console.log(token);
+                            //console.log(jwt.decode());
+                            //console.log(jwt.decode().id);
+                            //console.log(jwt.decode().username);
 
 
                         }else{
