@@ -9,6 +9,7 @@ import PageNotFound from './Components/PageNotFound';
 import Register from './Components/UserInterface/Pages/Register';
 import Forgot from './Components/UserInterface/Pages/Forgot';
 import ActivationPage from './Components/ActivationPage';
+import ResetPassword from './Components/UserInterface/Pages/resetPassword';
 
 function App() {
   return (
@@ -20,11 +21,13 @@ function App() {
           <Route  path='/login' element={<Login />} />
           <Route  path='/register' element={<Register />} />
           <Route  path='/forgot' element={<Forgot />} />
+          <Route path="/reset/:id" element={<ResetPassword />}/>
       
         
         
         </Route>
-      
+  
+        
 
 
 
