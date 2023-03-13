@@ -1,4 +1,5 @@
 const express = require('express');
+const connection = require("./db");
 const app = express();
 require('dotenv').config();
 const userRoute = require('./Routers/UserRoute');
@@ -34,3 +35,6 @@ app.use('/association',associationRoute);
 
 
 app.listen(3001, ()=>console.log('server run in port 3001'));
+
+//database connection
+connection();

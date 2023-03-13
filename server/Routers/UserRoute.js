@@ -16,6 +16,17 @@ route.post('/register',(req,res,next)=>{
     .catch((err)=>res.status(400).json({error:err}));
 })
 
+route.get("/me/:mail", async (req, res, next)=>{
+     userModel.currentUser(req.params.mail).then((user)=>res.status(200).json({
+        user:user,
+        msg:'User'
+    }))
+    
+    .catch((err)=>res.status(400).json({error:err}));
+    // console.log(user.email);
+    
+})
+
 
 route.post('/login',(req,res,next)=>{
     console.log("login")

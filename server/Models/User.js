@@ -232,6 +232,20 @@ exports.register=(username,email,password,phone,postal,role)=>{
     })
 }
 
+exports.currentUser=async(email)=>{
+    try{
+        return User.findOne({ email:email})
+        .then((user)=>{
+            console.log(user.username)
+            return user
+        })
+        .catch((err)=>res.status(400).json({error:err}));
+    }
+    catch(err){
+        console.log(err.message);
+    }
+}
+
 exports.login=(email,password)=>{
     return new Promise((resolve, reject)=>{
         mongoose.connect(url,{
@@ -262,7 +276,7 @@ exports.login=(email,password)=>{
                         
                         console.log("same password");
                         jwt.decode();
-                        resolve([token,"token", user.role]);
+                        resolve([token,"token", user.role, user.email]);
 
 
                     }else{

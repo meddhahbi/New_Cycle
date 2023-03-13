@@ -9,6 +9,8 @@ import PageNotFound from './Components/PageNotFound';
 import Register from './Components/UserInterface/Pages/Register';
 import Forgot from './Components/UserInterface/Pages/Forgot';
 import ActivationPage from './Components/ActivationPage';
+import Association from './Components/UserInterface/Association';
+import AssociationLogin from './Components/UserInterface/Pages/LoginAssociation';
 
 function App() {
   return (
@@ -21,9 +23,16 @@ function App() {
           <Route  path='/register' element={<Register />} />
           <Route  path='/forgot' element={<Forgot />} />
       
-        
+          <Route path="/association" element={<Association />}>
+            <Route index element={<Home />} />
+            
+            <Route  path='login' element={<AssociationLogin />} />
+          </Route>
         
         </Route>
+
+        
+        
       
 
 
