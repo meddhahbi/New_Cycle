@@ -3,26 +3,26 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { sendConfirmationEmail } = require('../Config/nodemailer');
 
-
-
-
-
-
-
 let schemaUser = mongoose.Schema({
     username:{ type: String, required: true },
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    phone:{ type: Number, required: true },
-    postal:{ type: Number, required: true },
+    password: { type: String, required: false },
+    phone:{ type: Number, required: false },
+    postal:{ type: Number, required: false },
     isActive : {type:Boolean,default:false},
     activationCode:String,
+    googleId: String,
+    secret: String,
     role: { type: String, enum: ['client', 'admin'], default: 'client' }
 });
 
+const User = mongoose.model('User', schemaUser);
+
+module.exports = User;
 
 
-var User = mongoose.model('User',schemaUser);
+
+//var User = mongoose.model('User',schemaUser);
 var url = process.env.URL;
 
 var privateKey = "this is my secret key testjsdjsbdjdbdjbcjbkajdbqsjq"

@@ -1,6 +1,7 @@
 const route = require('express').Router();
 const userModel = require('../Models/User');
 const path = require('path');
+const passport = require("passport");
 
 
 // route.get('/', (req,res,next)=>{
@@ -53,6 +54,29 @@ route.post('/verifyuser/:activationCode',(req,res,next)=>{
     .then((doc)=>res.status(200).json(doc))
     .catch((err)=>res.status(400).json(err))
 });
+
+
+
+
+route.get(
+    "/auth/google",
+    passport.authenticate("google", { scope: ["profile", "email"] })
+  );
+  
+  route.get(
+    "/auth/google/callback",
+    passport.authenticate("google", {
+      failureRedirect: "http://localhost:3000/login",
+    }),
+    function (req, res) {
+      // Successful authentication, redirect home.
+      console.log(req);
+      res.redirect(
+        `http://localhost:3000?email=${req.user.email}&fullname=${req.user.username}&secret=${req.user.secret}`
+      );
+    }
+  );
+
 
 
 
