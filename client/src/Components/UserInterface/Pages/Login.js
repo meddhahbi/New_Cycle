@@ -7,6 +7,8 @@ import styles from "./style/styles.module.css"
 
 export default function Login(){
 
+    
+    
 
     const [data, setData] = useState({ email: "", password: "" });
     const [error, setError] = useState("");
@@ -22,6 +24,8 @@ export default function Login(){
             // console.log("data",data)
             const { data: res } = await axios.post(url, data);
             // console.log(res.token[0])
+
+			
 
             if(res.token[1]==="err"){
                 localStorage.setItem("error", res.token[0]);
@@ -79,7 +83,6 @@ export default function Login(){
             </div>
         </section>
 
-
         <section className="log-in-section background-image-2 section-b-space">
             <div className="container-fluid-lg w-100">
                 <div className="row">
@@ -136,6 +139,24 @@ export default function Login(){
                                         </div>
                                     </div>
 
+
+                                    <div className="col-12">
+                                        {error && <div className={styles.error_msg}>{error}</div>}
+                                        <div className="forgot-box">
+                                            <div className="form-check ps-0 m-0 remember-box">
+                                                <input className="checkbox_animated check-box" type="checkbox"
+                                                       id="flexCheckDefault"/>
+                                                <label className="form-check-label" htmlFor="flexCheckDefault">Remember
+                                                    me</label>
+                                            </div>
+
+                                            <Link className="forgot-password" to="/forgot">Forgot Password?</Link>
+                                        </div>
+                                    </div>
+
+                                    <div className="col-12">
+
+
                         <div className="other-log-in">
                             <h6>or</h6>
                         </div>
@@ -177,6 +198,7 @@ export default function Login(){
 
 
                                     <div className="col-12">
+
                                         <button className="btn btn-animation w-100 justify-content-center"
                                                 type="submit">Log
                                             In

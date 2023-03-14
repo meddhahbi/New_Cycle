@@ -16,10 +16,25 @@ function App() {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<User />}>
+      <Route path="/" element={<User />}>
 
-          <Route index element={<Home />} />
+        <Route index element={<Home />} />
+        {/*<Route  path='/login' element={<Login />} />*/}
+        <Route  path='/register' element={<Register />} />
+        <Route  path='/forgot' element={<Forgot />} />
+        <Route path="/reset/:id" element={<ResetPassword />}/>
+        <Route path='/confirm/:activationCode' element={<ActivationPage />} />
+        <Route path='/loginAssociation' element={<LoginAssociation />} />
           <Route  path='/login' element={<Login />} />
+
+
+
+
+
+      </Route>
+
+
+
           <Route  path='/register' element={<Register />} />
           <Route  path='/forgot' element={<Forgot />} />
 
@@ -32,6 +47,7 @@ function App() {
         
         
         </Route>
+
   
         <Route path='/reset/:id' element={<ResetPassword />}/>
 

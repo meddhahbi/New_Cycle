@@ -1,4 +1,5 @@
 const express = require('express');
+const connection = require("./db");
 const app = express();
 require('dotenv').config();
 const userRoute = require('./Routers/UserRoute');
@@ -35,6 +36,9 @@ app.use(express.urlencoded({
 }))
 
 Connect();
+
+//database connection
+// connection();
 
 
 //* Une méthode de test
