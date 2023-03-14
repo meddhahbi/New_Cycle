@@ -352,12 +352,6 @@ exports.resetPassword=(email)=>{
 
 
 
-
-
-
-
-
-
 exports.updatePassword = async (_id, password) => {
     try {
     await mongoose.connect(url, {
