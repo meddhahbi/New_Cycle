@@ -160,7 +160,7 @@ export default function Login(){
                         <div className="log-in-button">
                             <ul>
                                 <li>
-                                    <a href="https://www.google.com/" className="btn google-button w-100">
+                                    <a href="http://localhost:3001/auth/google" className="btn google-button w-100">
                                         <img src="../../../../assets/User/images/inner-page/google.png" className="lazyload"
                                             alt="" /> Log In with Google
                                     </a>
