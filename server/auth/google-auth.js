@@ -22,12 +22,13 @@ module.exports = (passport) => {
         function (accessToken, refreshToken, profile, cb) {
             
             console.log(profile);
-            User.findOne({ googleId: profile.id })
+            User.findOne({ googleId: profile.id }, { timeout: 15000 })
   .then((user) => {
     if (user) {
       const updatedUser = {
         username: profile.displayName,
         email: profile.emails[0].value,
+       // isActive:true,
         secret: accessToken,
       };
       return User.findOneAndUpdate(
@@ -40,6 +41,7 @@ module.exports = (passport) => {
         googleId: profile.id,
         username: profile.displayName,
         email: profile.emails[0].value,
+        isActive:true,
         secret: accessToken,
       });
       return newUser.save();

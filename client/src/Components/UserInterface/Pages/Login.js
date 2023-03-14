@@ -136,6 +136,31 @@ export default function Login(){
                                         </div>
                                     </div>
 
+                        <div className="other-log-in">
+                            <h6>or</h6>
+                        </div>
+
+                        <div className="log-in-button">
+                            <ul>
+                                <li>
+                                    <a href="http://localhost:3001/auth/google" className="btn google-button w-100">
+                                        <img src="../../../../assets/User/images/inner-page/google.png" className="lazyload"
+                                            alt="" /> Log In with Google
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://www.facebook.com/" className="btn google-button w-100">
+                                        <img src="../../../../assets/User/images/inner-page/facebook.png" className="lazyload"
+                                            alt="" /> Log In with Facebook
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div className="other-log-in">
+                            <h6></h6>
+                        </div>
+
                                     <div className="col-12">
                                         {error && <div className={styles.error_msg}>{error}</div>}
                                         <div className="forgot-box">
@@ -149,6 +174,7 @@ export default function Login(){
                                             <Link className="forgot-password" to="/forgot">Forgot Password?</Link>
                                         </div>
                                     </div>
+
 
                                     <div className="col-12">
                                         <button className="btn btn-animation w-100 justify-content-center"
