@@ -53,6 +53,7 @@ app.use('/association',associationRoute);
 
 app.use(passport.initialize());
 require("./auth/google-auth")(passport);
+require("./auth/facebook-auth")(passport);
 
 
 

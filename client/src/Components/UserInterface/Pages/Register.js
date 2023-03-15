@@ -272,7 +272,7 @@ export default function Register(){
                         <div className="log-in-button">
                             <ul>
                                 <li>
-                                    <a href="https://accounts.google.com/signin/v2/identifier?flowName=GlifWebSignIn&amp;flowEntry=ServiceLogin"
+                                <a href="http://localhost:3001/auth/google"
                                         className="btn google-button w-100">
                                         <img src="../../../../assets/User/images/inner-page/google.png" className="lazyload"
                                             alt="" />
@@ -280,7 +280,7 @@ export default function Register(){
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="https://www.facebook.com/" className="btn google-button w-100">
+                                    <a href="http://localhost:3001/auth/facebook/callback" className="btn google-button w-100">
                                         <img src="../../../../assets/User/images/inner-page/facebook.png" className="lazyload"
                                             alt="" /> Sign up with Facebook
                                     </a>

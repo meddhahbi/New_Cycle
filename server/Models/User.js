@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { sendConfirmationEmail, sendResetPassword } = require('../Config/nodemailer');
+const { sendConfirmationEmail } = require('../Config/nodemailer');
 
 let schemaUser = mongoose.Schema({
     username:{ type: String, required: true },
@@ -16,10 +16,9 @@ let schemaUser = mongoose.Schema({
     role: { type: String, enum: ['client', 'admin'], default: 'client' }
 });
 
-// const User = mongoose.model('User', schemaUser);
-var User = mongoose.model('User',schemaUser);
+const User = mongoose.model('User', schemaUser);
 
-//module.exports = User;
+module.exports = User;
 
 
 
@@ -233,20 +232,6 @@ exports.register=(username,email,password,phone,postal,role)=>{
     })
 }
 
-exports.currentUser=async(email)=>{
-    try{
-        return User.findOne({ email:email})
-        .then((user)=>{
-            console.log(user.username)
-            return user
-        })
-        .catch((err)=>res.status(400).json({error:err}));
-    }
-    catch(err){
-        console.log(err.message);
-    }
-}
-
 exports.login=(email,password)=>{
     return new Promise((resolve, reject)=>{
         mongoose.connect(url,{
@@ -255,49 +240,50 @@ exports.login=(email,password)=>{
         }).then(()=>{
             return User.findOne({ email:email})
         }).then((user)=>{
-            if(user){
+            if(!user){
+                mongoose.disconnect();
+                msg = "this email does not exist";
+                resolve([msg,"err"])
+                reject(msg);
+            }else if(user && bcrypt.compare(password, user.password) &&!user.isActive){
+
+                mongoose.disconnect();
+                msg = "Please check your email for activation";
+                // resolve(message);
+                resolve([msg,"err"])
+            }else{
                 bcrypt.compare(password, user.password).then((same)=>{
-                    if(same){
-                        
-                        if(!user.isActive){
+                        if(same){
+                            //?send token
+                            let token = jwt.sign({
+                                id:user._id,
+                                username:user.username
+                            },privateKey,{
+                                expiresIn:'1h',
+                            })
                             mongoose.disconnect();
-                            msg = "Please check your email for activation";
-                            // resolve(message);
+                            
+                    console.log("same password");
+                            resolve([token,"token", user.role])
+                            jwt.decode();
+
+
+                        }else{
+                            mongoose.disconnect();
+                            msg= 'invalid password'
+                            console.log(msg)
                             resolve([msg,"err"])
+                            reject(ùsg)
                         }
-                        //?send token
-                        let token = jwt.sign({
-                            id:user._id,
-                            username:user.username
-                        },privateKey,{
-                            expiresIn:'1h',
-                        })
-                        
-                        mongoose.disconnect();
-                        
-                        console.log("same password");
-                        jwt.decode();
-                        resolve([token,"token", user.role, user.email]);
-
-
-                    }else{
-                        mongoose.disconnect();
-                        msg= 'invalid password'
-                        resolve([msg,"err"])
-                        reject(ùsg)
-                    }
                 }).catch((err)=>{
                     mongoose.disconnect();
                     reject(err);
                 })
-            }else{
-                mongoose.disconnect();
-                msg = "this email does not exist";
-                resolve([msg,"err"])
             }
         })
     })
 }
+
 
 
 exports.verifyUser=(activationCode)=>{
@@ -325,6 +311,8 @@ exports.verifyUser=(activationCode)=>{
     })
 }
 
+
+
 //? Email verification (test only)
 // exports.verifyUser=(activationCode)=>{
 //     return new Promise((resolve, reject)=>{
@@ -342,65 +330,3 @@ exports.verifyUser=(activationCode)=>{
 //         })
 // })
 // }
-
-exports.resetPassword=(email)=>{
-    return new Promise((resolve,reject)=>{
-        mongoose.connect(url,{
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        }).then(()=>{
-            const user = User.findOne({ email: email });
-            return user.exec().then((doc)=>{  // add .exec() method call here
-                if(doc){
-                    console.log(doc._id);  // use doc instead of user
-                    const cnt = `http://localhost:3000/reset/${doc._id}`;  // use doc instead of user
-                    resolve(sendResetPassword(email,cnt));
-                    return true;
-                }else{
-                    mongoose.disconnect();
-                    reject('this email does not exist');
-                }
-            });
-        });
-    });    
-}
-
-
-
-exports.updatePassword = async (_id, password) => {
-    try {
-    await mongoose.connect(url, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    });
-    const user = await User.findById(_id);
-    if (!user) {
-        mongoose.disconnect();
-        throw new Error('User not found');
-      }
-      console.log(_id);
-      const hashedPassword = await bcrypt.hash(password, 10);
-      console.log(hashedPassword);
-      user.password = hashedPassword;
-      const updatedUser = await user.save();
-      mongoose.disconnect();
-      return updatedUser;
-    } catch (err) {
-      console.log(err);
-      mongoose.disconnect();
-      throw new Error('Failed to update password');
-    }
-    
-};
-
-
-
-
-
-
-
-
-
-
-
-
