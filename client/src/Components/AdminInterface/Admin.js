@@ -1,4 +1,5 @@
 import { Outlet } from "react-router"
+import NavbarAdmin from "./Navbar";
 
 
 export default function Admin(){
@@ -6,7 +7,7 @@ export default function Admin(){
 
     return <div>
 
-        <div>NavBar</div>
+        <NavbarAdmin />
         <Outlet />
         <div>Footer</div>
 

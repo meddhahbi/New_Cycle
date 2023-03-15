@@ -27,6 +27,7 @@ const UpdatePassword = () => {
       setError('');
       setNewPassword('');
       setConfirmPassword('');
+      window.location = "/login";
         
     } catch (error) {
       setError(error.response.data.message);
