@@ -10,6 +10,7 @@ import Forgot from './Components/UserInterface/Pages/Forgot';
 import ActivationPage from './Components/UserInterface/Pages/ActivationPage';
 import ResetPassword from './Components/UserInterface/Pages/resetPassword';
 import LoginAssociation from './Components/UserInterface/Pages/LoginAssociation';
+import UserProfile from "./Components/UserInterface/Pages/UserProfile";
 
 
 function App() {
@@ -25,7 +26,8 @@ function App() {
         <Route path="/reset/:id" element={<ResetPassword />}/>
         <Route path='/confirm/:activationCode' element={<ActivationPage />} />
         <Route path='/loginAssociation' element={<LoginAssociation />} />
-          <Route  path='/login' element={<Login />} />
+        <Route  path='/login' element={<Login />} />
+          <Route path='/me' element={<UserProfile />} />
 
 
 

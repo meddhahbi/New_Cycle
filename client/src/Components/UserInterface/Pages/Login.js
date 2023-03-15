@@ -33,6 +33,7 @@ export default function Login(){
                 console.log(res.token[0])
                 localStorage.removeItem("error");
                 localStorage.setItem("token", res.token[0]);
+                localStorage.setItem("mail", res.token[3]);
                 if(res.token[2]==="client"){
                     window.location = "/";
                 }
@@ -67,7 +68,7 @@ export default function Login(){
                                 <ol className="breadcrumb mb-0">
                                     <li className="breadcrumb-item">
                                         <a href="index.html">
-                                            <i className="fa-solid fa-house"></i>
+                                            <i className="fa-solid fa-house" />
                                         </a>
                                     </li>
                                     <li className="breadcrumb-item active">Log In</li>
@@ -111,7 +112,7 @@ export default function Login(){
                         </nav>
                         <div className="log-in-box">
                             <div className="log-in-title">
-                                <h3>Welcome To Fastkart</h3>
+                                <h3>Welcome To NewCycle</h3>
                                 <h4>Log In Your Account ( As a client )</h4>
                             </div>
 

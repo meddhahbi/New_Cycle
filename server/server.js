@@ -16,7 +16,7 @@ app.use(cors()) // Use this after the variable declaration
 
 
 //database connection
-// connection();
+connection();
 
 
 //* Une méthode de test

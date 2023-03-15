@@ -233,6 +233,7 @@ exports.register=(username,email,password,phone,postal,role)=>{
 }
 
 exports.currentUser=async(email)=>{
+    console.log(email)
     try{
         return User.findOne({ email:email})
         .then((user)=>{
