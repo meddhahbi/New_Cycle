@@ -146,8 +146,9 @@ export default function UserProfile() {
                                         </div>
 
                                         <div className="dashboard-user-name">
-                                            <h6 className="text-content">Hello, <b className="text-title">Vicki E.
-                                                Pope</b></h6>
+                                            <h6 className="text-content">Hello, <b className="text-title">
+                                                {profile && profile.email}
+                                            </b></h6>
                                             <p className="text-content">From your My Account Dashboard you have the
                                                 ability to
                                                 view a snapshot of your recent account activity and update your account

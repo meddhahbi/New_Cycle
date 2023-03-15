@@ -6,6 +6,7 @@
 .pnp.js
 /.env
 ../.idea
+../.idea/workspace.xml
 # testing
 /coverage
 

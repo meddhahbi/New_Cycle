@@ -123,17 +123,16 @@ export default function Login(){
 
                                             <input type="email" name="email" className="form-control" id="email"
                                                    onChange={handleChange} placeholder="Email Address"/>
-                                            
+                                            <label htmlFor="email">Email Address</label>
                                         </div>
                                     </div>
 
                                     <div className="col-12">
                                         <div className="form-floating theme-form-floating log-in-form">
                                             <input type="password" name="password" className="form-control"
-                                                   id="password"
-                                                   onChange={handleChange}
+                                                   id="password" onChange={handleChange}
                                                    placeholder="Password"/>
-                                            
+                                            <label htmlFor="password">Password</label>
                                         </div>
                                     </div>
 
