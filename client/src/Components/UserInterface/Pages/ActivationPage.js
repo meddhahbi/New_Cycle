@@ -1,5 +1,5 @@
 
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 
@@ -19,31 +19,37 @@ export default function ActivationPage(){
 
 
 
-
+    const handleSubmit= async(e)=>{
+        e.preventDefault();
+        window.location = "/login";
+    }
 
     return <div>
 
-<section className="breadscrumb-section pt-0">
-        <div className="container-fluid-lg">
-            <div className="row">
-                <div className="col-12">
-                    <div className="breadscrumb-contain">
-                        <h2 className="mb-2">Activation Page</h2>
-                        <nav>
-                            <ol className="breadcrumb mb-0">
-                                <li className="breadcrumb-item">
-                                    <a href="index.html">
-                                        <i className="fa-solid fa-house"></i>
-                                    </a>
-                                </li>
-                                <li className="breadcrumb-item active">Log In</li>
-                            </ol>
-                        </nav>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+<section>
+<div className="mainDiv">
+<div class="cardStyle">
+    
+    <img src="../../assets/User/images/logo/1.png" id="signupLogo"/>
+    
+    <h2 class="formTitle">
+        The account has been verified successfully
+    </h2>
+
+    <form action="" method="post" name="signupForm" id="signupForm" onSubmit={handleSubmit}>
+
+    <div class="buttonWrapper">
+    <button type="submit" id="submitButton" className="submitButton pure-button pure-button-success    ">
+        <span>You can log In now </span>
+        
+    </button>
+    
+    </div>
+        </form>
+
+</div>
+</div>
+</section>
 
 
     </div>

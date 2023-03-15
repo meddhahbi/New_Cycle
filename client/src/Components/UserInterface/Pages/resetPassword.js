@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import {style} from  './style/resetStyle.css'
 
 const UpdatePassword = () => {
   const [password, setNewPassword] = useState('');
@@ -26,6 +27,8 @@ const UpdatePassword = () => {
       setError('');
       setNewPassword('');
       setConfirmPassword('');
+      window.location = "/login";
+        
     } catch (error) {
       setError(error.response.data.message);
       setSuccess('');
@@ -34,50 +37,40 @@ const UpdatePassword = () => {
 
   return (
     
-    <section className="log-in-section section-b-space forgot-section">
-    <div className="container-fluid-lg w-100">
-        <div className="row">
-            <div className="col-xxl-6 col-xl-5 col-lg-6 d-lg-block d-none ms-auto">
-                <div className="image-contain">
-                    <img src="../../../../assets/User/images/inner-page/forgot.png" className="img-fluid" alt="" />
-                </div>
-            </div>
-
-            <div className="col-xxl-4 col-xl-5 col-lg-6 col-sm-8 mx-auto">
-                <div className="d-flex align-items-center justify-content-center h-100">
-                    <div className="log-in-box">
-                        <div className="log-in-title">
-                            <h3>Welcome To Fastkart</h3>
-                            <h4>Reset your password</h4>
-                        </div>
-
-                        <div className="input-box">
-                            <form className="row g-4" onSubmit={handleSubmit}>
-                                <div className="col-12">
-                                    <div className="form-floating theme-form-floating log-in-form">
-                                        <input type="password" className="form-control" id="email"
-                                            placeholder="Email Address" value={password} onChange={(e) => setNewPassword(e.target.value)} required/>
-                                        <label htmlFor="email" >Password </label>
-                                    </div>
-                                </div>
-                                <div className="col-12">
-                                    <div className="form-floating theme-form-floating log-in-form">
-                                        <input type="password" className="form-control" id="email"
-                                            placeholder="Email Address" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
-                                        <label htmlFor="email" >Confirm your password</label>
-                                    </div>
-                                </div>
-                                <div className="col-12">
-                                    <button className="btn btn-animation w-100" type="submit">Reset
-                                        Password</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <section>
+<div className="mainDiv">
+  <div class="cardStyle">
+    <form action="" method="post" name="signupForm" id="signupForm" onSubmit={handleSubmit}>
+      
+      <img src="" id="signupLogo"/>
+      
+      <h2 class="formTitle">
+        Reset your password
+      </h2>
+      
+    <div class="inputDiv">
+      <label class="inputLabel" for="password">New Password</label>
+      <input type="password" id="password" name="password" value={password} onChange={(e) => setNewPassword(e.target.value)} required />
     </div>
+      
+    <div class="inputDiv">
+      <label class="inputLabel" for="confirmPassword">Confirm Password</label>
+      <input type="password" id="confirmPassword" name="confirmPassword" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
+    </div>
+    {error && <p class="error">{error}</p>}
+    
+    <div class="buttonWrapper">
+      <button type="submit" id="submitButton" className="submitButton pure-button pure-button-success    ">
+        <span>submit</span>
+        
+      </button>
+      
+    </div>
+    
+      
+  </form>
+  </div>
+</div>
 </section>
   );
 };

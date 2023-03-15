@@ -5,15 +5,37 @@ require('dotenv').config();
 const userRoute = require('./Routers/UserRoute');
 const associationRoute = require('./Routers/AssociationRoute');
 var cors = require('cors');
+const passport = require("passport");
+const { Connect } = require("./Config/connect");
+//const googleAuth = require("./routes/index");
+
+app.use(cors()); // Use this after the variable declaration
+
+const session = require("express-session");
+ 
+//const app = express();
+
+// Set up session middleware
+app.use(
+  session({
+    secret: "your-secret-key",
+    resave: false,
+    saveUninitialized: false
+  })
+);
+
+
+
+
+
 
 //? reception et envoie de données avec le format json 
 app.use(express.json());
 app.use(express.urlencoded({
     extended: true
 }))
-app.use(cors()) // Use this after the variable declaration
 
-
+Connect();
 
 //database connection
 connection();
@@ -27,6 +49,10 @@ connection();
 
 app.use('/',userRoute);
 app.use('/association',associationRoute);
+
+
+app.use(passport.initialize());
+require("./auth/google-auth")(passport);
 
 
 

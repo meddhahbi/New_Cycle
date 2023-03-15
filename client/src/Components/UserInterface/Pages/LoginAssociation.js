@@ -9,20 +9,20 @@ export default function AssociationLogin(){
     
     
     const [data, setData] = useState({ email: "", password: "" });
-	const [error, setError] = useState("");
+   const [error, setError] = useState("");
 
-	const handleChange = ({ currentTarget: input }) => {
-		setData({ ...data, [input.name]: input.value });
-	};
+   const handleChange = ({ currentTarget: input }) => {
+      setData({ ...data, [input.name]: input.value });
+   };
     const handleSubmit = async (e) => {
-		e.preventDefault();
-		try {
-			const url = "http://localhost:3001/association/login";
-			console.log(url)
+      e.preventDefault();
+      try {
+         const url = "http://localhost:3001/association/login";
+         console.log(url)
             // console.log("data",data)
-			const { data: res } = await axios.post(url, data);
+         const { data: res } = await axios.post(url, data);
             // console.log(res.token[0])
-			
+         
             if(res.token[1]==="err"){
                 localStorage.setItem("error", res.token[0]);
                 setError(res.token[0]);
@@ -37,22 +37,22 @@ export default function AssociationLogin(){
                     window.location = "/";
                 }
             }
-			
-			// console.log(res.role)
-		} catch (error) {
-			// if (
-			// 	error.response &&
-			// 	error.response.status >= 400 &&
-			// 	error.response.status <= 500
-			// ) {
+         
+         // console.log(res.role)
+      } catch (error) {
+         // if (
+         //     error.response &&
+         //     error.response.status >= 400 &&
+         //     error.response.status <= 500
+         // ) {
                 
             // console.log(error)
             //     // console.log(res);
-			// 	setError(error.response.data.message);
+         //     setError(error.response.data.message);
             //     console.log("err: ",error.response.data.message);
-			// }
-		}
-	};
+         // }
+      }
+   };
     return <div>
     {/* <div class="fullpage-loader">
         <span></span>

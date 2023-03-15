@@ -9,20 +9,20 @@ export default function Login(){
     
     
     const [data, setData] = useState({ email: "", password: "" });
-	const [error, setError] = useState("");
+   const [error, setError] = useState("");
 
-	const handleChange = ({ currentTarget: input }) => {
-		setData({ ...data, [input.name]: input.value });
-	};
+   const handleChange = ({ currentTarget: input }) => {
+      setData({ ...data, [input.name]: input.value });
+   };
     const handleSubmit = async (e) => {
-		e.preventDefault();
-		try {
-			const url = "http://localhost:3001/login";
-			console.log(url)
+      e.preventDefault();
+      try {
+         const url = "http://localhost:3001/login";
+         console.log(url)
             // console.log("data",data)
-			const { data: res } = await axios.post(url, data);
+         const { data: res } = await axios.post(url, data);
             // console.log(res.token[0])
-			
+         
             if(res.token[1]==="err"){
                 localStorage.setItem("error", res.token[0]);
                 setError(res.token[0]);
@@ -41,22 +41,22 @@ export default function Login(){
                     window.location = "/admin";
                 }
             }
-			
-			// console.log(res.role)
-		} catch (error) {
-			// if (
-			// 	error.response &&
-			// 	error.response.status >= 400 &&
-			// 	error.response.status <= 500
-			// ) {
+         
+         // console.log(res.role)
+      } catch (error) {
+         // if (
+         //     error.response &&
+         //     error.response.status >= 400 &&
+         //     error.response.status <= 500
+         // ) {
                 
             // console.log(error)
             //     // console.log(res);
-			// 	setError(error.response.data.message);
+         //     setError(error.response.data.message);
             //     console.log("err: ",error.response.data.message);
-			// }
-		}
-	};
+         // }
+      }
+   };
     return <div>
         <section className="breadscrumb-section pt-0">
             <div className="container-fluid-lg">
@@ -123,7 +123,7 @@ export default function Login(){
 
                                             <input type="email" name="email" className="form-control" id="email"
                                                    onChange={handleChange} placeholder="Email Address"/>
-                                            <label htmlFor="email">Email Address</label>
+                                            
                                         </div>
                                     </div>
 
@@ -133,7 +133,7 @@ export default function Login(){
                                                    id="password"
                                                    onChange={handleChange}
                                                    placeholder="Password"/>
-                                            <label htmlFor="password">Password</label>
+                                            
                                         </div>
                                     </div>
 

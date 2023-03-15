@@ -1,16 +1,16 @@
 import './App.css';
-import {Route, Routes } from 'react-router';
+import { Route, Routes } from 'react-router';
 import User from './Components/UserInterface/User';
 import Admin from './Components/AdminInterface/Admin';
 import Home from './Components/UserInterface/Pages/Home';
 import Login from './Components/UserInterface/Pages/Login';
-import PageNotFound from './Components/PageNotFound';
 import Register from './Components/UserInterface/Pages/Register';
 import Forgot from './Components/UserInterface/Pages/Forgot';
 import ActivationPage from './Components/UserInterface/Pages/ActivationPage';
 import ResetPassword from './Components/UserInterface/Pages/resetPassword';
 import LoginAssociation from './Components/UserInterface/Pages/LoginAssociation';
 import UserProfile from "./Components/UserInterface/Pages/UserProfile";
+import PageNotFound from './Components/UserInterface/PageNotFound';
 
 
 function App() {
@@ -23,8 +23,7 @@ function App() {
         {/*<Route  path='/login' element={<Login />} />*/}
         <Route  path='/register' element={<Register />} />
         <Route  path='/forgot' element={<Forgot />} />
-        <Route path="/reset/:id" element={<ResetPassword />}/>
-        <Route path='/confirm/:activationCode' element={<ActivationPage />} />
+        {/* <Route path="/reset/:id" element={<ResetPassword />}/> */}
         <Route path='/loginAssociation' element={<LoginAssociation />} />
         <Route  path='/login' element={<Login />} />
           <Route path='/me' element={<UserProfile />} />
@@ -35,8 +34,20 @@ function App() {
       </Route>
 
 
-  
+
+          {/* <Route  path='/register' element={<Register />} />
+          <Route  path='/forgot' element={<Forgot />} /> */}
+          <Route path="/reset/:id" element={<ResetPassword />}/>
+          <Route path='/loginAssociation' element={<LoginAssociation />} />
+          <Route path='/confirm/:activationCode' element={<ActivationPage />} />
+
+      
         
+        
+        
+
+  
+        <Route path='/reset/:id' element={<ResetPassword />}/>
 
 
 
@@ -45,6 +56,8 @@ function App() {
         
         
         </Route>
+
+        <Route path='/confirm/:activationCode' element={<ActivationPage />} />
 
         <Route path='*' element={<PageNotFound/>}/> 
 
