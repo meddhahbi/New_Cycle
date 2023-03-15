@@ -178,13 +178,13 @@ export default function Register(){
                             <form className="row g-4" onSubmit={register} >
                                 <div className="col-12">
                                     <div className="form-floating theme-form-floating">
-                                        <input type="text" className="form-control" id="username" placeholder="username" value={username} onChange={(e)=>setUsername(e.target.value)} />
+                                        <input type="text" className="form-control" id="username" placeholder="Username" value={username} onChange={(e)=>setUsername(e.target.value)} />
                                         {
                                             errors.username!=""?<div style={{textAlign:'left', color:'orangered'}}>
                                                 {errors.username}
                                                 </div>:''
                                         }
-                                        <label htmlFor="username">Username</label>
+                                       
 
                                     
 
@@ -198,7 +198,7 @@ export default function Register(){
                                                 {errors.email}
                                                 </div>:''
                                         }
-                                        <label htmlFor="email">Email Address</label>
+                                    
                                     </div>
                                 
                                 </div>
@@ -212,7 +212,7 @@ export default function Register(){
                                                 {errors.password}
                                                 </div>:''
                                         }
-                                        <label htmlFor="password">Password</label>
+                                       
                                     </div>
                                 
                                 </div>
@@ -226,7 +226,7 @@ export default function Register(){
                                                 {errors.phone}
                                                 </div>:''
                                         }
-                                        <label htmlFor="phone">Phone</label>
+                                       
                                     </div>
                                 </div>
 
@@ -235,13 +235,13 @@ export default function Register(){
                                 <div className="col-12">
                                     <div className="form-floating theme-form-floating">
                                         <input type="number" className="form-control" id="postal"
-                                            placeholder="postal" name="postal" value={postal} onChange={(e)=>setPostal(e.target.value)} />
+                                            placeholder="Postal" name="postal" value={postal} onChange={(e)=>setPostal(e.target.value)} />
                                         {
                                             errors.postal!=""?<div style={{textAlign:'left', color:'orangered'}}>
                                                 {errors.postal}
                                                 </div>:''
                                         }
-                                        <label htmlFor="postal">Postal</label>
+                                      
                                     </div>
                                 
                                 </div>
