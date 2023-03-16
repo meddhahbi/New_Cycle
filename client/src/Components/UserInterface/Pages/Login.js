@@ -123,6 +123,7 @@ export default function Login(){
 
                                             <input type="email" name="email" className="form-control" id="email"
                                                    onChange={handleChange} placeholder="Email Address"/>
+                                                    <label htmlFor="email">Email Address</label>
                                             
                                         </div>
                                     </div>
@@ -133,6 +134,7 @@ export default function Login(){
                                                    id="password"
                                                    onChange={handleChange}
                                                    placeholder="Password"/>
+                                                   <label htmlFor="password">Password</label>
                                             
                                         </div>
                                     </div>
@@ -167,7 +169,7 @@ export default function Login(){
                             <div className="log-in-button">
                                 <ul>
                                     <li>
-                                        <a href="https://www.google.com/" className="btn google-button w-100">
+                                        <a href="#" className="btn google-button w-100">
                                             <img src="../../../../assets/User/images/inner-page/google.png"
                                                  className="lazyload"
                                                  alt=""/> Log In with Google

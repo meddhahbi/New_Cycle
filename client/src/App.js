@@ -10,6 +10,7 @@ import ActivationPage from './Components/UserInterface/Pages/ActivationPage';
 import ResetPassword from './Components/UserInterface/Pages/resetPassword';
 import LoginAssociation from './Components/UserInterface/Pages/LoginAssociation';
 import PageNotFound from './Components/UserInterface/PageNotFound';
+import RegisterAssociation from './Components/UserInterface/Pages/RegisterAssociation';
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
         {/* <Route path="/reset/:id" element={<ResetPassword />}/> */}
         <Route path='/loginAssociation' element={<LoginAssociation />} />
         <Route  path='/login' element={<Login />} />
+        <Route  path='/registerAssociation' element={<RegisterAssociation />} />
 
 
 
@@ -36,15 +38,9 @@ function App() {
 
           {/* <Route  path='/register' element={<Register />} />
           <Route  path='/forgot' element={<Forgot />} /> */}
-          <Route path="/reset/:id" element={<ResetPassword />}/>
-          <Route path='/loginAssociation' element={<LoginAssociation />} />
+          {/* <Route path="/reset/:id" element={<ResetPassword />}/> */}
+          {/* <Route path='/loginAssociation' element={<LoginAssociation />} /> */}
           <Route path='/confirm/:activationCode' element={<ActivationPage />} />
-
-      
-        
-        
-        
-
   
         <Route path='/reset/:id' element={<ResetPassword />}/>
 
