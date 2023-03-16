@@ -18,8 +18,8 @@ route.post('/register',(req,res,next)=>{
 })
 
 route.get("/me/:mail", async (req, res, next)=>{
-    console.log("current")
-     userModel.currentUser(req.params.mail).then((user)=>res.status(200).json({
+     userModel.currentUser(req.params.mail)
+         .then((user)=>res.status(200).json({
         user:user,
         msg:'User'
     }))

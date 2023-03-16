@@ -261,7 +261,7 @@ exports.login=(email,password)=>{
                     if(same){
                         
                         if(!user.isActive){
-                            mongoose.disconnect();
+                            // mongoose.disconnect();
                             msg = "Please check your email for activation";
                             // resolve(message);
                             resolve([msg,"err"])
@@ -274,7 +274,7 @@ exports.login=(email,password)=>{
                             expiresIn:'1h',
                         })
                         
-                        mongoose.disconnect();
+                        // mongoose.disconnect();
                         
                         console.log("same password");
                         jwt.decode();
@@ -282,17 +282,17 @@ exports.login=(email,password)=>{
 
 
                     }else{
-                        mongoose.disconnect();
+                        // mongoose.disconnect();
                         msg= 'invalid password'
                         resolve([msg,"err"])
-                        reject(ùsg)
+                        reject(msg)
                     }
                 }).catch((err)=>{
-                    mongoose.disconnect();
+                    // mongoose.disconnect();
                     reject(err);
                 })
             }else{
-                mongoose.disconnect();
+                // mongoose.disconnect();
                 msg = "this email does not exist";
                 resolve([msg,"err"])
             }
