@@ -19,7 +19,7 @@ let schemaUser = mongoose.Schema({
 // const User = mongoose.model('User', schemaUser);
 var User = mongoose.model('User',schemaUser);
 
-//module.exports = User;
+
 
 
 
@@ -399,6 +399,7 @@ exports.updatePassword = async (_id, password) => {
 
 
 
+// module.exports = User;
 
 
 

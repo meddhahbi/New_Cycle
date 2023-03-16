@@ -166,8 +166,30 @@ export default function Register(){
                         <img src="../../../../assets/User/images/inner-page/sign-up.png" className="img-fluid" alt="" />
                     </div>
                 </div>
+                
 
                 <div className="col-xxl-4 col-xl-5 col-lg-6 col-sm-8 mx-auto">
+                   
+                <nav className="navbar navbar-expand-lg navbar-light bg-light">
+                            <div className="container-fluid">
+                                <div className="collapse navbar-collapse" id="navbarNav">
+                                    <ul className="navbar-nav">
+                                        <li className="nav-item">
+                                            <a className="nav-link active" >
+                                                <Link to="/register">Client</Link>
+                                            </a>
+                                        </li>
+                                        <li className="nav-item">
+                                            <a className="nav-link" >
+                                                <Link to="/registerAssociation">Association</Link>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </nav>
+                   
+                   
                     <div className="log-in-box">
                         <div className="log-in-title">
                             <h3>Welcome To NewCycle</h3>
@@ -184,6 +206,7 @@ export default function Register(){
                                                 {errors.username}
                                                 </div>:''
                                         }
+                                        <label htmlFor="username">Username</label>
                                        
 
                                     
@@ -198,6 +221,7 @@ export default function Register(){
                                                 {errors.email}
                                                 </div>:''
                                         }
+                                         <label htmlFor="email">Email Address</label>
                                     
                                     </div>
                                 
@@ -212,6 +236,7 @@ export default function Register(){
                                                 {errors.password}
                                                 </div>:''
                                         }
+                                           <label htmlFor="password">Password</label>
                                        
                                     </div>
                                 
@@ -226,6 +251,7 @@ export default function Register(){
                                                 {errors.phone}
                                                 </div>:''
                                         }
+                                         <label htmlFor="phone">Phone</label>
                                        
                                     </div>
                                 </div>
@@ -241,6 +267,7 @@ export default function Register(){
                                                 {errors.postal}
                                                 </div>:''
                                         }
+                                           <label htmlFor="postal">Postal</label>
                                       
                                     </div>
                                 
@@ -272,7 +299,7 @@ export default function Register(){
                         <div className="log-in-button">
                             <ul>
                                 <li>
-                                    <a href="https://accounts.google.com/signin/v2/identifier?flowName=GlifWebSignIn&amp;flowEntry=ServiceLogin"
+                                    <a href="http://localhost:3001/auth/google"
                                         className="btn google-button w-100">
                                         <img src="../../../../assets/User/images/inner-page/google.png" className="lazyload"
                                             alt="" />
