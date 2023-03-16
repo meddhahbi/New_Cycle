@@ -2,13 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="11118971-840c-4a3c-a945-2fa355299da7" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/client/src/Components/Loading.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/client/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/Components/Loading.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/Components/Loading.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/Components/UserInterface/Navbar.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/Components/UserInterface/Navbar.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/Components/UserInterface/Pages/Login.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/Components/UserInterface/Pages/Login.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/Components/UserInterface/Pages/LoginAssociation.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/Components/UserInterface/Pages/LoginAssociation.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/Components/UserInterface/Pages/UserProfile.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/Components/UserInterface/Pages/UserProfile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/Models/User.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/Models/User.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/Routers/UserRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/Routers/UserRoute.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

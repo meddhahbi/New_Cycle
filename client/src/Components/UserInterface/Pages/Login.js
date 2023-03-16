@@ -3,7 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import styles from "./style/styles.module.css"
-import Loading from "../../Loading";
+import LoadingPage from "../../Loading";
 
 
 export default function Login(){
@@ -38,6 +38,7 @@ export default function Login(){
                 localStorage.removeItem("error");
                 localStorage.setItem("token", res.token[0]);
                 localStorage.setItem("mail", res.token[3]);
+                localStorage.setItem("role", res.token[2]);
                 if(res.token[2]==="client"){
                     window.location = "/";
                 }
@@ -63,7 +64,7 @@ export default function Login(){
    };
 
     return <div>
-        {isLoading ? <Loading/> :
+        {isLoading ? <LoadingPage/> :
             <div>
                 <section className="breadscrumb-section pt-0">
                     <div className="container-fluid-lg">

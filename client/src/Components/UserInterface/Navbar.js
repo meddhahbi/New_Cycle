@@ -260,8 +260,12 @@ export default function Navbar(){
                                             </div>
                                             
                                             {localStorage.getItem("token")?<div className="delivery-detail">
-                                                <h6>Hello,</h6>
-                                                <h5>{profile && profile.username}</h5>
+                                                {
+                                                    profile?<div>
+                                                        <h6>Hello,</h6>
+                                                        <h5>{profile && profile.username}</h5>
+                                                    </div>:""
+                                                }
                                             </div>:<div className="delivery-detail">
                                                 <h6>Login/Sign Up</h6>
                                             </div>}
@@ -285,7 +289,6 @@ export default function Navbar(){
                                                         <li className="product-box-contain">
                                                             <Link to="/me">My Account</Link>
                                                         </li>
-                                                        <br/>
                                                         <li className="product-box-contain">
                                                             <form onSubmit={logout}>
                                                                 <button  >Logout</button>

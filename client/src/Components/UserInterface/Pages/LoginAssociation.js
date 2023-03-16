@@ -3,7 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import styles from "./style/styles.module.css"
-import Loading from "../../Loading";
+import LoadingPage from "../../Loading";
 
 
 export default function AssociationLogin(){
@@ -59,7 +59,7 @@ export default function AssociationLogin(){
    };
     return <div>
 
-        {isLoading ? <Loading/> :
+        {isLoading ? <LoadingPage/> :
             <div>
                 <section className="breadscrumb-section pt-0">
 

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
-import Loading from "../../Loading";
+import LoadingPage from "../../Loading";
 
 export default function UserProfile() {
 
@@ -25,7 +25,7 @@ export default function UserProfile() {
     },[])
 
     return <div>
-        {isLoading ? <Loading/> :
+        {isLoading ? <LoadingPage/> :
             <section className="user-dashboard-section section-b-space">
                 <div className="container-fluid-lg">
                     <div className="row">
@@ -1396,7 +1396,7 @@ export default function UserProfile() {
                                                         <li>
                                                             <div className="location-box">
                                                                 <i data-feather="map-pin"></i>
-                                                                <h6>Downers Grove, IL</h6>
+                                                                <h6>Email:</h6>
                                                             </div>
                                                         </li>
 
@@ -1408,10 +1408,10 @@ export default function UserProfile() {
                                                         </li>
 
                                                         <li>
-                                                            <div className="location-box">
-                                                                <i data-feather="check-square"/>
-                                                                <h6>Licensed for 2 years</h6>
-                                                            </div>
+                                                            {/*<div className="location-box">*/}
+                                                            {/*    <i data-feather="check-square"/>*/}
+                                                            {/*    <h6>Licensed for 2 years</h6>*/}
+                                                            {/*</div>*/}
                                                         </li>
                                                     </ul>
                                                 </div>
