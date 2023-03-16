@@ -1,5 +1,6 @@
 
 import { Link } from "react-router-dom";
+import {useEffect, useState} from "react";
 
 
 export default function Navbar(){
@@ -9,6 +10,20 @@ export default function Navbar(){
         localStorage.clear();
         window.location = "/login"
     }
+    const [profile, setProfile] = useState(null);
+    useEffect(()=>{
+        const getData= async ()=>{
+            const url = "http://localhost:3001/me/" + localStorage.getItem("mail");
+            const response = await fetch(url);
+            const json = await response.json();
+            const user = json.user;
+            console.log(user);
+            if(response.ok){
+                setProfile(user);
+            }
+        }
+        getData()
+    },[])
     return <div>
 
 <header className="pb-md-4 pb-0">
@@ -246,7 +261,7 @@ export default function Navbar(){
                                             
                                             {localStorage.getItem("token")?<div className="delivery-detail">
                                                 <h6>Hello,</h6>
-                                                <h5>My Account</h5>
+                                                <h5>{profile && profile.username}</h5>
                                             </div>:<div className="delivery-detail">
                                                 <h6>Login/Sign Up</h6>
                                             </div>}
@@ -258,16 +273,25 @@ export default function Navbar(){
                                                 
                                                 {!localStorage.getItem("token")?
                                                 <ul className="user-box-name"><li className="product-box-contain">
-                                                    <i></i>
-                                                <Link to="/login">Log In</Link>
-                                                </li>
+                                                        <i></i>
+                                                        <Link to="/login">Log In</Link>
+                                                    </li>
 
-                                                <li className="product-box-contain">
-                                                <Link to="/register">Register</Link>
-                                                </li></ul>
-                                                :<ul className="user-box-name"><form onSubmit={logout}>
-                                                <button  >Logout</button>
-                                                </form></ul>}
+                                                    <li className="product-box-contain">
+                                                        <Link to="/register">Register</Link>
+                                                    </li>
+                                                </ul>
+                                                :<ul className="user-box-name">
+                                                        <li className="product-box-contain">
+                                                            <Link to="/me">My Account</Link>
+                                                        </li>
+                                                        <br/>
+                                                        <li className="product-box-contain">
+                                                            <form onSubmit={logout}>
+                                                                <button  >Logout</button>
+                                                            </form>
+                                                        </li>
+                                                    </ul>}
                                                 
 
                                             

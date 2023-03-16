@@ -9,6 +9,7 @@ import Forgot from './Components/UserInterface/Pages/Forgot';
 import ActivationPage from './Components/UserInterface/Pages/ActivationPage';
 import ResetPassword from './Components/UserInterface/Pages/resetPassword';
 import LoginAssociation from './Components/UserInterface/Pages/LoginAssociation';
+import UserProfile from "./Components/UserInterface/Pages/UserProfile";
 import PageNotFound from './Components/UserInterface/PageNotFound';
 import RegisterAssociation from './Components/UserInterface/Pages/RegisterAssociation';
 
@@ -26,7 +27,11 @@ function App() {
         {/* <Route path="/reset/:id" element={<ResetPassword />}/> */}
         <Route path='/loginAssociation' element={<LoginAssociation />} />
         <Route  path='/login' element={<Login />} />
+
         <Route  path='/registerAssociation' element={<RegisterAssociation />} />
+
+
+          <Route path='/me' element={<UserProfile />} />
 
 
 

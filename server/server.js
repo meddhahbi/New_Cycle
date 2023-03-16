@@ -38,7 +38,7 @@ app.use(express.urlencoded({
 Connect();
 
 //database connection
-// connection();
+connection();
 
 app.use(express.static('public'));
 
