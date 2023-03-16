@@ -259,7 +259,7 @@ export default function Navbar(){
                                                 <i data-feather="user"></i>
                                             </div>
                                             
-                                            {profile?<div className="delivery-detail">
+                                            {localStorage.getItem("token")?<div className="delivery-detail">
                                                 <h6>Hello,</h6>
                                                 <h5>{profile && profile.username}</h5>
                                             </div>:<div className="delivery-detail">
@@ -271,7 +271,7 @@ export default function Navbar(){
                                         <div className="onhover-div onhover-div-login">
                                             
                                                 
-                                                {!profile?
+                                                {!localStorage.getItem("token")?
                                                 <ul className="user-box-name"><li className="product-box-contain">
                                                         <i></i>
                                                         <Link to="/login">Log In</Link>
