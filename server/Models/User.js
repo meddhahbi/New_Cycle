@@ -395,6 +395,23 @@ exports.updatePassword = async (_id, password) => {
 };
 
 
+// exports.findUser=({googleId})=>{
+    
+//     // return new Promise((resolve,reject)=>{
+//     //     mongoose.connect(url,{
+//     //         useNewUrlParser: true,
+//     //         useUnifiedTopology: true
+//     //     }).then(()=>{
+//     //             return User.findOne({googleId : googleId})
+//     //         }).then((user)=>{
+//     //             if(user){
+//     //                 mongoose.disconnect();
+//     //                 resolve(user);
+//     //             }
+//     //         })
+      
+//     //   });
+//     // }
 
 
 

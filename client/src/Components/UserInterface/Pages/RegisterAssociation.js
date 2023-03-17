@@ -21,7 +21,7 @@ export default function RegisterAssociation(){
     const [password, setPassword] = useState('');
     const [phone, setPhone] = useState('');
     const [postal, setPostal] = useState('');
-    const [docVerif, setDocVerif]=useState('');
+    //const [docVerif, setDocVerif]=useState('');
 
     console.log(docVerif,12);
 
@@ -46,7 +46,7 @@ export default function RegisterAssociation(){
             password: '',
             phone: '',
             postal: '',
-            docVerif
+           // docVerif
            // ...errors
         }
 
@@ -80,10 +80,10 @@ export default function RegisterAssociation(){
             status=false;
         }
 
-        if (docVerif == "") {
-            localErrors.docVerif = "Verification document is required or invalid format";
-            status=false;
-        }
+        // if (docVerif == "") {
+        //     localErrors.docVerif = "Verification document is required or invalid format";
+        //     status=false;
+        // }
     
 
         setErrors(localErrors);
@@ -111,7 +111,7 @@ export default function RegisterAssociation(){
                 password,
                 phone,
                 postal,
-                docVerif,
+               // docVerif,
             };
             const url='localhost:3001/association/register'
             axios.post(url, data)
@@ -123,7 +123,7 @@ export default function RegisterAssociation(){
                         setPassword('');
                         setPhone('');
                         setPostal('');
-                        setDocVerif('');
+                        //setDocVerif('');
                     })
                     .catch(error => {
                         console.error(error); // Handle error
@@ -296,7 +296,7 @@ export default function RegisterAssociation(){
 
 
 
-                                     <div className="col-12">
+                                     {/* <div className="col-12">
                                         <div className="form-floating theme-form-floating">
                                             <input type="file" className="form-control" id="postal"
                                                 placeholder="Postal" name="postal" onChange={(e)=>setDocVerif(e.target.files[0])} />
@@ -309,7 +309,7 @@ export default function RegisterAssociation(){
                                           
                                         </div>
                                     
-                                    </div>
+                                    </div> */}
     
     
     

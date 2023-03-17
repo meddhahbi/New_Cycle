@@ -57,6 +57,7 @@ function App() {
         
         </Route>
 
+
         <Route path='/confirm/:activationCode' element={<ActivationPage />} />
 
         <Route path='*' element={<PageNotFound/>}/> 

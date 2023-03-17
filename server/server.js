@@ -40,7 +40,7 @@ Connect();
 //database connection
 connection();
 
-app.use(express.static('public'));
+// app.use(express.static('public'));
 
 
 //* Une méthode de test
@@ -55,6 +55,8 @@ app.use('/association',associationRoute);
 
 app.use(passport.initialize());
 require("./auth/google-auth")(passport);
+
+require("./auth/facebook-auth")(passport);
 
 
 

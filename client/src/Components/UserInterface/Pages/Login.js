@@ -99,24 +99,6 @@ export default function Login(){
                                 </div>
                             </div>
 
-
-                                            <input type="email" name="email" className="form-control" id="email"
-                                                   onChange={handleChange} placeholder="Email Address"/>
-                                                    <label htmlFor="email">Email Address</label>
-                                            
-                                        </div>
-                                    </div>
-
-                                    <div className="col-12">
-                                        <div className="form-floating theme-form-floating log-in-form">
-                                            <input type="password" name="password" className="form-control"
-                                                   id="password"
-                                                   onChange={handleChange}
-                                                   placeholder="Password"/>
-                                                   <label htmlFor="password">Password</label>
-                                            
-                                        </div>
-
                             <div className="col-xxl-4 col-xl-5 col-lg-6 col-sm-8 mx-auto">
                                 <nav className="navbar navbar-expand-lg navbar-light bg-light">
                                     <div className="container-fluid">
@@ -140,7 +122,6 @@ export default function Login(){
                                     <div className="log-in-title">
                                         <h3>Welcome To NewCycle</h3>
                                         <h4>Log In Your Account ( As a client )</h4>
-
                                     </div>
 
                                     <div className="input-box">
@@ -191,25 +172,6 @@ export default function Login(){
                                         <h6>or</h6>
                                     </div>
 
-                            <div className="log-in-button">
-                                <ul>
-                                    <li>
-                                        <a href="#" className="btn google-button w-100">
-                                            <img src="../../../../assets/User/images/inner-page/google.png"
-                                                 className="lazyload"
-                                                 alt=""/> Log In with Google
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="https://www.facebook.com/" className="btn google-button w-100">
-                                            <img src="../../../../assets/User/images/inner-page/facebook.png"
-                                                 className="lazyload"
-                                                 alt=""/> Log In with Facebook
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-
                                     <div className="log-in-button">
                                         <ul>
                                             <li>
@@ -229,7 +191,6 @@ export default function Login(){
                                         </ul>
                                     </div>
 
-
                                     <div className="other-log-in">
                                         <h6></h6>
                                     </div>
@@ -246,6 +207,5 @@ export default function Login(){
 
             </div>
         }
-
-    </div>
+  </div>
 }
