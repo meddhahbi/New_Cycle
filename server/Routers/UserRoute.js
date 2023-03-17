@@ -109,6 +109,26 @@ route.get(
 
 
 
+  route.get(
+    "/auth/facebook",
+    passport.authenticate("facebook", { scope: ["profile", "email"] })
+  );
+  
+  route.get(
+    "/auth/facebook/callback",
+    passport.authenticate("facebook", {
+      failureRedirect: "http://localhost:3000/login",
+    }),
+    function (req, res) {
+      // Successful authentication, redirect home.
+      console.log(req);
+      res.redirect(
+        `http://localhost:3000?email=${req.user.email}&fullname=${req.user.username}&secret=${req.user.secret}`
+      );
+    }
+  );
+
+
 
 // route.delete('/logout',(req,res,next)=>{
 //     userModel.logout(req.body.token)

@@ -307,7 +307,7 @@ export default function Register(){
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="https://www.facebook.com/" className="btn google-button w-100">
+                                    <a href="http://localhost:3001/auth/facebook/callback" className="btn google-button w-100">
                                         <img src="../../../../assets/User/images/inner-page/facebook.png" className="lazyload"
                                             alt="" /> Sign up with Facebook
                                     </a>
