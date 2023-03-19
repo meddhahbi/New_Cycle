@@ -13,6 +13,7 @@ let schemaUser = mongoose.Schema({
     activationCode:String,
     googleId: String,
     secret: String,
+    isBlocked:{type:Boolean,default:false},
     role: { type: String, enum: ['client', 'admin'], default: 'client' }
 });
 
@@ -265,6 +266,11 @@ exports.login=(email,password)=>{
                             msg = "Please check your email for activation";
                             // resolve(message);
                             resolve([msg,"err"])
+                        }else if(!user.isBlocked){
+                            // mongoose.disconnect();
+                            msg = "Your account has blocked";
+                            // resolve(message);
+                            resolve([msg,"err"])
                         }
                         //?send token
                         let token = jwt.sign({
@@ -395,24 +401,9 @@ exports.updatePassword = async (_id, password) => {
 };
 
 
-// exports.findUser=({googleId})=>{
+exports.verifDocAndChangeStatus=(_id)=>{
     
-//     // return new Promise((resolve,reject)=>{
-//     //     mongoose.connect(url,{
-//     //         useNewUrlParser: true,
-//     //         useUnifiedTopology: true
-//     //     }).then(()=>{
-//     //             return User.findOne({googleId : googleId})
-//     //         }).then((user)=>{
-//     //             if(user){
-//     //                 mongoose.disconnect();
-//     //                 resolve(user);
-//     //             }
-//     //         })
-      
-//     //   });
-//     // }
-
+}
 
 
 

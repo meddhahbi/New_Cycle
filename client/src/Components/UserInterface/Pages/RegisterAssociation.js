@@ -23,7 +23,7 @@ export default function RegisterAssociation(){
     const [postal, setPostal] = useState('');
     //const [docVerif, setDocVerif]=useState('');
 
-    console.log(docVerif,12);
+    //console.log(docVerif,12);
 
     const [errors, setErrors] = useState(
         {
@@ -32,7 +32,7 @@ export default function RegisterAssociation(){
             password: '',
             phone: '',
             postal: '',
-            docVerif:'',
+           // docVerif:'',
         }
     )
 
@@ -98,7 +98,7 @@ export default function RegisterAssociation(){
     const register=(e)=>{
         e.preventDefault();
         console.log("form submitted");
-        console.log("form data", name, email, password, phone, postal,docVerif);
+        console.log("form data", name, email, password, phone, postal);
 
 
         //? Form valid
