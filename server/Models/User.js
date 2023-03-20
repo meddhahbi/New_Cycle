@@ -247,6 +247,26 @@ exports.currentUser=async(email)=>{
         console.log(err.message);
     }
 }
+exports.updateProfile=(user_email, username, phone, postal)=>{
+    try{
+        return User.findOne({ email:user_email})
+            .then(async(user)=>{
+                console.log(user.username)
+                if (user.username !== username && username)
+                    user.username = username;
+                if (user.phone !== phone && phone)
+                    user.phone = phone;
+                if (user.postal !== postal && postal)
+                    user.postal = postal;
+                const updatedUser = await user.save()
+                return updatedUser
+            })
+            .catch((err)=>res.status(400).json({error:err}));
+    }
+    catch(err){
+        console.log(err.message);
+    }
+}
 
 exports.login=(email,password)=>{
     return new Promise((resolve, reject)=>{

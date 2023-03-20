@@ -7,9 +7,9 @@ export default function Admin(){
 
     return <div>
 
-        <NavbarAdmin />
+        {/*<NavbarAdmin />*/}
         <Outlet />
-        <div>Footer</div>
+        <div>Admin</div>
 
 
 
