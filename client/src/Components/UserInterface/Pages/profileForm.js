@@ -55,7 +55,7 @@ const ProfileForm = () => {
             const res = await axios.put(url, data);
             console.log(res);
             console.log(data)
-            // window.location = "/"
+            window.location = "/"
         } catch (e) {
             console.log(e)
         }
