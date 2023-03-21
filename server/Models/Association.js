@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 
 
 
+
 let schemaAssociation = mongoose.Schema({
     name:{ type: String, required: true },
     email: { type: String, required: true, unique: true },
@@ -12,12 +13,16 @@ let schemaAssociation = mongoose.Schema({
     phone:{ type: Number, required: true },
     postal:{ type: Number, required: true },
     isActive : {type:Boolean,default:false},
-    docVerif:String,
     role: { type: String,  default: 'association' }
 });
 
 var Association = mongoose.model('Association',schemaAssociation);
 var url = process.env.URL;
+
+
+// const storage = multer.memoryStorage();
+// const upload = multer({ storage: storage })
+
 
 var privateKey = "this is my secret key testjsdjsbdjdbdjbcjbkajdbqsjq"
 
@@ -25,7 +30,7 @@ var privateKey = "this is my secret key testjsdjsbdjdbdjbcjbkajdbqsjq"
 
 
 
-exports.register=(name,email,password,phone,postal,docVerif)=>{
+exports.register=(name,email,password,phone,postal)=>{
     return new Promise((resolve,reject)=>{
         mongoose.connect(url,{
             useNewUrlParser: true,
@@ -39,16 +44,13 @@ exports.register=(name,email,password,phone,postal,docVerif)=>{
                     reject('this email is exist');
                 }else{
                     bcrypt.hash(password,10).then((hashedPassword)=>{
-                        console.log(hashedPassword);
                         let association = new Association({
                             name:name,
                             email:email,
                             password:hashedPassword,
                             phone:phone,
                             postal:postal,
-                            docVerif:docVerif,
                         })
-                       // console.log(association);
                         association.save().then((association)=>{
                             mongoose.disconnect();
                             resolve(association);
@@ -56,10 +58,11 @@ exports.register=(name,email,password,phone,postal,docVerif)=>{
                         }).catch((err)=>{
                             mongoose.disconnect();
                             reject(err);
+            
                         })
                     }).catch((err)=>{
                         mongoose.disconnect();
-                        reject(err)
+                        reject(err);
                     })
                 }
             })

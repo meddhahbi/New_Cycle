@@ -29,9 +29,9 @@ module.exports.sendResetPassword = (email,cnt)=>{
         from:process.env.AUTH_EMAIL,
         to:email,
         subject:"Password Reset",
-        html:`<h1>Confirmation Email</h1>
-        <h2>Bonjour</h2>
-        <p>Pour activer votre compte, veuillez cliquez sur ce lien</p>
+        html:`<h1>Password reset link</h1>
+        <h2>Hello</h2>
+        <p>Click here to reset your password</p>
         ${cnt}`
         
        

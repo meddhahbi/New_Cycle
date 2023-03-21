@@ -13,13 +13,14 @@ let schemaUser = mongoose.Schema({
     activationCode:String,
     googleId: String,
     secret: String,
+    isBlocked:{type:Boolean,default:false},
     role: { type: String, enum: ['client', 'admin'], default: 'client' }
 });
 
 // const User = mongoose.model('User', schemaUser);
 var User = mongoose.model('User',schemaUser);
 
-//module.exports = User;
+
 
 
 
@@ -258,8 +259,7 @@ exports.updateProfile=(user_email, username, phone, postal)=>{
                     user.phone = phone;
                 if (user.postal !== postal && postal)
                     user.postal = postal;
-                const updatedUser = await user.save()
-                return updatedUser
+                return await user.save()
             })
             .catch((err)=>res.status(400).json({error:err}));
     }
@@ -283,6 +283,11 @@ exports.login=(email,password)=>{
                         if(!user.isActive){
                             // mongoose.disconnect();
                             msg = "Please check your email for activation";
+                            // resolve(message);
+                            resolve([msg,"err"])
+                        }else if(user.isBlocked){
+                            // mongoose.disconnect();
+                            msg = "Your account has been blocked";
                             // resolve(message);
                             resolve([msg,"err"])
                         }
@@ -415,10 +420,13 @@ exports.updatePassword = async (_id, password) => {
 };
 
 
+exports.verifDocAndChangeStatus=(_id)=>{
+    
+}
 
 
 
-
+// module.exports = User;
 
 
 

@@ -8,6 +8,7 @@ var cors = require('cors');
 const passport = require("passport");
 const { Connect } = require("./Config/connect");
 //const googleAuth = require("./routes/index");
+const multer = require('multer');
 
 app.use(cors()); // Use this after the variable declaration
 
@@ -28,7 +29,6 @@ app.use(
 
 
 
-
 //? reception et envoie de données avec le format json 
 app.use(express.json());
 app.use(express.urlencoded({
@@ -39,6 +39,8 @@ Connect();
 
 //database connection
 connection();
+
+// app.use(express.static('public'));
 
 
 //* Une méthode de test
@@ -53,6 +55,8 @@ app.use('/association',associationRoute);
 
 app.use(passport.initialize());
 require("./auth/google-auth")(passport);
+
+require("./auth/facebook-auth")(passport);
 
 
 

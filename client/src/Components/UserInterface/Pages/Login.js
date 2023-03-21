@@ -4,11 +4,12 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import styles from "./style/styles.module.css"
 import LoadingPage from "../../Loading";
+import { useNavigate } from 'react-router-dom';
 
 
 export default function Login(){
-    
-    
+
+    const navigate = useNavigate();
     const [data, setData] = useState({ email: "", password: "" });
    const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(true);
@@ -18,6 +19,18 @@ export default function Login(){
    const handleChange = ({ currentTarget: input }) => {
       setData({ ...data, [input.name]: input.value });
    };
+    // const [profile, setProfile] = useState(null);
+    // const getData= async ()=>{
+    //     const url = "http://localhost:3001/me/" + localStorage.getItem("mail");
+    //     const response = await fetch(url);
+    //     const json = await response.json();
+    //     const user = json.user;
+    //     console.log(user);
+    //     if(response.ok){
+    //         setProfile(user);
+    //     }
+    // }
+    // getData()
     const handleSubmit = async (e) => {
       e.preventDefault();
       try {
@@ -41,6 +54,7 @@ export default function Login(){
                 localStorage.setItem("role", res.token[2]);
                 if(res.token[2]==="client"){
                     window.location = "/";
+                    // navigate('/',{replace:true, state: { profile: profile }});
                 }
                 else if(res.token[2]==="admin"){
                     window.location = "/admin";
@@ -208,6 +222,5 @@ export default function Login(){
 
             </div>
         }
-
-    </div>
+  </div>
 }
