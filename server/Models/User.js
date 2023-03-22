@@ -21,9 +21,6 @@ let schemaUser = mongoose.Schema({
 var User = mongoose.model('User',schemaUser);
 
 
-
-
-
 //var User = mongoose.model('User',schemaUser);
 var url = process.env.URL;
 

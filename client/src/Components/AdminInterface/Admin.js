@@ -1,19 +1,20 @@
 import { Outlet } from "react-router"
-import NavbarAdmin from "./Navbar";
+
+import Sidebar from "./Sidebar";
 
 
 export default function Admin(){
 
 
     return <div>
-
-        <NavbarAdmin />
+    
+        <Sidebar/>
         <Outlet />
         <div>Admin</div>
 
+        </div>
 
 
-    </div>
 
 
 
