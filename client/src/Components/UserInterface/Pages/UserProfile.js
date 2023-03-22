@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
-import Loading from "../../Loading";
+import LoadingPage from "../../Loading";
+import {Link} from "react-router-dom";
 
 export default function UserProfile() {
 
@@ -25,7 +26,7 @@ export default function UserProfile() {
     },[])
 
     return <div>
-        {isLoading ? <Loading/> :
+        {isLoading ? <LoadingPage/> :
             <section className="user-dashboard-section section-b-space">
                 <div className="container-fluid-lg">
                     <div className="row">
@@ -1387,8 +1388,9 @@ export default function UserProfile() {
                                                         </div>
                                                     </div>
 
-                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                       data-bs-target="#editProfile">Edit</a>
+                                                    <Link to="/edit_me"
+                                                          // data-bs-toggle="modal"
+                                                       data-bs-target="#editProfile">Edit</Link>
                                                 </div>
 
                                                 <div className="location-profile">
@@ -1396,7 +1398,7 @@ export default function UserProfile() {
                                                         <li>
                                                             <div className="location-box">
                                                                 <i data-feather="map-pin"></i>
-                                                                <h6>Downers Grove, IL</h6>
+                                                                <h6>Email:</h6>
                                                             </div>
                                                         </li>
 
@@ -1408,10 +1410,10 @@ export default function UserProfile() {
                                                         </li>
 
                                                         <li>
-                                                            <div className="location-box">
-                                                                <i data-feather="check-square"/>
-                                                                <h6>Licensed for 2 years</h6>
-                                                            </div>
+                                                            {/*<div className="location-box">*/}
+                                                            {/*    <i data-feather="check-square"/>*/}
+                                                            {/*    <h6>Licensed for 2 years</h6>*/}
+                                                            {/*</div>*/}
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -1595,7 +1597,142 @@ export default function UserProfile() {
                         </div>
                     </div>
                 </div>
+                <div className="modal fade theme-modal" id="editProfile" tabIndex="-1"
+                     aria-labelledby="exampleModalLabel2"
+                     aria-hidden="true">
+                    <div className="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title" id="exampleModalLabel2">Edit Profile</h5>
+                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                    <i className="fa-solid fa-xmark"></i>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                <div className="row g-4">
+                                    <div className="col-xxl-12">
+                                        <form>
+                                            <div className="form-floating theme-form-floating">
+                                                <input type="text" className="form-control" id="pname"
+                                                       value="Jack Jennas" />
+                                                    <label htmlFor="pname">Full Name</label>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <div className="col-xxl-6">
+                                        <form>
+                                            <div className="form-floating theme-form-floating">
+                                                <input type="email" className="form-control" id="email1"
+                                                       value="vicki.pope@gmail.com"/>
+                                                    <label htmlFor="email1">Email address</label>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <div className="col-xxl-6">
+                                        <form>
+                                            <div className="form-floating theme-form-floating">
+                                                <input className="form-control" type="tel" value="4567891234"
+                                                       name="mobile" id="mobile"
+                                                       maxLength="10" onInput="javascript: if (this.value.length > this.maxLength) this.value =
+                                            this.value.slice(0, this.maxLength);"/>
+                                                    <label htmlFor="mobile">Email address</label>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <div className="col-12">
+                                        <form>
+                                            <div className="form-floating theme-form-floating">
+                                                <input type="text" className="form-control" id="address1"
+                                                       value="8424 James Lane South San Francisco"/>
+                                                    <label htmlFor="address1">Add Address</label>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <div className="col-12">
+                                        <form>
+                                            <div className="form-floating theme-form-floating">
+                                                <input type="text" className="form-control" id="address2"
+                                                       value="CA 94080"/>
+                                                    <label htmlFor="address2">Add Address 2</label>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <div className="col-xxl-4">
+                                        <form>
+                                            <div className="form-floating theme-form-floating">
+                                                <select className="form-select" id="floatingSelect1"
+                                                        aria-label="Floating label select example">
+                                                    <option selected>Choose Your Country</option>
+                                                    <option value="kindom">United Kingdom</option>
+                                                    <option value="states">United States</option>
+                                                    <option value="fra">France</option>
+                                                    <option value="china">China</option>
+                                                    <option value="spain">Spain</option>
+                                                    <option value="italy">Italy</option>
+                                                    <option value="turkey">Turkey</option>
+                                                    <option value="germany">Germany</option>
+                                                    <option value="russian">Russian Federation</option>
+                                                    <option value="malay">Malaysia</option>
+                                                    <option value="mexico">Mexico</option>
+                                                    <option value="austria">Austria</option>
+                                                    <option value="hong">Hong Kong SAR, China</option>
+                                                    <option value="ukraine">Ukraine</option>
+                                                    <option value="thailand">Thailand</option>
+                                                    <option value="saudi">Saudi Arabia</option>
+                                                    <option value="canada">Canada</option>
+                                                    <option value="singa">Singapore</option>
+                                                </select>
+                                                <label htmlFor="floatingSelect">Country</label>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <div className="col-xxl-4">
+                                        <form>
+                                            <div className="form-floating theme-form-floating">
+                                                <select className="form-select" id="floatingSelect">
+                                                    <option selected>Choose Your City</option>
+                                                    <option value="kindom">India</option>
+                                                    <option value="states">Canada</option>
+                                                    <option value="fra">Dubai</option>
+                                                    <option value="china">Los Angeles</option>
+                                                    <option value="spain">Thailand</option>
+                                                </select>
+                                                <label htmlFor="floatingSelect">City</label>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <div className="col-xxl-4">
+                                        <form>
+                                            <div className="form-floating theme-form-floating">
+                                                <input type="text" className="form-control" id="address3" value="94080" />
+                                                    <label htmlFor="address3">Pin Code</label>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-animation btn-md fw-bold"
+                                        data-bs-dismiss="modal">Close
+                                </button>
+                                <button type="button" data-bs-dismiss="modal"
+                                        className="btn theme-bg-color btn-md fw-bold text-light">Save changes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </section>
+
+
         }
     </div>
 };

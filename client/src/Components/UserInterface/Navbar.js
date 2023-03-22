@@ -1,6 +1,7 @@
 
 import { Link } from "react-router-dom";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
+import navbar from "./Pages/style/navbar.css"
 
 
 export default function Navbar(){
@@ -68,28 +69,28 @@ export default function Navbar(){
                                 <div className="dropdown theme-form-select">
                                     <button className="btn dropdown-toggle" type="button" id="select-language"
                                         data-bs-toggle="dropdown" aria-expanded="false">
-                                        <img src="../../assets/images/User/country/united-states.png"
+                                        <img src="../../../assets/images/User/country/united-states.png"
                                             className="img-fluid blur-up lazyload" alt="" />
                                         <span>English</span>
                                     </button>
                                     <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="select-language">
                                         <li>
                                             <a className="dropdown-item" href="#" id="english">
-                                                <img src="../../assets/User/images/country/united-kingdom.png"
+                                                <img src="../../../assets/User/images/country/united-kingdom.png"
                                                     className="img-fluid blur-up lazyload" alt="" />
                                                 <span>English</span>
                                             </a>
                                         </li>
                                         <li>
                                             <a className="dropdown-item" href="#" id="france">
-                                                <img src="../../assets/User/images/country/germany.png"
+                                                <img src="../../../assets/User/images/country/germany.png"
                                                     className="img-fluid blur-up lazyload" alt="" />
                                                 <span>Germany</span>
                                             </a>
                                         </li>
                                         <li>
                                             <a className="dropdown-item" href="#" id="chinese">
-                                                <img src="../../assets/User/images/country/turkish.png"
+                                                <img src="../../../assets/User/images/country/turkish.png"
                                                     className="img-fluid blur-up lazyload" alt="" />
                                                 <span>Turki</span>
                                             </a>
@@ -134,16 +135,16 @@ export default function Navbar(){
                                     <i className="fa-solid fa-bars"></i>
                                 </span>
                             </button>
-                            <a href="index.html" className="web-logo nav-logo">
+                            <Link to="/" className="web-logo nav-logo">
                                 <img src="../../assets/User/images/logo/1.png" className="img-fluid blur-up lazyload" alt="" />
-                            </a>
+                            </Link>
 
                             <div className="middle-box">
                                 <div className="location-box">
                                     <button className="btn location-button" data-bs-toggle="modal"
                                         data-bs-target="#locationModal">
                                         <span className="location-arrow">
-                                            <i data-feather="map-pin"></i>
+                                            <i data-feather="map-pin" className="fa fa-map-marker"/>
                                         </span>
                                         <span className="locat-name">Your Location</span>
                                         <i className="fa-solid fa-angle-down"></i>
@@ -155,7 +156,7 @@ export default function Navbar(){
                                         <input type="search" className="form-control" placeholder="I'm searching for..."
                                             aria-label="Recipient's username" aria-describedby="button-addon2" />
                                         <button className="btn" type="button" id="button-addon2">
-                                            <i data-feather="search"></i>
+                                            <i data-feather="search" className="fa-solid fa-search"/>
                                         </button>
                                     </div>
                                 </div>
@@ -192,7 +193,7 @@ export default function Navbar(){
                                     <li className="right-side">
                                         <div className="onhover-dropdown header-badge">
                                             <button type="button" className="btn p-0 position-relative header-wishlist">
-                                                <i data-feather="shopping-cart"></i>
+                                                <i data-feather="shopping-cart" className="fa fa-shopping-cart"/>
                                                 <span className="position-absolute top-0 start-100 translate-middle badge">2
                                                     <span className="visually-hidden">unread messages</span>
                                                 </span>
@@ -203,7 +204,7 @@ export default function Navbar(){
                                                     <li className="product-box-contain">
                                                         <div className="drop-cart">
                                                             <a href="product-left-thumbnail.html" className="drop-image">
-                                                                <img src="../../assets/User/images/vegetable/product/1.png"
+                                                                <img src="../../../assets/User/images/vegetable/product/1.png"
                                                                     className="blur-up lazyload" alt="" />
                                                             </a>
 
@@ -255,13 +256,17 @@ export default function Navbar(){
                                     </li>
                                     <li className="right-side onhover-dropdown">
                                         <div className="delivery-login-box">
-                                            <div className="delivery-icon">
-                                                <i data-feather="user"></i>
-                                            </div>
+
                                             
                                             {localStorage.getItem("token")?<div className="delivery-detail">
-                                                <h6>Hello,</h6>
-                                                <h5>{profile && profile.username}</h5>
+                                                {
+                                                    profile?<div>
+                                                        <h6><center><div className="delivery-icon">
+                                                            <i data-feather="user" className="fa fa-user"/>
+                                                        </div></center></h6>
+                                                        {/*<h5>{profile && profile.username}</h5>*/}
+                                                    </div>:""
+                                                }
                                             </div>:<div className="delivery-detail">
                                                 <h6>Login/Sign Up</h6>
                                             </div>}
@@ -283,12 +288,11 @@ export default function Navbar(){
                                                 </ul>
                                                 :<ul className="user-box-name">
                                                         <li className="product-box-contain">
-                                                            <Link to="/me">My Account</Link>
+                                                            <Link to="/me">Profile</Link>
                                                         </li>
-                                                        <br/>
                                                         <li className="product-box-contain">
                                                             <form onSubmit={logout}>
-                                                                <button  >Logout</button>
+                                                                <button className="btn btn-sm btn-outline-danger" >Logout</button>
                                                             </form>
                                                         </li>
                                                     </ul>}

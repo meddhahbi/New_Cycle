@@ -248,6 +248,25 @@ exports.currentUser=async(email)=>{
         console.log(err.message);
     }
 }
+exports.updateProfile=(user_email, username, phone, postal)=>{
+    try{
+        return User.findOne({ email:user_email})
+            .then(async(user)=>{
+                console.log(user.username)
+                if (user.username !== username && username)
+                    user.username = username;
+                if (user.phone !== phone && phone)
+                    user.phone = phone;
+                if (user.postal !== postal && postal)
+                    user.postal = postal;
+                return await user.save()
+            })
+            .catch((err)=>res.status(400).json({error:err}));
+    }
+    catch(err){
+        console.log(err.message);
+    }
+}
 
 exports.login=(email,password)=>{
     return new Promise((resolve, reject)=>{
@@ -266,9 +285,9 @@ exports.login=(email,password)=>{
                             msg = "Please check your email for activation";
                             // resolve(message);
                             resolve([msg,"err"])
-                        }else if(!user.isBlocked){
+                        }else if(user.isBlocked){
                             // mongoose.disconnect();
-                            msg = "Your account has blocked";
+                            msg = "Your account has been blocked";
                             // resolve(message);
                             resolve([msg,"err"])
                         }

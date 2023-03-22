@@ -9,7 +9,7 @@ export default function Admin(){
 
         <NavbarAdmin />
         <Outlet />
-        <div>Footer</div>
+        <div>Admin</div>
 
 
 

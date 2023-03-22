@@ -29,6 +29,18 @@ route.get("/me/:mail", async (req, res, next)=>{
     
 })
 
+route.put("/client/me/update/:mail",async(req, res, next)=>{
+    userModel.updateProfile(req.params.mail, req.body.username, req.body.phone, req.body.postal)
+        .then((user)=>res.status(200).json({
+            user:user,
+            msg:'User Updated'
+        }))
+
+        .catch((err)=>res.status(400).json({error:err}));
+    // console.log(user.email);
+
+})
+
 
 route.post('/login',(req,res,next)=>{
     console.log("login")
