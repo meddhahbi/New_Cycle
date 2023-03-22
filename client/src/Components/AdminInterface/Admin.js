@@ -7,7 +7,7 @@ export default function Admin(){
 
     return <div>
 
-        Navbar
+        <NavbarAdmin />
         <Outlet />
         <div>Footer</div>
 
