@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { sendConfirmationEmail, sendResetPassword } = require('../Config/nodemailer');
+const moment = require('moment');
+//const stripe = require('../Config/stripe.js')
 
 let schemaUser = mongoose.Schema({
     username:{ type: String, required: true },
@@ -14,6 +16,13 @@ let schemaUser = mongoose.Schema({
     googleId: String,
     secret: String,
     isBlocked:{type:Boolean,default:false},
+    subscription: {
+        plan: {type:String,default:'premium'}, 
+        status: {type:Boolean,default:false}, 
+        start: {type:Date,default:null}, 
+        end: {type:Date,default:null}, 
+        nextPayment: {type:Date,default:null}, 
+    },
     role: { type: String, enum: ['client', 'admin'], default: 'client' }
 });
 
@@ -422,6 +431,57 @@ exports.verifDocAndChangeStatus=(_id)=>{
 }
 
 
+exports.createSubs=(email)=>{
+
+
+    return new Promise((resolve,reject)=>{
+        mongoose.connect(url,{
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        }).then(()=>{
+            return User.findOne({email: email
+            }).then((doc)=>{
+                if(doc){
+                    const subscription = {
+                        status: true,
+                        start: moment(),
+                        end: moment().add(30, 'days'), 
+                        nextPayment: moment().add(30, 'days'),
+                    };
+                
+                    User.updateOne({email: email}, {
+                        $set: {
+                        subscription,
+                        //stripeCustomerId
+                        }
+                        
+                    }).then((user)=>{
+                        mongoose.disconnect();
+                        resolve(user);
+
+                    }).catch((err)=>{
+                        mongoose.disconnect();
+                        reject(err);
+                    });
+                
+                }else{
+                    mongoose.disconnect();
+                    reject('this email is exist');
+                }
+            })
+
+        });
+    })
+
+}
+
+
+// exports.getPrices=()=>{
+//     const prices = stripe.prices.list({
+//         apiKey:process.env.STRIPE_SECRET_KEY,
+//     });
+
+// }
 
 // module.exports = User;
 

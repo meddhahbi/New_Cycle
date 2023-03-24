@@ -70,14 +70,6 @@ route.put('/updatePassword/:_id',(req,res,next)=>{
 });
 
 
-// route.get('/verify/:userId/:uniqueString',(req,res,next)=>{
-//     userModel.verify(req.params.userId,req.params.uniqueString)
-//     .then((user)=>res.status(200).json({
-//         user:user,
-//         msg:'User Verification successfully'
-//     }))
-//     .catch((err)=>res.status(400).json({error:err}));
-// })
 
 
 
@@ -141,16 +133,14 @@ route.get(
   );
 
 
-
-// route.delete('/logout',(req,res,next)=>{
-//     userModel.logout(req.body.token)
-//     .then((res)=>res.status(200).json({
-//         msg:'Logout success'
-//     }))
-//     .catch((err)=>res.status(400).json({error:err}));
-// })
-
-
+route.post('/subscribe',(req,res,next)=>{
+    userModel.createSubs(req.body.email)
+    .then((user)=>res.status(200).json({
+      user:user,
+      msg:'User subscribed successfully'
+  }))
+  .catch((err)=>res.status(400).json({error:err}));
+});
 
 
 
