@@ -13,6 +13,7 @@ const multer = require('multer');
 app.use(cors()); // Use this after the variable declaration
 
 const session = require("express-session");
+const articleRoutes = require('./Routers/ArticleRoute');
  
 //const app = express();
 
@@ -58,7 +59,7 @@ require("./auth/google-auth")(passport);
 
 require("./auth/facebook-auth")(passport);
 
-
+app.use('/article', articleRoutes);
 
 
 
