@@ -33,7 +33,8 @@ var User = mongoose.model('User',schemaUser);
 //var User = mongoose.model('User',schemaUser);
 var url = process.env.URL;
 
-var privateKey = "this is my secret key testjsdjsbdjdbdjbcjbkajdbqsjq"
+// var privateKey = "this is my secret key testjsdjsbdjdbdjbcjbkajdbqsjq"
+var privateKey = process.env.PK
 
 
 
@@ -240,7 +241,7 @@ exports.register=(username,email,password,phone,postal,role)=>{
     })
 }
 
-exports.currentUser=async(email)=>{
+currentUser=async(email)=>{
     console.log(email)
     try{
         return User.findOne({ email:email})
@@ -274,7 +275,7 @@ exports.updateProfile=(user_email, username, phone, postal)=>{
     }
 }
 
-exports.login=(email,password)=>{
+login=(email,password)=>{
     return new Promise((resolve, reject)=>{
         mongoose.connect(url,{
             useNewUrlParser: true,
@@ -299,10 +300,9 @@ exports.login=(email,password)=>{
                         }
                         //?send token
                         let token = jwt.sign({
-                            id:user._id,
-                            username:user.username
+                            id:user._id
                         },privateKey,{
-                            expiresIn:'1h',
+                            expiresIn:'30d',
                         })
                         
                         // mongoose.disconnect();
@@ -494,7 +494,11 @@ exports.createSubs=(email)=>{
 
 // }
 
-// module.exports = User;
+module.exports = {
+    User,
+    login,
+    currentUser
+};
 
 
 
