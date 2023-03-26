@@ -435,6 +435,7 @@ exports.createSubs=(email)=>{
 
 
     return new Promise((resolve,reject)=>{
+        const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
         mongoose.connect(url,{
             useNewUrlParser: true,
             useUnifiedTopology: true
@@ -442,6 +443,16 @@ exports.createSubs=(email)=>{
             return User.findOne({email: email
             }).then((doc)=>{
                 if(doc){
+
+                    const subs = stripe.subscriptions.create({
+                        customer: stripeCustomerId,
+                        items: [{
+                          plan: 'your_plan_id',
+                        }],
+                      });
+
+
+
                     const subscription = {
                         status: true,
                         start: moment(),
