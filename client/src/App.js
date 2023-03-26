@@ -13,6 +13,7 @@ import UserProfile from "./Components/UserInterface/Pages/UserProfile";
 import PageNotFound from './Components/UserInterface/PageNotFound';
 import RegisterAssociation from './Components/UserInterface/Pages/RegisterAssociation';
 import ProfileForm from "./Components/UserInterface/Pages/profileForm";
+import Plan from './Components/UserInterface/Pages/Plan';
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
 
           <Route path='/me' element={<UserProfile />} />
           <Route path='/edit_me' element={<ProfileForm />} />
+          <Route path='/subscribe' element={<Plan />} />
 
 
 

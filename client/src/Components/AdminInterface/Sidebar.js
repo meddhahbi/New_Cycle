@@ -1,7 +1,131 @@
 export default function Sidebar(){
     return <div>
+      
+      <div class="custom-row">
+<div class="sidebar-col">
+                    <div class="category-menu">
+                        <a href="index.html" class="web-logo nav-logo">
+                            <img src="../../assets/User/images/logo/1.png" class="img-fluid blur-up lazyload" alt="" />
+                        </a>
+                        <ul>
+                            <li>
+                                <div class="category-list">
+                                    <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/vegetable.svg" class="blur-up lazyload" alt="" />
+                                    <h5>
+                                        <a href="shop-left-sidebar.html">Vegetables & Fruit</a>
+                                    </h5>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="category-list">
+                                    <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/cup.svg" class="blur-up lazyload" alt="" />
+                                    <h5>
+                                        <a href="shop-left-sidebar.html">Beverages</a>
+                                    </h5>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="category-list">
+                                    <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/meats.svg" class="blur-up lazyload" alt="" />
+                                    <h5>
+                                        <a href="shop-left-sidebar.html">Meats & Seafood</a>
+                                    </h5>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="category-list">
+                                    <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/breakfast.svg" class="blur-up lazyload" alt="" />
+                                    <h5>
+                                        <a href="shop-left-sidebar.html">Breakfast & Dairy</a>
+                                    </h5>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="category-list">
+                                    <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/frozen.svg" class="blur-up lazyload" alt="" />
+                                    <h5>
+                                        <a href="shop-left-sidebar.html">Frozen Foods</a>
+                                    </h5>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="category-list">
+                                    <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/biscuit.svg" class="blur-up lazyload" alt="" />
+                                    <h5>
+                                        <a href="shop-left-sidebar.html">Biscuits & Snacks</a>
+                                    </h5>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="category-list">
+                                    <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/grocery.svg" class="blur-up lazyload" alt="" />
+                                    <h5>
+                                        <a href="shop-left-sidebar.html">Grocery & Staples</a>
+                                    </h5>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="category-list">
+                                    <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/drink.svg" class="blur-up lazyload" alt="" />
+                                    <h5>
+                                        <a href="shop-left-sidebar.html">Wines & Alcohol Drinks</a>
+                                    </h5>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="category-list">
+                                    <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/milk.svg" class="blur-up lazyload" alt="" />
+                                    <h5>
+                                        <a href="shop-left-sidebar.html">Milk & Dairies</a>
+                                    </h5>
+                                </div>
+                            </li>
+                            <li class="pb-30">
+                                <div class="category-list">
+                                    <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/pet.svg" class="blur-up lazyload" alt="" />
+                                    <h5>
+                                        <a href="shop-left-sidebar.html">Pet Foods</a>
+                                    </h5>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                </div>
 
-<nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{/* <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
         <a class="navbar-brand brand-logo mr-5" href="index.html"><img src="../../assets/User/images/logo/1.png" class="mr-2" alt="logo"/></a>
       </div>
@@ -374,8 +498,8 @@ export default function Sidebar(){
       </nav>
     
 
-    </div> 
+    </div>  */}
 
-
+    
     </div>
 }
