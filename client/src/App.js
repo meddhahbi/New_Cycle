@@ -6,6 +6,9 @@ import Home from './Components/UserInterface/Pages/Home';
 import Login from './Components/UserInterface/Pages/Login';
 import Register from './Components/UserInterface/Pages/Register';
 import Forgot from './Components/UserInterface/Pages/Forgot';
+import Produit from './Components/Produit/Pages/Produit';
+import AllProduit from './Components/Produit/Pages/AllProduit';
+import UpdateProduct from './Components/Produit/Pages/UpdateProduct';
 import ActivationPage from './Components/UserInterface/Pages/ActivationPage';
 import ResetPassword from './Components/UserInterface/Pages/resetPassword';
 import LoginAssociation from './Components/UserInterface/Pages/LoginAssociation';
@@ -36,15 +39,18 @@ function App() {
           <Route path='/me' element={<UserProfile />} />
           <Route path='/edit_me' element={<ProfileForm />} />
           <Route path='/subscribe' element={<Plan />} />
+          <Route  path='/produit' element={<Produit />} />
 
-
+          <Route  path='/AllProduit' element={<AllProduit />} />
+          
+          
 
 
 
       </Route>
 
 
-
+      <Route  path='/UpdateProduct/:id' element={<UpdateProduct />} />
           {/* <Route  path='/register' element={<Register />} />
           <Route  path='/forgot' element={<Forgot />} /> */}
           {/* <Route path="/reset/:id" element={<ResetPassword />}/> */}
