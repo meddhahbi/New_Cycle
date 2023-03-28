@@ -133,8 +133,8 @@ route.get(
   );
 
 
-route.post('/subscribe',(req,res,next)=>{
-    userModel.createSubs(req.body.email)
+route.post('/subscribe/:email',(req,res,next)=>{
+    userModel.createSubs(req.params.email)
     .then((user)=>res.status(200).json({
       user:user,
       msg:'User subscribed successfully'

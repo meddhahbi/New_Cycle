@@ -33,8 +33,8 @@ var User = mongoose.model('User',schemaUser);
 //var User = mongoose.model('User',schemaUser);
 var url = process.env.URL;
 
-// var privateKey = "this is my secret key testjsdjsbdjdbdjbcjbkajdbqsjq"
-var privateKey = process.env.PK
+var privateKey = "this is my secret key testjsdjsbdjdbdjbcjbkajdbqsjq"
+//var privateKey = process.env.PK
 
 
 
@@ -186,7 +186,7 @@ var privateKey = process.env.PK
 
 
 
-exports.register=(username,email,password,phone,postal,role)=>{
+register=(username,email,password,phone,postal,role)=>{
     return new Promise((resolve,reject)=>{
         mongoose.connect(url,{
             useNewUrlParser: true,
@@ -196,7 +196,7 @@ exports.register=(username,email,password,phone,postal,role)=>{
                 email:email
             }).then((doc)=>{
                 if(doc){
-                    mongoose.disconnect();
+                   // mongoose.disconnect();
                     reject('this email is exist');
                 }else{
                     const caractere = "123456789abcdefghijklmnopqrstuvwyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -215,7 +215,7 @@ exports.register=(username,email,password,phone,postal,role)=>{
                             role:role
                         })
                         user.save().then((user)=>{
-                            mongoose.disconnect();
+                           // mongoose.disconnect();
                             resolve(user);
 
 
@@ -228,11 +228,11 @@ exports.register=(username,email,password,phone,postal,role)=>{
 
 
                         }).catch((err)=>{
-                            mongoose.disconnect();
+                           // mongoose.disconnect();
                             reject(err);
                         })
                     }).catch((err)=>{
-                        mongoose.disconnect();
+                       // mongoose.disconnect();
                         reject(err)
                     })
                 }
@@ -255,7 +255,7 @@ currentUser=async(email)=>{
         console.log(err.message);
     }
 }
-exports.updateProfile=(user_email, username, phone, postal)=>{
+updateProfile=(user_email, username, phone, postal)=>{
     try{
         return User.findOne({ email:user_email})
             .then(async(user)=>{
@@ -332,7 +332,7 @@ login=(email,password)=>{
 }
 
 
-exports.verifyUser=(activationCode)=>{
+verifyUser=(activationCode)=>{
     return new Promise((resolve, reject)=>{
         mongoose.connect(url,{
             useNewUrlParser: true,
@@ -341,15 +341,15 @@ exports.verifyUser=(activationCode)=>{
                 return User.findOne({ activationCode:activationCode});
             }).then((user)=>{
                 if(!user){
-                    mongoose.disconnect();
+                   // mongoose.disconnect();
                     reject("failed");
                 }else{
                     user.isActive=true;
                     user.save().then(()=>{
-                        mongoose.disconnect();
+                       // mongoose.disconnect();
                         resolve("success");
                     }).catch((err)=>{
-                        mongoose.disconnect();
+                       // mongoose.disconnect();
                         reject(err);
                     })
                 }
@@ -431,7 +431,7 @@ exports.verifDocAndChangeStatus=(_id)=>{
 }
 
 
-exports.createSubs=(email)=>{
+createSubs=(email)=>{
 
 
     return new Promise((resolve,reject)=>{
@@ -444,12 +444,12 @@ exports.createSubs=(email)=>{
             }).then((doc)=>{
                 if(doc){
 
-                    const subs = stripe.subscriptions.create({
-                        customer: stripeCustomerId,
-                        items: [{
-                          plan: 'your_plan_id',
-                        }],
-                      });
+                    // const subs = stripe.subscriptions.create({
+                    //     customer: stripeCustomerId,
+                    //     items: [{
+                    //       plan: 'your_plan_id',
+                    //     }],
+                    //   });
 
 
 
@@ -467,16 +467,16 @@ exports.createSubs=(email)=>{
                         }
                         
                     }).then((user)=>{
-                        mongoose.disconnect();
+                      //  mongoose.disconnect();
                         resolve(user);
 
                     }).catch((err)=>{
-                        mongoose.disconnect();
+                      //  mongoose.disconnect();
                         reject(err);
                     });
                 
                 }else{
-                    mongoose.disconnect();
+                   // mongoose.disconnect();
                     reject('this email is exist');
                 }
             })
@@ -497,7 +497,11 @@ exports.createSubs=(email)=>{
 module.exports = {
     User,
     login,
-    currentUser
+    currentUser,
+    register,
+    createSubs,
+    verifyUser,
+    updateProfile,
 };
 
 
