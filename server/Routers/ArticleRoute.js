@@ -4,16 +4,19 @@ const articles = require('../Models/Article');
 
 
 route.post('/', (req, res, next) => {
-    articles.createArticle(req.body.title, req.body.content, req.body.image, req.body.author)
-      .then((artcile) => res.status(200).json({
-        artcile:artcile,
-        message: 'Article created successfully'
-      }))
-      .catch((err) => {
-        console.error(err);
-        res.status(400).json({ message: 'Failed to create article' });
-      });
-  });
+  // Convert the base64-encoded photo data to a Buffer
+  const photo = Buffer.from(req.body.photo, 'base64');
+  
+  articles.createArticle(req.body.title, req.body.content, req.body.image, req.body.author, photo)
+    .then((article) => res.status(200).json({
+      article: article,
+      message: 'Article created successfully'
+    }))
+    .catch((err) => {
+      console.error(err);
+      res.status(400).json({ message: 'Failed to create article' });
+    });
+});
 
   route.delete('/:id', (req, res) => {
     const articleId = req.params.id;
