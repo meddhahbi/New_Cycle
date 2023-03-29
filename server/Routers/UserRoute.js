@@ -143,5 +143,15 @@ route.post('/subscribe/:email',(req,res,next)=>{
 });
 
 
+route.put('/block/:_id',(req,res,next)=>{
+  console.log(req.body);
+  userModel.block(req.params._id)
+  .then(()=>res.status(200).json({
+      msg:'User blocked successfully'
+  }))
+  .catch((err)=>res.status(400).json({error:err}));
+});
+
+
 
 module.exports = route;

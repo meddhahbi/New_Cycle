@@ -505,7 +505,42 @@ module.exports = {
 };
 
 
+  exports.blockUser=(userId)=>{
+    try {
+        const user =  User.findById(userId);
+        if (!user) {
+          throw new Error('User not found');
+        }
+        user.isBlocked = true;
+         user.save();
+        console.log(`User with ID ${userId} has been blocked`);
+      } catch (err) {
+        console.error(`Error blocking user with ID ${userId}: ${err.message}`);
+      }
+}
 
-
+exports.block = async (_id) => {
+    try {
+    await mongoose.connect(url, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    });
+    const user = await User.findById(_id);
+    if (!user) {
+        mongoose.disconnect();
+        throw new Error('User not found');
+      }
+      console.log(_id);
+      user.isBlocked = true;
+      const updatedUser = await user.save();
+      mongoose.disconnect();
+      return updatedUser;
+    } catch (err) {
+      console.log(err);
+      mongoose.disconnect();
+      throw new Error('Failed to block user');
+    }
+    
+};
 
 
