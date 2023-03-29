@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
+
 function BlogList() {
   const [articles, setArticles] = useState([]);
 
   useEffect(() => {
+    
     fetch(`http://localhost:3001/article`)
       .then(res => res.json())
       .then(data => setArticles(data.articles))

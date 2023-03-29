@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
 const fs = require('fs');
 
+
 const articleSchema = new mongoose.Schema({
   title: { type: String, required: true },
   content: { type: String, required: true },
   author: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
-  photo: { type: Buffer }
+  photo: { type: String }
 });
 
 var Article = mongoose.model('Article', articleSchema);
@@ -15,20 +16,19 @@ var url = process.env.URL;
 
 
 
-exports.createArticle = (title, content, image, author, photo) => {
+exports.createArticle = (title, content, author, photoBuffer) => {
   return new Promise((resolve, reject) => {
     mongoose.connect(url, {
       useNewUrlParser: true,
       useUnifiedTopology: true
     }).then(() => {
-  
-
       // Create an article object with the image buffer and photo buffer
-      let article = new Article({
-        title: title,
-        content: content,
-        author: author,
-        photo: photo
+      const article = new Article({
+        title,
+        content,
+        author,
+        photo: photoBuffer
+       
       });
 
       article.save().then((article) => {

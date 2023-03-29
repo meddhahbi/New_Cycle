@@ -5,9 +5,9 @@ const articles = require('../Models/Article');
 
 route.post('/', (req, res, next) => {
   // Convert the base64-encoded photo data to a Buffer
-  const photo = Buffer.from(req.body.photo, 'base64');
+  //const photo = Buffer.from(req.body.photo, 'base64');
   
-  articles.createArticle(req.body.title, req.body.content, req.body.image, req.body.author, photo)
+  articles.createArticle(req.body.title, req.body.content, req.body.author,req.body.photo)
     .then((article) => res.status(200).json({
       article: article,
       message: 'Article created successfully'
