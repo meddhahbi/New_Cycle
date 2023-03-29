@@ -153,5 +153,27 @@ route.put('/block/:_id',(req,res,next)=>{
 });
 
 
+route.get('/verifySubs/:email',(req,res,next)=>{
+  userModel.verifySubscription(req.params.email)
+  .then((status)=>{
+    if(status){
+      res.status(200).json({
+        subscribed:true
+      })
+    }else{
+      res.status(200).json({
+        subscribed:false
+      })
+     
+    }
+  }).catch((err)=>{
+    res.status(400).json({
+      error:err
+    })
+  })
+});
+
+
+
 
 module.exports = route;
