@@ -355,6 +355,42 @@ verifySubscription=(email)=>{
 }
 
 
+
+getAllUsers=()=>{
+    return new Promise((resolve,reject)=>{
+        mongoose.connect(url,{
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        }).then(()=>{
+            return User.find();
+        }).then((doc)=>{
+            resolve(doc);
+        }).catch((err)=>{
+            reject(err);
+        })
+    })
+}
+
+
+getAllUsersCount = () => {
+    return new Promise((resolve, reject) => {
+      mongoose.connect(url, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+      }).then(() => {
+        return User.countDocuments();
+      }).then((count) => {
+        resolve(count);
+      }).catch((err) => {
+        reject(err);
+      })
+    })
+  }
+
+
+
+
+
 // exports.getPrices=()=>{
 //     const prices = stripe.prices.list({
 //         apiKey:process.env.STRIPE_SECRET_KEY,
@@ -413,4 +449,6 @@ module.exports = {
     updateProfile,
     block,
     verifySubscription,
+    getAllUsers,
+    getAllUsersCount,
 };
