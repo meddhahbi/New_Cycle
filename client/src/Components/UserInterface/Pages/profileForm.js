@@ -11,6 +11,13 @@ const ProfileForm = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [profile, setProfile] = useState(null);
     const [data, setData] = useState({ username: "", phone: 0, postal:0});
+    const [errors, setErrors] = useState(
+        {
+            username: '',
+            phone: '',
+            postal: '',
+        }
+    )
 
     const handleChange = ({ currentTarget: input }) => {
         setData({ ...data, [input.name]: input.value });
@@ -27,9 +34,9 @@ const ProfileForm = () => {
 
         if(isLoading === true){
 
-            setUsername(profile.username)
-            setPostal(profile.postal)
-            setPhone(profile.phone)
+            // setUsername(profile.username)
+            // setPostal(profile.postal)
+            // setPhone(profile.phone)
 
             data.postal = profile.postal
             data.phone = profile.phone
@@ -46,18 +53,66 @@ const ProfileForm = () => {
         }
     })
 
+    const formValidation=()=> {
+
+        let status = true;
+        let localErrors={
+            username: '',
+            phone: '',
+            postal: '',
+            // ...errors
+        }
+
+        if(data.username===""){
+            localErrors.username='Username is required';
+            status=false;
+        }
+        else if(data.username.length>8){
+            localErrors.username='Username must be at most 8 caracters';
+            status=false;
+        }
+        else if(data.username === profile.username){
+            localErrors.username='Username is not yet updated!';
+            status=false;
+        }
+        else if(data.username.length<3 && data.username.length > 0){
+            localErrors.username='Username must be at least 3 caracters';
+            status=false;
+        }
+
+        if(data.phone===""){
+            localErrors.username='Phone is required';
+            status=false;
+        }
+        else if(data.phone === profile.phone){
+            localErrors.phone='Phone is not yet updated!';
+            status=false;
+        }
+
+        if(data.postal===""){
+            localErrors.postal='Postal code is required';
+            status=false;
+        }
+        else if(data.postal === profile.postal){
+            localErrors.postal='Postal code is not yet updated!';
+            status=false;
+        }
+        setErrors(localErrors);
+        return status
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            const url = "http://localhost:3001/client/me/update/"+localStorage.getItem("mail");
-            console.log(url)
-            console.log("data",data)
-            const res = await axios.put(url, data);
-            console.log(res);
-            console.log(data)
-            window.location = "/"
-        } catch (e) {
-            console.log(e)
+        if(formValidation()){
+            try {
+                const url = "http://localhost:3001/client/me/update/"+localStorage.getItem("mail");
+                console.log("data",data)
+                const res = await axios.put(url, data);
+                console.log(res);
+                window.location = "/me"
+            } catch (e) {
+                console.log(e)
+            }
         }
     }
     return (
@@ -183,9 +238,15 @@ const ProfileForm = () => {
                                                         <label htmlFor="exampleFormControlInput" className="form-label">Username</label>
                                                         <div className="custom-input">
                                                             <input type="text" className="form-control" id="exampleFormControlInput" name="username"
-                                                                   placeholder="Enter Your Userame" defaultValue={username} onChange={handleChange} />
+                                                                   placeholder="Enter Your Userame" defaultValue={data.username} onChange={handleChange} />
+
                                                             <i className="fa-solid fa-user"/>
                                                         </div>
+                                                        {
+                                                            errors.username!==""?<div style={{textAlign:'left', color:'orangered'}}>
+                                                                {errors.username}
+                                                            </div>:''
+                                                        }
                                                     </div>
                                                 </div>
 
@@ -208,9 +269,15 @@ const ProfileForm = () => {
                                                         <div className="custom-input">
                                                             <input type="number" className="form-control"
                                                                    id="exampleFormControlInput2" name="phone"
-                                                                   placeholder="Enter Your Phone Number" defaultValue={phone} onChange={handleChange} />
+                                                                   placeholder="Enter Your Phone Number" defaultValue={data.phone} onChange={handleChange} />
+
                                                             <i className="fa-solid fa-phone" />
                                                         </div>
+                                                        {
+                                                            errors.phone!==""?<div style={{textAlign:'left', color:'orangered'}}>
+                                                                {errors.phone}
+                                                            </div>:''
+                                                        }
                                                     </div>
                                                 </div>
 
@@ -220,9 +287,15 @@ const ProfileForm = () => {
                                                         <div className="custom-input">
                                                             <input type="number" className="form-control" id="exampleFormControlInput3"
                                                                    placeholder="Enter Your Postal Code" maxLength="10" name="postal"
-                                                                   defaultValue={postal} onChange={handleChange} />
+                                                                   defaultValue={data.postal} onChange={handleChange} />
+
                                                             <i className="fa fa-map-marker"/>
                                                         </div>
+                                                        {
+                                                            errors.postal!==""?<div style={{textAlign:'left', color:'orangered'}}>
+                                                                {errors.postal}
+                                                            </div>:''
+                                                        }
                                                     </div>
                                                 </div>
 

@@ -3,6 +3,8 @@ const connection = require("./db");
 const app = express();
 require('dotenv').config();
 const userRoute = require('./Routers/UserRoute');
+const chatRoute = require('./Routers/Chat/ChatRoute');
+const messageRoute = require('./Routers/Chat/MessageRoute');
 const associationRoute = require('./Routers/AssociationRoute');
 var cors = require('cors');
 const passport = require("passport");
@@ -60,6 +62,10 @@ require("./auth/google-auth")(passport);
 require("./auth/facebook-auth")(passport);
 
 app.use('/article', articleRoutes);
+
+app.use('/chat', chatRoute);
+
+app.use('/message', messageRoute);
 
 
 

@@ -778,7 +778,8 @@ export default function Navbar(){
                         <div className="header-nav-right">
                             <button className="btn deal-button" data-bs-toggle="modal" data-bs-target="#deal-box">
                                 <i data-feather="zap"></i>
-                                <span>Deal Today</span>
+                                <Link to="/subscribe">
+                                <span>Take your subscription</span></Link>  
                             </button>
                         </div>
                     </div>
