@@ -174,6 +174,19 @@ route.get('/verifySubs/:email',(req,res,next)=>{
 });
 
 
+route.get('/users',(req,res,next)=>{
+  userModel.getAllUsers()
+  .then((doc)=>res.status(200).json(doc))
+  .catch((err)=>res.status(400).json(err))
+});
+
+
+route.get('/users/count',(req,res,next)=>{
+  userModel.getAllUsersCount()
+  .then((doc)=>res.status(200).json(doc))
+  .catch((err)=>res.status(400).json(err))
+})
+
 
 
 module.exports = route;

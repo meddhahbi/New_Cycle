@@ -18,6 +18,7 @@ import BlogList from './Components/BlogInterface/BlogList';
 import AddBlog from './Components/BlogInterface/addBlog'
 
 import Plan from './Components/UserInterface/Pages/Plan';
+import Dashboard from './Components/AdminInterface/Pages/Dashboard';
 
 
 
@@ -65,7 +66,7 @@ function App() {
 
 
         <Route path="/admin" element={<Admin />}>
-        
+        <Route path='/admin/dashboard' element={<Dashboard />} />
 
         
         
