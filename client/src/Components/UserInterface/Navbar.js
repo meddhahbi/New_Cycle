@@ -2,6 +2,7 @@
 import { Link } from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import navbar from "./Pages/style/navbar.css"
+import axios from "axios";
 
 
 export default function Navbar(){
@@ -24,7 +25,35 @@ export default function Navbar(){
             }
         }
         getData()
-    },[])
+    },[]);
+
+    const [isSubscribed, setIsSubscribed] = useState(false);
+
+    const url="https://localhost:3001/verifySubs/" + localStorage.getItem("mail");
+
+    useEffect(() => {
+        // Make an API call to get the subscription status
+        fetch(url)
+          .then(response => response.json())
+          .then(data => setIsSubscribed(data.isSubscribed))
+          .catch(error => console.error(error));
+      }, []);
+
+//   const subscriptionStatus=(e)=>{
+//     e.preventDefault();
+//     const [subscribed,setSubscribed] =useState(false);
+//     const url="https://localhost:3001/verifySubs/" + localStorage.getItem("mail");
+//     useEffect(()=>{
+//         axios.get(url)
+//         .then((response)=>{
+//             setSubscribed(response.data.subscribed);
+//         }).catch((error)=>{
+//             console.error(error);
+//         })
+//     })
+//   }
+
+
     return <div>
 
 <header className="pb-md-4 pb-0">
@@ -774,14 +803,24 @@ export default function Navbar(){
                                 </div>
                             </div>
                         </div>
-
+                        {isSubscribed ?
                         <div className="header-nav-right">
                             <button className="btn deal-button" data-bs-toggle="modal" data-bs-target="#deal-box">
                                 <i data-feather="zap"></i>
                                 <Link to="/subscribe">
                                 <span>Take your subscription</span></Link>  
                             </button>
-                        </div>
+                        </div>:
+
+                        <div className="header-nav-right">
+                            <button className="btn deal-button" data-bs-toggle="modal" data-bs-target="#deal-box">
+                                <i data-feather="zap"></i>
+                                <span>subscribed</span>
+                            </button>
+                        </div>}
+
+
+
                     </div>
                 </div>
             </div>
