@@ -2,12 +2,9 @@ import React, {useEffect, useState} from 'react';
 import LoadingPage from "../../Loading";
 import inputStyle from "./style/profileForm.css";
 import axios from "axios";
+import {useNavigate} from "react-router";
 
 const ProfileForm = () => {
-    const [username, setUsername]=useState(null);
-    // const [password, setPassword]=useState(null);
-    const [phone, setPhone]=useState(null);
-    const [postal, setPostal]=useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [profile, setProfile] = useState(null);
     const [data, setData] = useState({ username: "", phone: 0, postal:0});
@@ -19,18 +16,21 @@ const ProfileForm = () => {
         }
     )
 
+    const navigate = useNavigate();
+
     const handleChange = ({ currentTarget: input }) => {
         setData({ ...data, [input.name]: input.value });
     };
     const getData = async ()=>{
-        const url = "http://localhost:3001/me/" + localStorage.getItem("mail");
+        const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+        const url = "/me/" + localStorage.getItem("mail");
         const response = await fetch(url);
         const json = await response.json();
         const user = json.user;
         // console.log(user);
-        if(response.ok){
-            setProfile(user);
-        }
+        // if(response.ok){
+
+        // }
 
         if(isLoading === true){
 
@@ -38,18 +38,37 @@ const ProfileForm = () => {
             // setPostal(profile.postal)
             // setPhone(profile.phone)
 
-            data.postal = profile.postal
-            data.phone = profile.phone
-            data.username = profile.username
+
         }
     }
     useEffect(()=>{
+
         if(isLoading === true){
-            getData()
-            setTimeout(()=> {
-                setIsLoading(false)
-            }, 1500);
-            // console.log(data)
+            const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+            setProfile(userInfo);
+            data.postal = userInfo.postal
+            data.phone = userInfo.phone
+            data.username = userInfo.username
+
+            // const {user} = UserState();
+            console.log("userInfo");
+
+            if (!userInfo) {
+                console.log("no user")
+                // authMiddleware(navigate)
+                navigate("/login",{});
+            }
+            else {
+                getData().then(r => {
+                    console.log(r)
+                    setTimeout(()=> {
+                        setIsLoading(false)
+                    }, 1500);
+                })
+
+                // console.log(data)
+            }
+            setIsLoading(false)
         }
     })
 
@@ -60,6 +79,7 @@ const ProfileForm = () => {
             username: '',
             phone: '',
             postal: '',
+            all:''
             // ...errors
         }
 
@@ -71,10 +91,6 @@ const ProfileForm = () => {
             localErrors.username='Username must be at most 8 caracters';
             status=false;
         }
-        else if(data.username === profile.username){
-            localErrors.username='Username is not yet updated!';
-            status=false;
-        }
         else if(data.username.length<3 && data.username.length > 0){
             localErrors.username='Username must be at least 3 caracters';
             status=false;
@@ -84,17 +100,14 @@ const ProfileForm = () => {
             localErrors.username='Phone is required';
             status=false;
         }
-        else if(data.phone === profile.phone){
-            localErrors.phone='Phone is not yet updated!';
-            status=false;
-        }
 
         if(data.postal===""){
             localErrors.postal='Postal code is required';
             status=false;
         }
-        else if(data.postal === profile.postal){
-            localErrors.postal='Postal code is not yet updated!';
+
+        if(data.username === profile.username && data.postal === profile.postal && data.phone === profile.phone){
+            localErrors.all='None of the data is updated yet!';
             status=false;
         }
         setErrors(localErrors);
@@ -105,7 +118,7 @@ const ProfileForm = () => {
         e.preventDefault();
         if(formValidation()){
             try {
-                const url = "http://localhost:3001/client/me/update/"+localStorage.getItem("mail");
+                const url = "/client/me/update/"+localStorage.getItem("mail");
                 console.log("data",data)
                 const res = await axios.put(url, data);
                 console.log(res);
@@ -311,6 +324,13 @@ const ProfileForm = () => {
                                                 {/*        </div>*/}
                                                 {/*    </div>*/}
                                             </div>
+
+
+                                            {
+                                                errors.all!==""?<div style={{textAlign:'left', color:'orangered'}}>
+                                                    {errors.all}
+                                                </div>:''
+                                            }
                                             <button className="btn btn-animation btn-md fw-bold ms-auto">Update</button>
                                         </form>
                                     </div>

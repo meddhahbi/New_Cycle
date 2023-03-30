@@ -1,4 +1,35 @@
 .fa-user{
     font-size: larger;
     cursor: pointer;
+    color: black;
+}
+.comment-box-contain{
+    color: black;
+    cursor: pointer;
+    width: 100%;
+    background-color: #d6d4d4;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 30px;
+    transition: color 1s ease-in-out, box-shadow 1s ease-in-out;
+}
+.comment-box-contain a.drop-card.user.username{
+    color: black;
+
+}
+.comment-box-contain:hover{
+    color: #3e3e3e;
+    box-shadow: inset 500px 0 0 0 #fafafa;
+}
+.left-nav-img{
+    max-width: 20px;
+    margin-left: 10px;
+}
+.username{
+    font-weight: bold;
+    float: top;
+}
+.fa-comments{
+    /*font-size: larger;*/
+    cursor: pointer;
 }

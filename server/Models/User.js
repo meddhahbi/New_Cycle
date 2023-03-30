@@ -255,17 +255,18 @@ currentUser=async(email)=>{
         console.log(err.message);
     }
 }
-exports.updateProfile=(user_email, username, phone, postal)=>{
+updateProfile=(user_email, username, phone, postal)=>{
     try{
+        console.log("trying")
         return User.findOne({ email:user_email})
             .then(async(user)=>{
                 console.log(user.username)
-                if (user.username !== username && username)
+                if ((user.username !== username||user.phone!==phone||user.postal!==postal) && username && postal && phone)
+                {
                     user.username = username;
-                if (user.phone !== phone && phone)
                     user.phone = phone;
-                if (user.postal !== postal && postal)
                     user.postal = postal;
+                }
                 return await user.save()
             })
             .catch((err)=>res.status(400).json({error:err}));
@@ -309,7 +310,7 @@ login=(email,password)=>{
                         
                         console.log("same password");
                         jwt.decode();
-                        resolve([token,"token", user.role, user.email]);
+                        resolve([token,"token", user.role, user.email, user]);
 
 
                     }else{
@@ -497,7 +498,8 @@ exports.createSubs=(email)=>{
 module.exports = {
     User,
     login,
-    currentUser
+    currentUser,
+    updateProfile
 };
 
 

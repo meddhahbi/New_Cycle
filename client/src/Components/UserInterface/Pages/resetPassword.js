@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import {style} from  './style/resetStyle.css'
 
 const UpdatePassword = () => {

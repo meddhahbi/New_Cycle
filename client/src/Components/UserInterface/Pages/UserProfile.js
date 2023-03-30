@@ -2,27 +2,50 @@ import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import LoadingPage from "../../Loading";
 import {Link} from "react-router-dom";
-
+import {useNavigate} from "react-router";
+// import {UserState} from "../../../Context/userProvider"
 export default function UserProfile() {
 
     // console.log(url)
     // // console.log("data",data)
     const [isLoading, setIsLoading] = useState(true);
     const [profile, setProfile] = useState(null);
+    const navigate = useNavigate();
     useEffect(()=>{
-        const getData= async ()=>{
-            const url = "http://localhost:3001/me/" + localStorage.getItem("mail");
-            const response = await fetch(url);
-            const json = await response.json();
-            const user = json.user;
-            console.log(user);
-            if(response.ok){
-                setProfile(user);
+
+        if(isLoading){
+            const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+            // const {user} = UserState();
+            console.log("userInfo");
+
+            if (!userInfo) {
+                console.log("no user")
+                navigate("/login",{});
+            }
+            else{
+
+                setProfile(userInfo);
+                console.log("userInfo");
+                console.log(profile);
+                // const getData= async ()=>{
+                //     const url = "http://localhost:3001/me/" + localStorage.getItem("mail");
+                //     const response = await fetch(url);
+                //     const json = await response.json();
+                //     const user1 = json.user;
+                //     console.log(user1);
+                //     if(response.ok){
+                //         setProfile(userInfo);
+                //     }
+                //
+                // }
+                // getData()
             }
 
+            setTimeout(()=> {
+                setIsLoading(false)
+            }, 1000);
         }
-        getData()
-        setIsLoading(false);
+
     },[])
 
     return <div>

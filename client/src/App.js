@@ -1,5 +1,5 @@
 import './App.css';
-import { Route, Routes } from 'react-router';
+import {Route, Routes, useNavigate} from 'react-router';
 import User from './Components/UserInterface/User';
 import Admin from './Components/AdminInterface/Admin';
 import Home from './Components/UserInterface/Pages/Home';
@@ -14,6 +14,8 @@ import PageNotFound from './Components/UserInterface/PageNotFound';
 import RegisterAssociation from './Components/UserInterface/Pages/RegisterAssociation';
 import ProfileForm from "./Components/UserInterface/Pages/profileForm";
 import Plan from './Components/UserInterface/Pages/Plan';
+import authMiddleware from "./middleware/middleware";
+import Chats from "./Components/UserInterface/Pages/Chat/Chats";
 
 
 function App() {
@@ -33,9 +35,10 @@ function App() {
         <Route  path='/registerAssociation' element={<RegisterAssociation />} />
 
 
-          <Route path='/me' element={<UserProfile />} />
-          <Route path='/edit_me' element={<ProfileForm />} />
+          <Route path='/me' element={<UserProfile />}/>
+          <Route path='/edit_me' element={<ProfileForm />}/>
           <Route path='/subscribe' element={<Plan />} />
+          <Route path='/client_messages' element={<Chats />} />
 
 
 
