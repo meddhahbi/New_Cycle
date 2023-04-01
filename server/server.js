@@ -15,7 +15,11 @@ app.use(cors()); // Use this after the variable declaration
 const session = require("express-session");
 const articleRoutes = require('./Routers/ArticleRoute');
 const produitRoutes = require('./Routers/ProduitRoute');
- 
+
+
+
+app.use(express.static('public'));
+
 //const app = express();
 
 // Set up session middleware

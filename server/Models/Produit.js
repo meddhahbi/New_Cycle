@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const ml = require('ml-regression');
 
 const productSchema = new mongoose.Schema({
   name: {
@@ -17,47 +18,105 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  images: {
-    type: [String],
-    required: true
-  }
+  images: [
+    {
+      url: {
+        type: String,
+        required: true
+      },
+      caption: {
+        type: String,
+        required: false
+      }
+    }
+  ]
 });
 
-//module.exports = mongoose.model('Product', productSchema);
-var Product  = mongoose.model('Product',productSchema);
-var url = process.env.URL;
+const Product = mongoose.model('Product', productSchema);
+const url = process.env.URL;
+
+// train a linear regression model to estimate price
+const trainModel = (products) => {
+  // create a vocabulary of words from descriptions and categories
+  const vocabulary = new Set();
+  products.forEach((product) => {
+    product.description.split(' ').forEach((word) => vocabulary.add(word));
+    product.category.split(' ').forEach((word) => vocabulary.add(word));
+  });
+
+  // create feature vectors for each product
+  const X = products.map((product) => {
+    const featureVector = Array.from(vocabulary).map((word) =>
+      (product.description.includes(word) || product.category.includes(word)) ? 1 : 0
+    );
+    return featureVector;
+  });
+
+  // create target variable for each product
+  const Y = products.map((product) => product.price);
+
+  // train a linear regression model
+  const regression = new ml.SimpleLinearRegression(X, Y);
+  return regression;
+};
 
 
-exports.createProduct = (name, description, price, category, images) => {
-    return new Promise((resolve, reject) => {
-      mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
-        .then(() => {
-          let product = new Product({
-            name: name,
-            description: description,
-            price: price,
-            category: category,
-            images: images
-          });
-          product.save()
-            .then((product) => {
-              mongoose.disconnect();
-              resolve(product);
-            })
-            .catch((err) => {
-              mongoose.disconnect();
-              reject({ message: "Failed to save product to database", error: err });
-            });
-        })
-        .catch((err) => {
-          mongoose.disconnect();
-          reject({ message: "Failed to connect to database", error: err });
-        });
+// get a trained model and estimate the price of a product
+exports.estimatePrice = async (description, category) => {
+  try {
+    await mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
+    const products = await Product.find();
+    const regression = trainModel(products);
+    const estimatedPrice = regression.predict([[description.length, category.length]]);
+    mongoose.disconnect();
+    return { estimatedPrice: estimatedPrice[0] };
+  } catch (error) {
+    mongoose.disconnect();
+    throw error;
+  }
+};
+
+// create a product with estimated price or provided price
+exports.createProduct = async (name, description, price, category, images) => {
+  try {
+    await mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
+    let product = new Product({
+      name: name,
+      description: description,
+      category: category,
+      images: []
     });
-  };
 
-  
-  exports.AllProducts = () => {
+    if (price) {
+      product.price = price;
+      await product.save();
+    } else {
+      const products = await Product.find();
+      const regression = trainModel(products);
+      const estimatedPrice = regression.predict([[description.length, category.length]]);
+      product.price = estimatedPrice[0];
+
+      images.forEach((image) => {
+        product.images.push({
+          url: image,
+          caption: ''
+        });
+      });
+
+      await product.save();
+    }
+
+    mongoose.disconnect();
+    return product;
+  } catch (error) {
+    mongoose.disconnect();
+    throw error;
+  }
+};
+
+
+
+exports.AllProducts = () => {
     return new Promise((resolve, reject) => {
       mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         .then(() => {
