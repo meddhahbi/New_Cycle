@@ -28,7 +28,7 @@ app.use(
   })
 );
 
-
+app.use(express.static('uploads'));
 
 
 

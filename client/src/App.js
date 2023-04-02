@@ -46,34 +46,23 @@ function App() {
 
           <Route path='/subscribe' element={<Plan />} />
 
-
-
-
-
-
       </Route>
 
-
-
-          {/* <Route  path='/register' element={<Register />} />
-          <Route  path='/forgot' element={<Forgot />} /> */}
-          {/* <Route path="/reset/:id" element={<ResetPassword />}/> */}
-          {/* <Route path='/loginAssociation' element={<LoginAssociation />} /> */}
-          <Route path='/confirm/:activationCode' element={<ActivationPage />} />
+      <Route path='/confirm/:activationCode' element={<ActivationPage />} />
   
-        <Route path='/reset/:id' element={<ResetPassword />}/>
+      <Route path='/reset/:id' element={<ResetPassword />}/>
 
 
 
-        <Route path="/admin" element={<Admin />}>
-        <Route path='/admin/dashboard' element={<Dashboard />} />
+        <Route path="admin" element={<Admin />}>
+        <Route path='dashboard' element={<Dashboard />} />
 
         
         
         </Route>
 
         
-        <Route path='/confirm/:activationCode' element={<ActivationPage />} />
+        {/* <Route path='/confirm/:activationCode' element={<ActivationPage />} /> */}
 
         <Route path='*' element={<PageNotFound/>}/> 
 

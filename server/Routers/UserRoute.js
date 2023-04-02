@@ -2,20 +2,72 @@ const route = require('express').Router();
 const userModel = require('../Models/User');
 const path = require('path');
 const passport = require("passport");
+const multer = require('multer');
 
 
 // route.get('/', (req,res,next)=>{
 //     userModel.testConnect().then((msg)=>res.send(msg)).catch((err)=>res.send(err))
 // })
 
-route.post('/register',(req,res,next)=>{
-    userModel.register(req.body.username,req.body.email,req.body.password,req.body.phone,req.body.postal,req.body.role)
+
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './uploads/'); // set the destination folder for uploaded files
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '_' + file.originalname); // set the filename for uploaded files
+  }
+});
+
+const fileFilter = function (req, file, cb) {
+  // set the file filter for uploaded files
+  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+    cb(null, true);
+  } else {
+    cb(new Error('Invalid file type'), false);
+  }
+};
+
+const upload = multer({
+  storage: storage,
+  fileFilter: fileFilter
+});
+
+
+
+
+route.post('/register',upload.single('image'),(req,res,next)=>{
+  const image = req.file.path;
+    userModel.register(req.body.username,req.body.email,req.body.password,req.body.phone,req.body.postal,image,req.body.role)
     .then((user)=>res.status(200).json({
         user:user,
         msg:'User registered successfully'
     }))
     .catch((err)=>res.status(400).json({error:err}));
 })
+
+
+// app.get('/images/:filename', (req, res) => {
+//   const { filename } = req.params;
+//   const filePath = path.join(__dirname, 'uploads', filename);
+//   res.sendFile(filePath);
+// });
+
+// route.get('/cleanFileName/:fileName',(req,res)=>{
+//   const fileName= req.params.fileName;
+//   const cleanFilename = fileName.replace("/uploads/", "");
+//   console.log(cleanFilename); // Output: "myfile.jpg"
+//   res.status(200).json({
+    
+//     msg:'Done'
+// })
+// });
+
+
+
+
+
 
 route.get("/me/:mail", async (req, res, next)=>{
      userModel.currentUser(req.params.mail)
@@ -73,23 +125,11 @@ route.put('/updatePassword/:_id',(req,res,next)=>{
 
 
 
-
-
-//? Verified page route(static)
-// route.get('/verified', (req,res)=>{
-//     res.sendFile(path.join(__dirname,"./../Utils/verified.html"));
-// })
-
-
-
 route.post('/verifyuser/:activationCode',(req,res,next)=>{
     userModel.verifyUser(req.params.activationCode)
     .then((doc)=>res.status(200).json(doc))
     .catch((err)=>res.status(400).json(err))
 });
-
-
-
 
 route.get(
     "/auth/google",
@@ -109,8 +149,6 @@ route.get(
       );
     }
   );
-
-
 
 
   route.get(
@@ -186,6 +224,23 @@ route.get('/users/count',(req,res,next)=>{
   .then((doc)=>res.status(200).json(doc))
   .catch((err)=>res.status(400).json(err))
 })
+
+// const storage = multer.diskStorage({
+//   destination:(req,file,cb)=>{
+//     cb(null,'./publlic')
+//   },
+//   filename:(req,res,cb)=>{
+//     const filename = `${Date.now()}_${file.originalname}`;
+//     cb(null,filename);
+//   }
+// })
+// const upload = multer({storage}).single('receipt');
+
+
+
+
+
+
 
 
 

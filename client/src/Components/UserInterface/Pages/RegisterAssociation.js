@@ -21,6 +21,7 @@ export default function RegisterAssociation(){
     const [password, setPassword] = useState('');
     const [phone, setPhone] = useState('');
     const [postal, setPostal] = useState('');
+    const [docVerif, setDocVerif] = useState(null);
     //const [docVerif, setDocVerif]=useState('');
 
     //console.log(docVerif,12);
@@ -98,32 +99,40 @@ export default function RegisterAssociation(){
     const register=(e)=>{
         e.preventDefault();
         console.log("form submitted");
-        console.log("form data", name, email, password, phone, postal);
+        console.log("form data", name, email, password, phone, postal,docVerif);
 
 
         //? Form valid
         if(formValidation()){
 
 
-            const data = { 
-                name,
-                email,
-                password,
-                phone,
-                postal,
-               // docVerif,
-            };
-            const url='localhost:3001/association/register'
-            axios.post(url, data)
+
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('email', email);
+            formData.append('password', password);
+            formData.append('phone', phone);
+            formData.append('postal', postal);
+            formData.append('docVerif', docVerif);
+            // const data = { 
+            //     name,
+            //     email,
+            //     password,
+            //     phone,
+            //     postal,
+            //    // docVerif,
+            // };
+            const url='http://localhost:3001/association/register'
+            axios.post(url, formData)
             .then(response => {
                         console.log(response.data); // Handle response data
-                        toast.success("User created successfuly...");
+                        toast.success("Association created successfuly...");
                         setName('');
                         setEmail('');
                         setPassword('');
                         setPhone('');
                         setPostal('');
-                        //setDocVerif('');
+                        setDocVerif(null);
                     })
                     .catch(error => {
                         console.error(error); // Handle error
@@ -310,7 +319,7 @@ export default function RegisterAssociation(){
                                         </div>
                                     
                                     </div> */}
-    
+                                     <input type="file" accept="application/pdf" onChange={(e) => setDocVerif(e.target.files[0])} />
     
     
     

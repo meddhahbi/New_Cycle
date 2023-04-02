@@ -15,15 +15,18 @@ export default function UserProfile() {
             const response = await fetch(url);
             const json = await response.json();
             const user = json.user;
-            console.log(user);
+            console.log(user.image);
             if(response.ok){
                 setProfile(user);
+                console.log(profile)
             }
 
         }
         getData()
         setIsLoading(false);
     },[])
+
+    
 
     return <div>
         {isLoading ? <LoadingPage/> :
@@ -46,8 +49,17 @@ export default function UserProfile() {
 
                                     <div className="profile-contain">
                                         <div className="profile-image">
-                                            <div className="position-relative">
+                                            {/* <div className="position-relative">
                                                 <img src="../../../../assets/User/images/inner-page/user/default.png"
+                                                     className="blur-up lazyload update_img" alt=""/>
+                                                <div className="cover-icon">
+                                                    <i className="fa-solid fa-pen">
+                                                        <input type="file" onChange="readURL(this,0)"/>
+                                                    </i>
+                                                </div>
+                                            </div> */}
+                                            <div className="position-relative">
+                                                <img src={profile && profile.image}
                                                      className="blur-up lazyload update_img" alt=""/>
                                                 <div className="cover-icon">
                                                     <i className="fa-solid fa-pen">
