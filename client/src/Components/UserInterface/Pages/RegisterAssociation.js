@@ -4,9 +4,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import { Link } from "react-router-dom";
-
-
-
+import { LoadAssociation } from './LoadAssociation';
 
 
 
@@ -23,8 +21,28 @@ export default function RegisterAssociation(){
     const [postal, setPostal] = useState('');
     const [docVerif, setDocVerif] = useState(null);
     //const [docVerif, setDocVerif]=useState('');
+    // const [isLoading, setIsLoading] = useState(true);
+    // useEffect(()=>{
+    //     setTimeout(()=>setIsLoading(false), 1500);
+    // })
+   // const [isLoading, setIsLoading] = useState(false); // new state variable to track loading status
+  //  const history = useHistory();
+  const [isLoading, setIsLoading] = useState(false);
+//   useEffect(()=>{
+//     setTimeout(()=>setIsLoading(true), 5000);
+// })
+   
+
+
+// const redirectTimer = setTimeout(() => {
+//     history.push('/login');
+//   }, 5000);
+
 
     //console.log(docVerif,12);
+
+
+  
 
     const [errors, setErrors] = useState(
         {
@@ -133,6 +151,8 @@ export default function RegisterAssociation(){
                         setPhone('');
                         setPostal('');
                         setDocVerif(null);
+                        setIsLoading(true);
+                    
                     })
                     .catch(error => {
                         console.error(error); // Handle error
@@ -144,6 +164,8 @@ export default function RegisterAssociation(){
 
         }else{
             console.log("from invalid");
+            setIsLoading(false); // set loading state to false
+             //history.push('/home');
         }
 
     
@@ -159,7 +181,13 @@ export default function RegisterAssociation(){
 
 
 
-    return <div>
+    return<div>
+          {isLoading ? (
+        <LoadAssociation />
+      ) : (
+        
+     <div>
+        
     <section className="breadscrumb-section pt-0">
         <Toaster />
             <div className="container-fluid-lg">
@@ -379,6 +407,8 @@ export default function RegisterAssociation(){
                 </div>
             </div>
         </section>
+        </div>
+      )}
         </div>
     
 
