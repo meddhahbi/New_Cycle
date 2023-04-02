@@ -1,0 +1,13 @@
+.loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(255, 255, 255); /* add a semi-transparent background */
+    z-index: 999; /* make sure the loader is on top of everything else */
+    
+  }
