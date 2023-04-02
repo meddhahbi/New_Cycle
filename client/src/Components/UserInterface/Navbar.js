@@ -32,7 +32,6 @@ export default function Navbar(){
     const url="https://localhost:3001/verifySubs/" + localStorage.getItem("mail");
 
     useEffect(() => {
-        // Make an API call to get the subscription status
         fetch(url)
           .then(response => response.json())
           .then(data => setIsSubscribed(data.isSubscribed))
@@ -803,7 +802,7 @@ export default function Navbar(){
                                 </div>
                             </div>
                         </div>
-                        {isSubscribed ?
+                        {isSubscribed || !localStorage.getItem("token") ?
                         <div className="header-nav-right">
                             <button className="btn deal-button" data-bs-toggle="modal" data-bs-target="#deal-box">
                                 <i data-feather="zap"></i>
@@ -813,10 +812,6 @@ export default function Navbar(){
                         </div>:
 
                         <div className="header-nav-right">
-                            <button className="btn deal-button" data-bs-toggle="modal" data-bs-target="#deal-box">
-                                <i data-feather="zap"></i>
-                                <span>subscribed</span>
-                            </button>
                         </div>}
 
 

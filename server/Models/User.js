@@ -24,6 +24,7 @@ let schemaUser = mongoose.Schema({
         end: {type:Date,default:null}, 
         nextPayment: {type:Date,default:null}, 
     },
+    image:{type:String},
     role: { type: String, enum: ['client', 'admin'], default: 'client' }
 });
 
@@ -39,7 +40,7 @@ var privateKey = "this is my secret key testjsdjsbdjdbdjbcjbkajdbqsjq"
 
 
 
-register=(username,email,password,phone,postal,role)=>{
+register=(username,email,password,phone,postal,image,role)=>{
     return new Promise((resolve,reject)=>{
         mongoose.connect(url,{
             useNewUrlParser: true,
@@ -65,6 +66,7 @@ register=(username,email,password,phone,postal,role)=>{
                             phone:phone,
                             postal:postal,
                             activationCode:activationCode,
+                            image:image,
                             role:role
                         })
                         user.save().then((user)=>{
@@ -209,6 +211,7 @@ verifyUser=(activationCode)=>{
             })
     })
 }
+
 
 //? Email verification (test only)
 // exports.verifyUser=(activationCode)=>{
