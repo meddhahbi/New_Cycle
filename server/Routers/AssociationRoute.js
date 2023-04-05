@@ -53,7 +53,7 @@ route.post('/login',(req,res,next)=>{
     .catch((err)=>{res.status(400).json({error:err});console.log(err)});
 })
 
-route.post('/verifDoc/:email',(req,res,next)=>{
+route.put('/verifDoc/:email',(req,res,next)=>{
   associationModel.verifDoc(req.params.email)
   .then(()=>{res.status(200).json({
     msg:'docverif'

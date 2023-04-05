@@ -143,6 +143,12 @@ export default function RegisterAssociation(){
             const url='http://localhost:3001/association/register'
             axios.post(url, formData)
             .then(response => {
+
+                const updateUrl = `http://localhost:3001/association/verifDoc/${email}`
+                console.log(updateUrl);
+                axios.put(updateUrl);
+
+
                         console.log(response.data); // Handle response data
                         toast.success("Association created successfuly...");
                         setName('');
