@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const ml = require('ml-regression');
+const ml = require('ml-knn');
 
 const productSchema = new mongoose.Schema({
   name: {
@@ -34,40 +34,17 @@ const productSchema = new mongoose.Schema({
 
 const Product = mongoose.model('Product', productSchema);
 const url = process.env.URL;
-
-// train a linear regression model to estimate price
-const trainModel = (products) => {
-  // create a vocabulary of words from descriptions and categories
-  const vocabulary = new Set();
-  products.forEach((product) => {
-    product.description.split(' ').forEach((word) => vocabulary.add(word));
-    product.category.split(' ').forEach((word) => vocabulary.add(word));
-  });
-
-  // create feature vectors for each product
-  const X = products.map((product) => {
-    const featureVector = Array.from(vocabulary).map((word) =>
-      (product.description.includes(word) || product.category.includes(word)) ? 1 : 0
-    );
-    return featureVector;
-  });
-
-  // create target variable for each product
-  const Y = products.map((product) => product.price);
-
-  // train a linear regression model
-  const regression = new ml.SimpleLinearRegression(X, Y);
-  return regression;
-};
-
+const k = 5; // number of nearest neighbors to use in regression
 
 // get a trained model and estimate the price of a product
 exports.estimatePrice = async (description, category) => {
   try {
     await mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
     const products = await Product.find();
-    const regression = trainModel(products);
-    const estimatedPrice = regression.predict([[description.length, category.length]]);
+    const X = products.map((product) => [product.description.length, product.category.length]);
+    const Y = products.map((product) => product.price);
+    const knn = new ml.KernelDensity(k, X, Y);
+    const estimatedPrice = knn.predict([[description.length, category.length]]);
     mongoose.disconnect();
     return { estimatedPrice: estimatedPrice[0] };
   } catch (error) {
@@ -92,8 +69,10 @@ exports.createProduct = async (name, description, price, category, images) => {
       await product.save();
     } else {
       const products = await Product.find();
-      const regression = trainModel(products);
-      const estimatedPrice = regression.predict([[description.length, category.length]]);
+      const X = products.map((product) => [product.description.length, product.category.length]);
+      const Y = products.map((product) => product.price);
+      const knn = new ml.KernelDensity(k, X, Y);
+      const estimatedPrice = knn.predict([[description.length, category.length]]);
       product.price = estimatedPrice[0];
 
       images.forEach((image) => {
@@ -113,6 +92,8 @@ exports.createProduct = async (name, description, price, category, images) => {
     throw error;
   }
 };
+
+
 
 
 

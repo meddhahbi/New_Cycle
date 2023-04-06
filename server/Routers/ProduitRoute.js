@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const products = require('../models/Produit');
 const multer = require('multer');
+var mlKnn = require('ml-knn');
+
+
 
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -14,15 +17,32 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// Create a product
+//const { KNN } = require('ml-knn');
+
+const trainModel = (products) => {
+  const X = products.map((product) => [product.description.length, product.category.length]);
+  const Y = products.map((product) => product.price);
+  const knn = new mlKnn(X, Y, {k: 5});
+  return knn;
+};
+
+
 router.post('/', upload.array('images', 10), async (req, res) => {
   const { name, description, price, category } = req.body;
 
-  // get the file paths of uploaded images
   const images = req.files.map(file => `public/upload/${file.filename}`);
 
   try {
-    const product = await products.createProduct(name, description, price, category, images);
+    let product;
+    if (price) {
+      product = await products.createProduct(name, description, price, category, images);
+    } else {
+      const allProducts = await products.AllProducts();
+      const knn = trainModel(allProducts);
+      const estimatedPrice = knn.predict([[description.length, category.length]]);
+      product = await products.createProduct(name, description, estimatedPrice[0], category, images);
+    }
+
     res.status(200).json({
       product: product,
       message: 'Product created successfully'
@@ -33,19 +53,21 @@ router.post('/', upload.array('images', 10), async (req, res) => {
   }
 });
 
-// Estimate product price
 router.get('/estimate', async (req, res) => {
   try {
     const { description, category } = req.query;
-    const { estimatedPrice } = await products.estimatePrice(description, category);
-    res.status(200).json({ estimatedPrice });
+    const allProducts = await products.AllProducts();
+    const knn = trainModel(allProducts);
+    const estimatedPrice = knn.predict([[description.length, category.length]]);
+    res.status(200).json({ estimatedPrice: estimatedPrice[0] });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Failed to estimate product price' });
+    res.status(400).json({ message: 'Failed to estimate price' });
   }
 });
 
 module.exports = router;
+
 
 
 

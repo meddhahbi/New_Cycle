@@ -107,10 +107,11 @@ const CreateProduct = () => {
       <div>
         <label htmlFor="category">Category</label>
         <select id="category" value={category} onChange={handleCategoryChange}>
-          <
-option value="">Select a category</option>
+          <option value="">Select a category</option>
           <option value="electronics">Electronics</option>
           <option value="clothing">Clothing</option>
+         
+
           <option value="books">Books</option>
         </select>
       </div>
