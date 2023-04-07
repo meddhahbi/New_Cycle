@@ -5,12 +5,36 @@ import {Link} from "react-router-dom";
 import {useNavigate} from "react-router";
 // import {UserState} from "../../../Context/userProvider"
 export default function UserProfile() {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+    };
+
 
     // console.log(url)
     // // console.log("data",data)
     const [isLoading, setIsLoading] = useState(true);
     const [profile, setProfile] = useState(null);
+    const [oldPass, setOldPass] = useState(null);
+    const [passError, setPassError] = useState(null);
+    const [passValid, setPassValid] = useState(null);
+    const [newPass, setNewPass] = useState(null);
     const navigate = useNavigate();
+    const checkPass = async(pass)=>{
+        // if(pass.length>0){
+            try {
+                if(pass.length>0){
+                    const { data:check } = await axios.get("/checkPass/"+pass, config);
+                    return check
+                }
+            }
+            catch (e){
+                console.log(e.message)
+            }
+        // }
+        // return null
+    }
     useEffect(()=>{
 
         if(isLoading){
@@ -25,20 +49,6 @@ export default function UserProfile() {
             else{
 
                 setProfile(userInfo);
-                console.log("userInfo");
-                console.log(profile);
-                // const getData= async ()=>{
-                //     const url = "http://localhost:3001/me/" + localStorage.getItem("mail");
-                //     const response = await fetch(url);
-                //     const json = await response.json();
-                //     const user1 = json.user;
-                //     console.log(user1);
-                //     if(response.ok){
-                //         setProfile(userInfo);
-                //     }
-                //
-                // }
-                // getData()
             }
 
             setTimeout(()=> {
@@ -47,6 +57,24 @@ export default function UserProfile() {
         }
 
     },[])
+    const oldPassOnChange =async (e)=>{
+        const check = checkPass(e.target.value).then(
+            (check)=>{
+                if(check.error){
+                    console.log(check.error)
+                    setPassError(check.error)
+                    setPassValid(null)
+                }
+                else if(check.msg){
+                    console.log(check.msg)
+                    setPassError(null)
+                    setPassValid(check.msg)
+                }
+            }
+        )
+
+
+    }
 
     return <div>
         {isLoading ? <LoadingPage/> :
@@ -250,7 +278,9 @@ export default function UserProfile() {
                                                     <div className="dashboard-detail">
                                                         <h6 className="text-content">MARK JECNO</h6>
                                                         <h6 className="text-content">vicki.pope@gmail.com</h6>
-                                                        <a href="javascript:void(0)">Change Password</a>
+                                                        <a href="javascript:void(0)"
+                                                           data-bs-toggle="modal"
+                                                           data-bs-target="#editPassword">Change Password</a>
                                                     </div>
                                                 </div>
 
@@ -1502,7 +1532,7 @@ export default function UserProfile() {
                                                                     <td>
                                                                         <a href="javascript:void(0)">●●●●●●
                                                                             <span data-bs-toggle="modal"
-                                                                                  data-bs-target="#editProfile">Edit</span></a>
+                                                                                  data-bs-target="#editPassword">Edit</span></a>
                                                                     </td>
                                                                 </tr>
                                                                 </tbody>
@@ -1739,6 +1769,55 @@ export default function UserProfile() {
                                             </div>
                                         </form>
                                     </div>
+                                </div>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-animation btn-md fw-bold"
+                                        data-bs-dismiss="modal">Close
+                                </button>
+                                <button type="button" data-bs-dismiss="modal"
+                                        className="btn theme-bg-color btn-md fw-bold text-light">Save changes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="modal fade theme-modal" id="editPassword" tabIndex="-1"
+                     aria-labelledby="exampleModalLabel2"
+                     aria-hidden="true">
+                    <div className="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title" id="exampleModalLabel2">Edit Profile</h5>
+                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                    <i className="fa-solid fa-xmark"></i>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                <div className="row g-4">
+                                    <div className="col-xxl-12">
+                                            <div className="form-floating theme-form-floating">
+                                                <input type="password" className="form-control" id="pname" onChange={oldPassOnChange}/>
+                                                <label htmlFor="pname">your Password</label>
+                                            </div>
+                                    </div>
+
+                                    {passValid?
+                                        <div className="col-12">
+                                            <div className="form-floating theme-form-floating">
+                                                <input type="text" className="form-control" id="address1"/>
+                                                <label htmlFor="address1">New Password</label>
+                                            </div>
+                                        </div>
+                                        :
+                                        ""
+                                    }
+                                    {passError?
+                                        <div style={{textAlign:'left', color:'orangered'}}>
+                                            {passError}
+                                        </div>
+                                    :
+                                    ""}
                                 </div>
                             </div>
                             <div className="modal-footer">

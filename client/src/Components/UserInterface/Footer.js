@@ -3,8 +3,8 @@ import {useLocation} from "react-router";
 
 export default function Footer(){
     const location = useLocation().pathname
-    console.log("footer")
-    console.log(location)
+    // console.log("footer")
+    // console.log(location)
     return <div>
 
         {location!=="/client_messages"?

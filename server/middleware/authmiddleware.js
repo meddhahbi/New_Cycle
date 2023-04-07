@@ -19,7 +19,8 @@ const protect = asyncHandler(async (req, res, next) => {
             const decoded = jwt.verify(token, process.env.PK);
             // console.log(decoded)
 
-            req.user = await User.findById(decoded.id).select("-password");
+            req.user = await User.findById(decoded.id);
+            // req.user = await User.findById(decoded.id).select("-password");
 
             next();
         } catch (error) {

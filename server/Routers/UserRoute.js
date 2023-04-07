@@ -1,7 +1,10 @@
 const route = require('express').Router();
 const userModel = require('../Models/User');
 const path = require('path');
+const { protect } = require("../middleware/authmiddleware");
 const passport = require("passport");
+
+const bcrypt = require('bcrypt');
 
 
 // route.get('/', (req,res,next)=>{
@@ -27,6 +30,20 @@ route.get("/me/:mail", async (req, res, next)=>{
     .catch((err)=>res.status(400).json({error:err}));
     // console.log(user.email);
     
+})
+route.get("/checkPass/:pass",protect, async (req, res, next)=>{
+
+     bcrypt.compare(req.params.pass, req.user.password).then((same)=> {
+             if (same) {
+                 res.status(200).json({
+                     msg: 'same pass'
+                 })
+             } else
+                 res.status(200).json({error:"pass are not the same"});
+         }
+     )
+         .catch((err)=>res.status(400).json({error:err}));
+
 })
 
 route.put("/client/me/update/:mail",async(req, res, next)=>{

@@ -9,7 +9,7 @@ router.route("/").post(protect, async (req, res)=> {
     // console.log(req.user)
     let {content, chatId} = req.body;
 
-    console.log(content)
+    // console.log(content)
     if (!content || !chatId) {
         console.log("Invalid data passed into request");
         return res.sendStatus(400);

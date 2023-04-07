@@ -6,7 +6,6 @@ const router = express.Router();
 
 router.route("/").get(protect, async (req, res)=>{
     try {
-        console.log(req.user)
         Chat.find({users: {$elemMatch: {$eq: req.user._id}}})
             .populate("users", "-password -subscription")
             .populate("latestMessage")
@@ -52,7 +51,6 @@ router.route("/get_other/:chatId").get(protect, async (req, res)=>{
 
 router.route("/get_readMessages/:chatId").get(protect, async (req, res)=>{
     try {
-        console.log(req.user)
         Chat.find({users: {$elemMatch: {$eq: req.user._id}}})
             .populate("users", "-password -subscription")
             .sort({updatedAt:-1})

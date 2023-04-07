@@ -8,8 +8,8 @@ import axios from "axios";
 export default function Navbar(){
     const [other, setOther] = useState();
     const location = useLocation().pathname
-    console.log("location")
-    console.log(location)
+    // console.log("location")
+    // console.log(location)
     const config = {
         headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -17,33 +17,33 @@ export default function Navbar(){
     };
     const logout = (e)=>{
         e.preventDefault();
-        console.log("logout");
+        // console.log("logout");
         localStorage.clear();
         window.location = "/login"
     }
     const [profile, setProfile] = useState();
+    const [loaded, setLoaded] = useState(true);
     const [chats, setChats] = useState([]);
     useEffect(()=>{
         const getData= async ()=>{
             const url = "http://localhost:3001/me/" + localStorage.getItem("mail");
-            console.log(url)
+            // console.log(url)
             const response1 = await fetch(url);
             const json1 = await response1.json();
             const user = json1.user;
-            console.log(user);
             setProfile(user);
 
 
 
         }
         getData().then(async ()=>{
-            console.log("chats");
             // if(profile){
                 const all_chat_url = "/chat"
-                console.log(all_chat_url);
-                const {data:chatss} = await axios.get(all_chat_url, config);
-                setChats(chatss);
-                console.log(chats);
+                if(loaded){
+                    const {data:chatss} = await axios.get(all_chat_url, config);
+
+                    setChats(chatss);
+                }
             // }
         })
     },[])
@@ -172,7 +172,7 @@ export default function Navbar(){
                                 <Link to="/" className="web-logo nav-logo">
                                     <img src="../../assets/User/images/logo/1.png" className="img-fluid blur-up lazyload" alt="" />
                                 </Link>
-                                {location !== "/client_messages" ?
+                                {/*{location !== "/client_messages" ?*/}
                                     <div className="middle-box">
                                         <div className="location-box">
                                             <button className="btn location-button" data-bs-toggle="modal"
@@ -195,8 +195,8 @@ export default function Navbar(){
                                             </div>
                                         </div>
                                     </div>
-                                    : ""
-                                }
+                                {/*    : ""*/}
+                                {/*}*/}
 
                                 <div className="rightside-box">
                                     <div className="search-full">
@@ -284,11 +284,12 @@ export default function Navbar(){
                                             </div>
 
                                         </li>
+                                        {localStorage.getItem("token")?
                                         <li className="right-side">
                                             <div className="onhover-dropdown header-badge">
 
 
-                                                {localStorage.getItem("token")?<div className="delivery-detail">
+                                                <div className="delivery-detail">
                                                     {
                                                         profile?<div>
                                                             <h6><center><div className="delivery-icon">
@@ -303,17 +304,19 @@ export default function Navbar(){
                                                             {/*<h5>{profile && profile.username}</h5>*/}
                                                         </div>:""
                                                     }
-                                                </div>:""}
+                                                </div>
                                             </div>
                                             <div className="onhover-div onhover-div-login">
 
                                             </div>
                                         </li>
+                                            :""}
+                                        {localStorage.getItem("token")?
                                         <li className="right-side onhover-dropdown">
                                             <div className="header-badge">
 
 
-                                                {localStorage.getItem("token")?
+
                                                     <div className="delivery-detail">
                                                         {
                                                             profile?<div>
@@ -330,8 +333,7 @@ export default function Navbar(){
                                                             </div>:""
                                                         }
                                                     </div>
-                                                    :""
-                                                }
+
                                             </div>
                                             <div className="onhover-div">
 
@@ -372,6 +374,8 @@ export default function Navbar(){
 
                                             </div>
                                         </li>
+                                            :""
+                                        }
                                         <li className="right-side onhover-dropdown">
                                             <div className="header-badge">
 
