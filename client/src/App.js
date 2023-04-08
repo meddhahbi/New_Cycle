@@ -13,8 +13,13 @@ import UserProfile from "./Components/UserInterface/Pages/UserProfile";
 import PageNotFound from './Components/UserInterface/PageNotFound';
 import RegisterAssociation from './Components/UserInterface/Pages/RegisterAssociation';
 import ProfileForm from "./Components/UserInterface/Pages/profileForm";
+
 import BlogList from './Components/BlogInterface/BlogList';
 import AddBlog from './Components/BlogInterface/addBlog'
+import GetBlog from './Components/BlogInterface/getBlog'
+
+import Plan from './Components/UserInterface/Pages/Plan';
+
 
 
 function App() {
@@ -36,8 +41,18 @@ function App() {
 
           <Route path='/me' element={<UserProfile />} />
           <Route path='/edit_me' element={<ProfileForm />} />
+
           <Route path='/blog' element={<BlogList />} />
           <Route path='/addBlog' element={<AddBlog />} />
+         
+
+          <Route path='/subscribe' element={<Plan />} />
+
+
+
+
+
+
       </Route>
 
 
@@ -49,6 +64,7 @@ function App() {
           <Route path='/confirm/:activationCode' element={<ActivationPage />} />
   
         <Route path='/reset/:id' element={<ResetPassword />}/>
+        <Route path='/getBlog/:id' element={<GetBlog />} />
 
 
 

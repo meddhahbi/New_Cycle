@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const fs = require('fs');
 
 
+
+
 const articleSchema = new mongoose.Schema({
   title: { type: String, required: true },
   content: { type: String, required: true },
@@ -15,8 +17,7 @@ var url = process.env.URL;
 
 
 
-
-exports.createArticle = (title, content, author, photoBuffer) => {
+exports.createArticle = (title, content, author, photo) => {
   return new Promise((resolve, reject) => {
     mongoose.connect(url, {
       useNewUrlParser: true,
@@ -24,27 +25,25 @@ exports.createArticle = (title, content, author, photoBuffer) => {
     }).then(() => {
       // Create an article object with the image buffer and photo buffer
       const article = new Article({
-        title,
-        content,
-        author,
-        photo: photoBuffer
+        title:title,
+        content:content,
+        author:author,
+        photo: photo.split("uploads")[1]
        
       });
-
+      console.log()
       article.save().then((article) => {
-        mongoose.disconnect();
         resolve(article);
       }).catch((err) => {
-        mongoose.disconnect();
         reject({ message: "Failed to save article to database", error: err });
       });
     }).catch((err) => {
-      mongoose.disconnect();
       reject({ message: "Failed to connect to database", error: err });
     });
   });
 };
-  
+
+
   exports.deleteArticle = (id) => {
     return new Promise((resolve, reject) => {
       mongoose.connect(url, {

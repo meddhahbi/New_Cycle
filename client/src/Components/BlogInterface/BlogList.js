@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 
 function BlogList() {
@@ -50,7 +51,7 @@ function BlogList() {
                             <div class="blog-box blog-list wow fadeInUp" data-wow-delay="0.2s">
                                 <a href="blog-detail.html" class="blog-image">
                                     
-                                {article.photo && <img src={`data:image/jpeg;base64,${(article.photo).toString('base64')}`}  />}
+                                {article.photo && <img  width="400" height="200" src={`http://localhost:3001/${(article.photo)}`}  />}
                                 </a>
 
                                 <div class="blog-contain blog-contain-2">
@@ -63,8 +64,9 @@ function BlogList() {
                                         
                                     </a>
                                     <p>{article.content}</p>
-                                    <button onclick="location.href = 'blog-detail.html';" class="blog-button">Read
-                                        More <i class="fa-solid fa-right-long"></i></button>
+                                    <Link to={{ pathname: `/getBlog/${article._id}` }} className="blog-button">
+                                        Read More <i className="fa-solid fa-right-long"></i>
+                                        </Link>
                                 </div>
                             </div>
                         </div>                            
