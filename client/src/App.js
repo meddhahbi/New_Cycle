@@ -26,36 +26,36 @@ function App() {
   return (
     <div>
       <Routes>
-      <Route path="/" element={<User />}>
+      <Route path="/" exact element={<User />}>
 
         <Route index element={<Home />} />
         {/*<Route  path='/login' element={<Login />} />*/}
-        <Route  path='/register' element={<Register />} />
-        <Route  path='/forgot' element={<Forgot />} />
+        <Route  path='/register' exact element={<Register />} />
+        <Route  path='/forgot' exact element={<Forgot />} />
         {/* <Route path="/reset/:id" element={<ResetPassword />}/> */}
-        <Route path='/loginAssociation' element={<LoginAssociation />} />
-        <Route  path='/login' element={<Login />} />
+        <Route path='/loginAssociation' exact element={<LoginAssociation />} />
+        <Route  path='/login' exact element={<Login />} />
 
         <Route  path='/registerAssociation' element={<RegisterAssociation />} />
 
 
-          <Route path='/me' element={<UserProfile />} />
-          <Route path='/edit_me' element={<ProfileForm />} />
-          <Route path='/blog' element={<BlogList />} />
-          <Route path='/addBlog' element={<AddBlog />} />
+          <Route path='/me' exact element={<UserProfile />} />
+          <Route path='/edit_me' exact element={<ProfileForm />} />
+          <Route path='/blog' exact element={<BlogList />} />
+          <Route path='/addBlog' exact element={<AddBlog />} />
 
           <Route path='/subscribe' element={<Plan />} />
 
       </Route>
 
-      <Route path='/confirm/:activationCode' element={<ActivationPage />} />
+      <Route path='/confirm/:activationCode' exact element={<ActivationPage />} />
   
-      <Route path='/reset/:id' element={<ResetPassword />}/>
+      <Route path='/reset/:id' exact element={<ResetPassword />}/>
 
 
 
-        <Route path="admin" element={<Admin />}>
-        <Route path='' element={<Dashboard />} />
+        <Route path="admin" exact element={<Admin />}>
+        <Route path='' exact element={<Dashboard />} />
 
         
         
