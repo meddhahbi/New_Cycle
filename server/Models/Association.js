@@ -2,6 +2,8 @@ const route = require('express').Router();
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const fs = require('fs');
+const pdfparse = require('pdf-parse');
 
 
 
@@ -13,6 +15,7 @@ let schemaAssociation = mongoose.Schema({
     phone:{ type: Number, required: true },
     postal:{ type: Number, required: true },
     isActive : {type:Boolean,default:false},
+    docVerif:{type:String},
     role: { type: String,  default: 'association' }
 });
 
@@ -30,7 +33,7 @@ var privateKey = "this is my secret key testjsdjsbdjdbdjbcjbkajdbqsjq"
 
 
 
-exports.register=(name,email,password,phone,postal)=>{
+register=(name,email,password,phone,postal,docVerif)=>{
     return new Promise((resolve,reject)=>{
         mongoose.connect(url,{
             useNewUrlParser: true,
@@ -40,7 +43,7 @@ exports.register=(name,email,password,phone,postal)=>{
                 email:email
             }).then((doc)=>{
                 if(doc){
-                    mongoose.disconnect();
+                   // mongoose.disconnect();
                     reject('this email is exist');
                 }else{
                     bcrypt.hash(password,10).then((hashedPassword)=>{
@@ -50,18 +53,19 @@ exports.register=(name,email,password,phone,postal)=>{
                             password:hashedPassword,
                             phone:phone,
                             postal:postal,
+                            docVerif:docVerif,
                         })
                         association.save().then((association)=>{
-                            mongoose.disconnect();
+                           // mongoose.disconnect();
                             resolve(association);
 
                         }).catch((err)=>{
-                            mongoose.disconnect();
+                           // mongoose.disconnect();
                             reject(err);
             
                         })
                     }).catch((err)=>{
-                        mongoose.disconnect();
+                       // mongoose.disconnect();
                         reject(err);
                     })
                 }
@@ -71,7 +75,8 @@ exports.register=(name,email,password,phone,postal)=>{
 }
 
 
-exports.login=(email,password)=>{
+login=(email,password)=>{
+
     return new Promise((resolve, reject)=>{
         console.log("login association")
         mongoose.connect(url,{
@@ -81,13 +86,13 @@ exports.login=(email,password)=>{
             return Association.findOne({ email:email})
         }).then((association)=>{
             if(!association){
-                mongoose.disconnect();
+               // mongoose.disconnect();
                 msg = "this email does not exist";
                 resolve([msg,"err"])
                 // reject(msg);
             }else if(association && bcrypt.compare(password, association.password) &&!association.isActive){
 
-                mongoose.disconnect();
+               // mongoose.disconnect();
                 msg = "Please check your email for activation";
                 // resolve(message);
                 resolve([msg,"err"])
@@ -101,7 +106,7 @@ exports.login=(email,password)=>{
                             },privateKey,{
                                 expiresIn:'1h',
                             })
-                            mongoose.disconnect();
+                           // mongoose.disconnect();
                             
                             console.log("same password");
                             
@@ -114,14 +119,14 @@ exports.login=(email,password)=>{
 
 
                         }else{
-                            mongoose.disconnect();
+                           // mongoose.disconnect();
                             msg= 'invalid password'
                             console.log(msg)
                             resolve([msg,"err"])
                             reject(ùsg)
                         }
                 }).catch((err)=>{
-                    mongoose.disconnect();
+                   // mongoose.disconnect();
                     reject(err);
                 })
             }
@@ -129,6 +134,87 @@ exports.login=(email,password)=>{
     })
 }
 
+// verifDoc=(email)=>{
+//     return new Promise((resolve, reject)=>{
+//         mongoose.connect(url,{
+//             useNewUrlParser: true,
+//             useUnifiedTopology: true
+//         }).then(()=>{
+//             return Association.findOne({ email:email})
+//         }).then((association)=>{
+//             if(!association){
+//                 // mongoose.disconnect();
+//                  msg = "this email does not exist";
+//                  resolve([msg,"err"])
+//                  // reject(msg);
+//              }else{
+
+//                 const pdffile = fs.readFileSync(association.docVerif);
+//                 pdfparse(pdffile).then((data)=>{
+//                     console.log(data.numpages);
+//                 })
+//                // const nom =  association.docVerif.name;
+//                 resolve(pdffile);
+
+//              }
+//         }).catch((err)=>{
+//             // mongoose.disconnect();
+//              reject(err);
+
+//          })
+//     }).catch((err)=>{
+//         // mongoose.disconnect();
+//          reject(err);
+//      })
+// }
+
+
+verifDoc = (email) => {
+    return new Promise((resolve, reject) => {
+        mongoose.connect(url, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        }).then(() => {
+            return Association.findOne({
+                email: email
+            })
+        }).then((association) => {
+            if (!association) {
+                // mongoose.disconnect();
+                const msg = "this email does not exist";
+                resolve([msg, "err"])
+                // reject(msg);
+            } else {
+
+                const pdffile = fs.readFileSync(association.docVerif);
+                pdfparse(pdffile).then((data) => {
+                    // console.log(data.numpages);
+                    console.log(data.text);
+                    if(data.text.includes('Document')){
+                        association.isActive = true;
+                         association.save();
+                         console.log('verified')
+                    }else{
+                        console.log('Not verified')
+                    }
+
+                })
+                // const nom =  association.docVerif.name;
+                resolve(pdffile);
+
+            }
+        }).catch((err) => {
+            // mongoose.disconnect();
+            reject(err);
+        })
+    })
+}
 
 
 
+module.exports = {
+    Association,
+   login,
+   register,
+   verifDoc,
+};

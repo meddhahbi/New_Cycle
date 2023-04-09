@@ -16,6 +16,7 @@ function Message(props) {
                         <div className="userChatInfo darker">
                             <div className="right userInfo">
                                 <div className="user" >
+                                    <i className="fa fa-ellipsis-v"/>
                                     <span className="username">{message.sender.username}</span>
                                     <img src="../../../../../assets/User/images/inner-page/user/default.png"
                                          data-toggle="tooltip" data-placement="top" title={message.sender.username}

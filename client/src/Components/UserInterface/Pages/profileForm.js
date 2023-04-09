@@ -27,19 +27,6 @@ const ProfileForm = () => {
         const response = await fetch(url);
         const json = await response.json();
         const user = json.user;
-        // console.log(user);
-        // if(response.ok){
-
-        // }
-
-        if(isLoading === true){
-
-            // setUsername(profile.username)
-            // setPostal(profile.postal)
-            // setPhone(profile.phone)
-
-
-        }
     }
     useEffect(()=>{
 

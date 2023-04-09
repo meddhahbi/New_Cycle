@@ -24,7 +24,6 @@ router.route("/").get(protect, async (req, res)=>{
 });
 router.route("/get_other/:chatId").get(protect, async (req, res)=>{
     try {
-        console.log(req.user)
         Chat.findOne({_id: req.params.chatId})
             .populate("users", "-password -subscription")
             .sort({updatedAt:-1})
@@ -35,7 +34,6 @@ router.route("/get_other/:chatId").get(protect, async (req, res)=>{
             })
                 const users = results.users;
                 let other = null
-                console.log(users)
                 for (const client of users){
                     other = client._id !== req.user._id?client:null;
 
@@ -61,7 +59,6 @@ router.route("/get_readMessages/:chatId").get(protect, async (req, res)=>{
             })
                 const users = results.users;
                 let other = null
-                console.log(users)
                 for (const client of users){
                     other = client._id !== req.user._id?client:null;
 

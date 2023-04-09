@@ -8,8 +8,6 @@ import axios from "axios";
 export default function Navbar(){
     const [other, setOther] = useState();
     const location = useLocation().pathname
-    // console.log("location")
-    // console.log(location)
     const config = {
         headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -24,29 +22,58 @@ export default function Navbar(){
     const [profile, setProfile] = useState();
     const [loaded, setLoaded] = useState(true);
     const [chats, setChats] = useState([]);
+    const [isSubscribed, setIsSubscribed] = useState(false);
+
+    const url="https://localhost:3001/verifySubs/" + localStorage.getItem("mail");
     useEffect(()=>{
         const getData= async ()=>{
-            const url = "http://localhost:3001/me/" + localStorage.getItem("mail");
-            // console.log(url)
-            const response1 = await fetch(url);
+            const url1 = "http://localhost:3001/me/" + localStorage.getItem("mail");
+            const response1 = await fetch(url1);
             const json1 = await response1.json();
             const user = json1.user;
-            setProfile(user);
+            if(loaded){
 
+                setProfile(user);
+            }
 
 
         }
         getData().then(async ()=>{
             // if(profile){
-                const all_chat_url = "/chat"
+                const all_chat_url = "http://localhost:3001/chat"
                 if(loaded){
+            console.log("chatss")
                     const {data:chatss} = await axios.get(all_chat_url, config);
-
                     setChats(chatss);
+            console.log(chatss)
+                    setLoaded(false)
                 }
             // }
         })
-    },[])
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => setIsSubscribed(data.isSubscribed))
+            .catch(error => console.error(error));
+
+    },[]);
+
+//   const subscriptionStatus=(e)=>{
+//     e.preventDefault();
+//     const [subscribed,setSubscribed] =useState(false);
+//     const url="https://localhost:3001/verifySubs/" + localStorage.getItem("mail");
+//     useEffect(()=>{
+//         axios.get(url)
+//         .then((response)=>{
+//             setSubscribed(response.data.subscribed);
+//         }).catch((error)=>{
+//             console.error(error);
+//         })
+//     })
+//   }
+
+
+
     return <div>
 
         <header className="pb-md-4 pb-0">
@@ -906,6 +933,23 @@ export default function Navbar(){
                                 </div>
                             </div>
                         </div>
+                        {/*    </div>*/}
+                        {/*</div>*/}
+                        {isSubscribed || !localStorage.getItem("token") ?
+                        <div className="header-nav-right">
+                            <button className="btn deal-button" data-bs-toggle="modal" data-bs-target="#deal-box">
+                                <i data-feather="zap"></i>
+                                <Link to="/subscribe">
+                                <span>Take your subscription</span></Link>  
+                            </button>
+                        </div>:
+
+                        <div className="header-nav-right">
+                        </div>}
+
+
+
+
                     </div>
                 </div>
                 :""

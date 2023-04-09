@@ -13,9 +13,14 @@ import UserProfile from "./Components/UserInterface/Pages/UserProfile";
 import PageNotFound from './Components/UserInterface/PageNotFound';
 import RegisterAssociation from './Components/UserInterface/Pages/RegisterAssociation';
 import ProfileForm from "./Components/UserInterface/Pages/profileForm";
+
+import BlogList from './Components/BlogInterface/BlogList';
+import AddBlog from './Components/BlogInterface/addBlog'
+
 import Plan from './Components/UserInterface/Pages/Plan';
 import authMiddleware from "./middleware/middleware";
 import Chats from "./Components/UserInterface/Pages/Chat/Chats";
+import Dashboard from './Components/AdminInterface/Pages/Dashboard';
 
 
 function App() {
@@ -35,6 +40,7 @@ function App() {
         <Route  path='/registerAssociation' element={<RegisterAssociation />} />
 
 
+
           <Route path='/me' element={<UserProfile />}/>
           <Route path='/edit_me' element={<ProfileForm />}/>
           <Route path='/subscribe' element={<Plan />} />
@@ -44,28 +50,25 @@ function App() {
 
 
 
+          <Route path='/subscribe' element={<Plan />} />
+
       </Route>
 
-
-
-          {/* <Route  path='/register' element={<Register />} />
-          <Route  path='/forgot' element={<Forgot />} /> */}
-          {/* <Route path="/reset/:id" element={<ResetPassword />}/> */}
-          {/* <Route path='/loginAssociation' element={<LoginAssociation />} /> */}
-          <Route path='/confirm/:activationCode' element={<ActivationPage />} />
+      <Route path='/confirm/:activationCode' element={<ActivationPage />} />
   
-        <Route path='/reset/:id' element={<ResetPassword />}/>
+      <Route path='/reset/:id' element={<ResetPassword />}/>
 
 
 
-        <Route path="/admin" element={<Admin />}>
+        <Route path="admin" element={<Admin />}>
+        <Route path='' element={<Dashboard />} />
 
         
         
         </Route>
 
-
-        <Route path='/confirm/:activationCode' element={<ActivationPage />} />
+        
+        {/* <Route path='/confirm/:activationCode' element={<ActivationPage />} /> */}
 
         <Route path='*' element={<PageNotFound/>}/> 
 

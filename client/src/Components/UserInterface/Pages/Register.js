@@ -14,6 +14,8 @@ export default function Register(){
     const [password, setPassword] = useState('');
     const [phone, setPhone] = useState('');
     const [postal, setPostal] = useState('');
+    const [image, setImage] = useState(null);
+
 
     const [errors, setErrors] = useState(
         {
@@ -84,22 +86,32 @@ export default function Register(){
     const register=(e)=>{
         e.preventDefault();
         console.log("form submitted");
-        console.log("form data", username, email, password, phone, postal);
+        console.log("form data", username, email, password, phone, postal,image);
 
 
         //? Form valid
         if(formValidation()){
 
 
-            const data = { 
-                username,
-                email,
-                password,
-                phone,
-                postal 
-            };
+
+            const formData = new FormData();
+            formData.append('username', username);
+            formData.append('email', email);
+            formData.append('password', password);
+            formData.append('phone', phone);
+            formData.append('postal', postal);
+            formData.append('image', image);
+
+
+            // const data = { 
+            //     username,
+            //     email,
+            //     password,
+            //     phone,
+            //     postal 
+            // };
             const url='http://localhost:3001/register'
-            axios.post(url, data)
+            axios.post(url, formData)
             .then(response => {
                         console.log(response.data); // Handle response data
                         toast.success("User created successfuly...");
@@ -108,6 +120,7 @@ export default function Register(){
                         setPassword('');
                         setPhone('');
                         setPostal('');
+                        setImage(null);
                     })
                     .catch(error => {
                         console.error(error); // Handle error
@@ -273,7 +286,7 @@ export default function Register(){
                                 
                                 </div>
 
-
+                                <input type="file" accept="image/jpeg, image/png" onChange={(e) => setImage(e.target.files[0])} />
 
                                 <div className="col-12">
                                     <div className="forgot-box">
