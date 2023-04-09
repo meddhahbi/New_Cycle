@@ -2,19 +2,22 @@ import React, {useEffect, useRef, useState} from 'react';
 import axios from "axios";
 import LoadingPage from "../../../Loading";
 import {useNavigate} from "react-router";
-import TimeAgo from "react-timeago";
 import style from "./style.css"
 import {Link} from "react-router-dom";
+import Message from "./Message";
 const Chats = (props) => {
     const [isLoading, setIsLoading] = useState(true);
     const [messages, setMessages] = useState([]);
     const [chats, setChats] = useState([]);
     const [newMessage, setnewMessage] = useState();
     const [sidebarStyle, setSidebarStyle] = useState();
+    const messagesEndRef = useRef(null);
+    const textAreaRef = useRef(null);
     const [other, setOther] = useState();
     const navigate = useNavigate();
     const userInfo = JSON.parse(localStorage.getItem("userInfo"))
     const elementRef = useRef();
+    const chatId = localStorage.getItem("chats")
     const config = {
         headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -23,29 +26,39 @@ const Chats = (props) => {
 
     const getMessages = async ()=>{
 
-        const { data:messages } = await axios.get("/message/"+localStorage.getItem("chats"), config);
-        // console.log(data)
-        setMessages(messages.slice(messages.length-10, messages.length));
+        let { data:messages } = await axios.get("/message/"+chatId, config)
+        setMessages(messages);
         return messages
     }
     const getChats = async ()=>{
-
-        // console.log("data")
         const { data:chats } = await axios.get("/chat", config);
-        // console.log(data)
-        // console.log("chatssss")
         setChats(chats);
         return chats
     }
     const getOther = async ()=>{
 
         // console.log("data")
-        const { data } = await axios.get("/chat/get_other/"+localStorage.getItem("chats"), config);
+        const { data } = await axios.get("/chat/get_other/"+chatId, config);
         // console.log(data)
         setOther(data)
+        // console.log("other")
+        // console.log(other)
         return data
     }
     const handleChange = (e) =>{
+        const chatboxForm = document.querySelector('.chatbox-message-form')
+        let line = e.target.value.split('\n').length
+
+        if(e.target.rows < 6 || line < 6) {
+            e.target.rows = line
+        }
+        if(e.target.rows > 1) {
+            chatboxForm.style.alignItems = 'flex-end'
+        } else {
+            chatboxForm.style.alignItems = 'center'
+        }
+
+        console.log(e.target.value)
         setnewMessage(e.target.value)
     }
     const handleSubmit = async (e) => {
@@ -66,17 +79,32 @@ const Chats = (props) => {
         }
         setnewMessage("")
     }
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter' && e.ctrlKey) {
+            e.preventDefault();
+            handleSubmit(e).then();
+        }
+        e.target.rows = 1
+    };
+    const scrollToBottom = () => {
+            messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
     useEffect(()=>{
-
-
+        // console.log("document.body.scrollHeight");
+        // console.log(document.body.scrollHeight);
+        getOther().then(()=>{})
+        getChats().then()
+        getMessages().then(
+            ()=>{
+            }
+        )
 
         if(isLoading){
-            getMessages().then()
             window.scrollTo(0, document.body.scrollHeight)
-            getChats().then()
-            // setSidebarStyle({borderRight:"thick double #bbb", maxWidth:"300px"})
-            getOther().then(()=>{})
 
+
+            scrollToBottom()
+            // setSidebarStyle({borderRight:"thick double #bbb", maxWidth:"300px"})
             if (!userInfo) {
                 // authMiddleware(navigate)
                 navigate("/login",{});
@@ -86,12 +114,13 @@ const Chats = (props) => {
             // console.log(chats)
             setTimeout(()=> {
 
+                // window.scrollTo(0, document.body.scrollHeight)
                 setIsLoading(false)
             }, 1000);
         }
 
 
-    })
+    },[chatId, messages])
 
     return (
         <div ref={elementRef}>
@@ -124,9 +153,9 @@ const Chats = (props) => {
                                             >
                                                 <div className="d-flex w-100 align-items-center justify-content-between">
                                                     <strong className="mb-1">
-                                                                                <span>
-                                                                                    {chat.latestMessage?.sender.username}
-                                                                            </span>
+                                                        <span>
+                                                            {other&&other.username}
+                                                        </span>
                                                     </strong>
                                                     <small> </small>
                                                     {/*<small>{chat.latestMessage?.updatedAt} </small>*/}
@@ -154,8 +183,8 @@ const Chats = (props) => {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-4">
-                        <div className="d-flex flex-column align-items-stretch flex-shrink-0 bg-body-tertiary sidebar"
+                    <div className="col-4 messages-content">
+                        <div className="d-flex flex-column align-items-stretch flex-shrink-0 bg-body-tertiary sidebar sticky-header sidebar-sticky col-3"
                              style={sidebarStyle}>
                             <div className="list-group list-group-flush border-bottom scrollarea">
                                 {chats?.map((chat) => (
@@ -166,22 +195,29 @@ const Chats = (props) => {
                                             }
                                                aria-current="true" onClick={()=>{
                                                 // console.log(chat.latestMessage)
-                                                setIsLoading(false)
+                                                setIsLoading(true)
 
-                                                setTimeout(()=>{
-
-                                                    localStorage.setItem("chats", chat._id)
-                                                    setIsLoading(true)
-                                                }, 1000)
+                                                localStorage.setItem("chats", chat._id)
+                                                // setTimeout(()=>{
+                                                //
+                                                //     window.scrollTo(0, document.body.scrollHeight)
+                                                //     setIsLoading(false)
+                                                //
+                                                // }, 1000)
                                             }}
 
                                                key={chat._id}
                                             >
                                                 <div className="d-flex w-100 align-items-center justify-content-between">
                                                     <strong className="mb-1">
-                                                                                <span>
-                                                                                    {chat.latestMessage?.sender.username}
-                                                                            </span>
+                                                        <span>
+                                                            {/*{chat.latestMessage?.sender.username}*/}
+                                                            {chat.users[0]._id===userInfo._id?
+                                                                chat.users[1].username
+                                                                :
+                                                                chat.users[0].username
+                                                            }
+                                                        </span>
                                                     </strong>
                                                     <small> </small>
                                                     {/*<small>{chat.latestMessage?.updatedAt} </small>*/}
@@ -210,60 +246,26 @@ const Chats = (props) => {
 
 
 
-                    <div className="col-8">
-                        {messages?.sort((a,b)=>b.createdAt - a.createdAt).map((chat) => (
-                            <div
-                                className="userChat"
-                                key={chat.id}
-                            >
-
-                                {chat.sender._id === userInfo._id?
-                                    <div className="userChatInfoRight">
-
-                                        <div className="userChatInfo darker">
-                                            <div className="right userInfo">
-                                                <div className="user" >
-                                                    <span className="username">{chat.sender.username}</span>
-                                                    <img src="../../../../../assets/User/images/inner-page/user/default.png"
-                                                         data-toggle="tooltip" data-placement="top" title={chat.sender.username}
-                                                         className="right-img"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="message">
-                                                <p>{chat.content}</p>
-                                            </div>
-                                            <span className="time-right"><TimeAgo date={chat.updatedAt} /></span>
-                                        </div>
-                                    </div>
-                                    :
-                                    <div className="userChatInfo">
-                                        <div className="user">
-                                            <img src="../../../../../assets/User/images/inner-page/user/default.png"
-                                                 alt={chat.sender.username}
-                                                 className="left-img"
-                                            />
-                                            <span className="username">{chat.sender.username}</span>
-                                        </div>
-
-                                        <div className="right">
-                                            <p>{chat.content}</p>
-                                        </div>
-
-                                        <span className="time-left"><TimeAgo date={chat.updatedAt} /></span>
-                                    </div>
-                                }
-                            </div>
+                    <div className="col-8 list-messages" id="list-messages">
+                        {messages?.sort((a,b)=>b.createdAt - a.createdAt).map((message) => (
+                            <Message message={message}/>
                         ))}
 
 
 
                     </div>
-                    <div className="send-message">
-                        <form action="" onSubmit={handleSubmit} >
-                            <input value={newMessage} type="text" className="form-control chat-input" placeholder="write something"
-                                   onChange={handleChange}
-                            />
+                    <div className="send-message fixed-bottom">
+                        <form action="" onSubmit={handleSubmit} className="chatbox-message-form">
+                            {/*<input value={newMessage} type="text" className="form-control chat-input" placeholder="write something"*/}
+                            {/*       onChange={handleChange}*/}
+                            {/*/>*/}
+                            <div ref={messagesEndRef}/>
+                            <div className="input-group">
+                                <textarea ref={textAreaRef}
+                                        name="send" id="" rows="1" value={newMessage} className=" form-control chat-input"
+                                        onChange={handleChange} placeholder="write something" onKeyDown={handleKeyDown}/>
+                                <button className="btn btn-outline-default"><i className="fa fa-paper-plane"/></button>
+                            </div>
                         </form>
                     </div>
                 </div>

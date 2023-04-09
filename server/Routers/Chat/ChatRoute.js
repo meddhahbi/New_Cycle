@@ -90,11 +90,11 @@ router.route("/").post(protect, async (req, res) => {
             {users: {$elemMatch: {$eq: userId}}},
         ],
     })
-        .populate("users", "-password")
+        .populate("users", "-password -subscription -isBlocked -isActive -activationCode")
         .populate("latestMessage");
     isChat = await User.populate(isChat, {
         path: "latestMessage.sender",
-        select: "name pic email",
+        select: "username email",
     });
     if (isChat.length > 0) {
         res.send(isChat[0]);
@@ -107,7 +107,7 @@ router.route("/").post(protect, async (req, res) => {
             const createdChat = await Chat.create(chatData);
             const FullChat = await Chat.findOne({ _id: createdChat._id }).populate(
                 "users",
-                "-password"
+                "-password -subscription -isBlocked -isActive -activationCode"
             );
             res.status(200).json(FullChat);
         } catch (error) {
