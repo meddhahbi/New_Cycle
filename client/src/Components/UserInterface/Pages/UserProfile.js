@@ -123,7 +123,7 @@ export default function UserProfile() {
                                                 </div>
                                             </div> */}
                                             <div className="position-relative">
-                                                <img src={profile && profile.image}
+                                                <img src={profile && "http://localhost:3001/"+profile.image}
                                                      className="blur-up lazyload update_img" alt=""/>
                                                 <div className="cover-icon">
                                                     <i className="fa-solid fa-pen">

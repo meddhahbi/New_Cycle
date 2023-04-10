@@ -28,7 +28,7 @@ router.route("/").post(protect, async (req, res) => {
         console.log("UserId param not sent with request");
         return res.sendStatus(400);
     }
-    let isReportUser = await ReportUser.find({
+    let isReportUser = await ReportUser.findOne({
         reported: userId
     })
         .populate("reported", "username email")
@@ -38,22 +38,29 @@ router.route("/").post(protect, async (req, res) => {
         select:"username email"
     })
     // console.log(reports)
-    for(let report of isReportUser){
-        for(let rep of report.reports){
-            console.log(rep.reporter._id)
-            console.log(req.user._id)
-            if(rep.reporter._id.toString() === req.user._id.toString()){
-                // console.log("you already reported this client")
-                res.status(400).send("you already reported this client")
-            }
-        }
+    // for(let report of isReportUser){
+
+
     //     if(report.reporter._id === req.user._id){
     //         console.log("exists")
     //         res.status(400).send("can't be reported again")
     //     }
-    }
-    if (isReportUser.length > 0) {
-        res.send(isReportUser[0]);
+    // }
+    if (isReportUser) {
+        console.log(isReportUser)
+        if(isReportUser.reports){
+            for(let rep of isReportUser.reports){
+                console.log(rep.reporter._id)
+                console.log(req.user._id)
+                if(rep.reporter._id.toString() === req.user._id.toString()){
+
+                    console.log("you already reported this client")
+                    res.status(400).send({error:"already reported"})
+                    return 0
+                }
+            }
+        }
+        res.send(isReportUser);
     }
 
     else {

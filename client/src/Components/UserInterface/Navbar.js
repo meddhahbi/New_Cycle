@@ -2,22 +2,26 @@
 import { Link } from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import navbar from "./Pages/style/navbar.css"
-import {useLocation} from "react-router";
+import {useLocation, useNavigate} from "react-router";
 import axios from "axios";
 
 export default function Navbar(){
-    const [other, setOther] = useState();
+    const navigate = useNavigate();
     const location = useLocation().pathname
     const config = {
         headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
     };
-    const logout = (e)=>{
+    const urlOffline="http://localhost:3001/setOffline";
+    const logout = async (e)=>{
         e.preventDefault();
+        let {data}=await axios.put(urlOffline, {
+            userId :profile._id
+        }, config)
         // console.log("logout");
         localStorage.clear();
-        window.location = "/login"
+        navigate("/login")
     }
     const [profile, setProfile] = useState();
     const [loaded, setLoaded] = useState(true);

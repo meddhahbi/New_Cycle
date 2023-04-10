@@ -1,3 +1,14 @@
+:root {
+    --blue: #335DFF;
+    --grey: #b5b5b5;
+    --grey-d-1: #EEE;
+    --grey-d-2: #DDD;
+    --grey-d-3: #888;
+    --white: #FFF;
+    --dark: #222;
+}
+
+
 .userChat{
     /*transform: scaleY(-1);*/
     /*overflow: auto;*/
@@ -9,6 +20,10 @@
 html, body{
     padding: 0;
     margin: 0;
+}
+.scrollarea{
+    display: flex;
+    align-items: normal;
 }
 @media (prefers-reduced-motion: reduce) {
     html:focus-within {
@@ -97,13 +112,22 @@ html, body{
 
 .time-left {
     float: left;
-    color: #999;
+    color: #999999;
 }
 
 .userChatInfo .username{
     margin-bottom: 1%;
+    padding: 0 10px 0 10px;
     font-weight: bolder;
     font-size: x-large;
+}
+
+.list-group-item{
+    padding: 0 10px;
+    margin: 0;
+}
+.chat-cont{
+    padding: 0;
 }
 .user{
     display: flex;
@@ -120,6 +144,12 @@ html, body{
 .darker {
     border-color: #b0b0b0;
     background-color: #bebebe;
+}
+.left-icon{
+    margin-left: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
 }
 .right{
     margin-right: 20px;
@@ -167,6 +197,56 @@ html, body{
 .current{
 
 }
+.list-group-item{
+    padding-top:0;
+}
 .userChatInfo p{
     font-weight: bold;
+}
+
+.chatbox-message-dropdown {
+    position: relative;
+}
+.chatbox-message-dropdown-toggle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2rem;
+    height: 2rem;
+    font-size: 1.25rem;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.chatbox-message-dropdown-toggle:hover {
+    background: var(--grey);
+}
+.chatbox-message-dropdown-menu {
+    list-style: none;
+    margin: 0;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: var(--white);
+    padding: 0;
+    width: 110px;
+    box-shadow: .25rem .25rem 1.5rem rgba(0, 0, 0, .1);
+    transform: scale(0);
+    transform-origin: top right;
+    transition: .2s;
+    border-radius: .5rem;
+}
+.chatbox-message-dropdown-menu.show {
+    transform: scale(1);
+}
+.chatbox-message-dropdown-menu a {
+    font-size: .875rem;
+    font-weight: 500;
+    color: var(--dark);
+    text-decoration: none;
+    padding: .5rem 1rem;
+    display: block;
+}
+.chatbox-message-dropdown-menu a:hover {
+    background: var(--grey);
 }

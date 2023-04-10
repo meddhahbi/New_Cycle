@@ -13,6 +13,8 @@ let schemaUser = mongoose.Schema({
     phone:{ type: Number, required: false },
     postal:{ type: Number, required: false },
     isActive : {type:Boolean,default:false},
+    isOnline : {type:Boolean,default:false},
+    isReported : {type:Boolean,default:false},
     activationCode:String,
     googleId: String,
     secret: String,
@@ -136,7 +138,8 @@ login=(email,password)=>{
             useUnifiedTopology: true
         }).then(()=>{
             return User.findOne({ email:email})
-        }).then((user)=>{
+        }).then(async(user)=>{
+
             if(user){
                 bcrypt.compare(password, user.password).then((same)=>{
                     if(same){
@@ -163,6 +166,8 @@ login=(email,password)=>{
                         
                         console.log("same password");
                         jwt.decode();
+                        user.isOnline = true
+                        user.save()
                         resolve([token,"token", user.role, user.email, user]);
 
 

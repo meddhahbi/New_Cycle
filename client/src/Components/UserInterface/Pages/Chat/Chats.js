@@ -5,15 +5,17 @@ import {useNavigate} from "react-router";
 import style from "./style.css"
 import {Link} from "react-router-dom";
 import Message from "./Message";
+import Chat from "./Chat";
 const Chats = (props) => {
     const [isLoading, setIsLoading] = useState(true);
     const [messages, setMessages] = useState([]);
     const [chats, setChats] = useState([]);
     const [newMessage, setnewMessage] = useState();
-    const [sidebarStyle, setSidebarStyle] = useState();
+    const [selectedReason, setSelectedReason] = useState();
     const messagesEndRef = useRef(null);
     const textAreaRef = useRef(null);
     const [other, setOther] = useState();
+    const [reported, setReported] = useState();
     const navigate = useNavigate();
     const userInfo = JSON.parse(localStorage.getItem("userInfo"))
     const elementRef = useRef();
@@ -24,21 +26,32 @@ const Chats = (props) => {
         },
     };
 
+    let count = 0
+
+
+
+    const onChangeSelect=(e)=> {
+        setSelectedReason(e.target.value);
+        console.log(e.target.value)
+        console.log("reported")
+        console.log(reported)
+    }
+
     const getMessages = async ()=>{
 
-        let { data:messages } = await axios.get("/message/"+chatId, config)
+        let { data:messages } = await axios.get("http://localhost:3001/message/"+chatId, config)
         setMessages(messages);
         return messages
     }
     const getChats = async ()=>{
-        const { data:chats } = await axios.get("/chat", config);
+        const { data:chats } = await axios.get("http://localhost:3001/chat", config);
         setChats(chats);
         return chats
     }
     const getOther = async ()=>{
 
         // console.log("data")
-        const { data } = await axios.get("/chat/get_other/"+chatId, config);
+        const { data } = await axios.get("http://localhost:3001/chat/get_other/"+chatId, config);
         // console.log(data)
         setOther(data)
         // console.log("other")
@@ -90,8 +103,12 @@ const Chats = (props) => {
             messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
     useEffect(()=>{
-        // console.log("document.body.scrollHeight");
-        // console.log(document.body.scrollHeight);
+        const intervalId = setInterval(() => {
+            // count+=1;
+            // console.log("message" + count)
+        }, 1000);
+
+
         getOther().then(()=>{})
         getChats().then()
         getMessages().then(
@@ -104,7 +121,6 @@ const Chats = (props) => {
 
 
             scrollToBottom()
-            // setSidebarStyle({borderRight:"thick double #bbb", maxWidth:"300px"})
             if (!userInfo) {
                 // authMiddleware(navigate)
                 navigate("/login",{});
@@ -119,9 +135,42 @@ const Chats = (props) => {
             }, 1000);
         }
 
-
+        return () => {
+            clearInterval(intervalId);
+        };
     },[chatId, messages])
 
+
+    // const [checked, setChecked] = useState(false);
+    // const toggleChecked = () => {
+    //     setChecked(!checked);
+    // }
+
+    const handleSetReported = async(data)=>{
+        setReported(data)
+        console.log(data)
+    };
+    const ReportUser=async ()=>{
+            const message = "user "+reported.username+" is going to be reported!"
+            console.log(message)
+            const reportUserUrl = "/reportUser"
+            try{
+                const{data:rep} = await axios.post(reportUserUrl,{
+                    userId:reported._id
+                }, config)
+                console.log(rep)
+            }
+            catch (e) {
+                console.log(e.message)
+            }
+        //
+        //     setIsLoading(true)
+        //     setChecked(false)
+        //
+        //     setTimeout(()=>{
+        //         setIsLoading(false)
+        //     }, 1000)
+    };
     return (
         <div ref={elementRef}>
             {isLoading ? <LoadingPage/> :
@@ -137,7 +186,7 @@ const Chats = (props) => {
                     </div>
                     <div className="offcanvas-body sidebar-nav">
                         <div className="d-flex flex-column align-items-stretch flex-shrink-0 bg-body-tertiary sidebar"
-                             style={sidebarStyle}>
+                             >
                             <div className="list-group list-group-flush border-bottom scrollarea">
                                 {chats?.map((chat) => (
                                     <div>
@@ -161,14 +210,15 @@ const Chats = (props) => {
                                                     {/*<small>{chat.latestMessage?.updatedAt} </small>*/}
                                                 </div>
                                                 <div className="col-10 mb-1 small">
-                                                                            <span className="username">
-                                                                        {chat.latestMessage?.sender._id === userInfo._id?
-                                                                            <div className="latest-message">
-                                                                                <strong>You: <strong className="latest-message2">{chat.latestMessage.content}</strong></strong>
-                                                                            </div>
-                                                                            :<span className="latest-message">{chat.latestMessage.content}</span>
-                                                                        }
-                                                                        </span>
+                                                    <span className="username">
+                                                        {chat.latestMessage?.sender._id === userInfo._id?
+                                                            <div className="latest-message">
+                                                                <strong>You: <strong className="latest-message2">{chat.latestMessage.content}</strong></strong>
+                                                            </div>
+                                                            :
+                                                            <span className="latest-message">{chat.latestMessage.content}</span>
+                                                        }
+                                                    </span>
                                                 </div>
                                             </a>
                                             :
@@ -183,56 +233,27 @@ const Chats = (props) => {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-4 messages-content">
-                        <div className="d-flex flex-column align-items-stretch flex-shrink-0 bg-body-tertiary sidebar sticky-header sidebar-sticky col-3"
-                             style={sidebarStyle}>
+                    <div className="col-5 messages-content">
+                        <div className="d-flex flex-column align-items-stretch flex-shrink-0 bg-body-tertiary sidebar sticky-header sidebar-sticky col-4"
+                             >
                             <div className="list-group list-group-flush border-bottom scrollarea">
                                 {chats?.map((chat) => (
-                                    <div>
+                                    <div key={chat._id}>
                                         {chat.latestMessage?
-                                            <a href="#" className={
-                                                localStorage.getItem("chats") === chat._id?"list-group-item list-group-item-action py-3 lh-sm active":"list-group-item list-group-item-action py-3 lh-sm"
-                                            }
-                                               aria-current="true" onClick={()=>{
-                                                // console.log(chat.latestMessage)
-                                                setIsLoading(true)
+                                            <Chat
+                                                chat={chat}
+                                                setIsLoading={setIsLoading}
+                                                isLoading={isLoading}
+                                                userInfo={userInfo}
+                                                onSetReported={handleSetReported}
+                                                other = {
+                                                    chat.users[0]._id===userInfo._id?
+                                                            chat.users[1]
+                                                            :
+                                                            chat.users[0]
+                                                }
+                                            />
 
-                                                localStorage.setItem("chats", chat._id)
-                                                // setTimeout(()=>{
-                                                //
-                                                //     window.scrollTo(0, document.body.scrollHeight)
-                                                //     setIsLoading(false)
-                                                //
-                                                // }, 1000)
-                                            }}
-
-                                               key={chat._id}
-                                            >
-                                                <div className="d-flex w-100 align-items-center justify-content-between">
-                                                    <strong className="mb-1">
-                                                        <span>
-                                                            {/*{chat.latestMessage?.sender.username}*/}
-                                                            {chat.users[0]._id===userInfo._id?
-                                                                chat.users[1].username
-                                                                :
-                                                                chat.users[0].username
-                                                            }
-                                                        </span>
-                                                    </strong>
-                                                    <small> </small>
-                                                    {/*<small>{chat.latestMessage?.updatedAt} </small>*/}
-                                                </div>
-                                                <div className="col-10 mb-1 small">
-                                                                            <span className="username">
-                                                                        {chat.latestMessage?.sender._id === userInfo._id?
-                                                                            <div className="latest-message">
-                                                                                <strong>You: <strong className="latest-message2">{chat.latestMessage.content}</strong></strong>
-                                                                            </div>
-                                                                            :<span className="latest-message">{chat.latestMessage.content}</span>
-                                                                        }
-                                                                        </span>
-                                                </div>
-                                            </a>
                                             :
                                             ""
                                         }
@@ -246,7 +267,7 @@ const Chats = (props) => {
 
 
 
-                    <div className="col-8 list-messages" id="list-messages">
+                    <div className="col-7 list-messages" id="list-messages">
                         {messages?.sort((a,b)=>b.createdAt - a.createdAt).map((message) => (
                             <Message message={message}/>
                         ))}
@@ -272,7 +293,46 @@ const Chats = (props) => {
             </div>
 
 
+
             }
+            <div className="modal fade theme-modal" id="userReport" tabIndex="-1"
+                 aria-labelledby="exampleModalLabel2"
+                 aria-hidden="true">
+                <div className="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="exampleModalLabel2">Edit Profile</h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                <i className="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <div className="row g-4">
+                                <div className="col-xxl-12">
+                                    <div className="form-floating theme-form-floating">
+                                        <select className="form-control" value={selectedReason} id="reason" onChange={onChangeSelect}>
+                                            <option value="bullying or harassment">bullying or harassment</option>
+                                            <option value="posting inappropriate things">posting inappropriate things</option>
+                                            <option value="fake account">fake account</option>
+                                        </select>
+                                        <label htmlFor="pname">report</label>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-animation btn-md fw-bold"
+                                    data-bs-dismiss="modal">Close
+                            </button>
+                            <button type="button" data-bs-dismiss="modal"
+                                    className="btn theme-bg-color btn-md fw-bold text-light" onClick={ReportUser}>Save changes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }

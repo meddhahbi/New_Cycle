@@ -1,5 +1,6 @@
 const route = require('express').Router();
 const userModel = require('../Models/User');
+const {User} = require('../Models/User');
 const path = require('path');
 const { protect } = require("../middleware/authmiddleware");
 const passport = require("passport");
@@ -37,10 +38,21 @@ const upload = multer({
   fileFilter: fileFilter
 });
 
+route.put("/setOffline",protect ,async(req, res, next)=>{
+    console.log("offline")
+        await User.findByIdAndUpdate(req.body.userId, {isOnline:false})
+            .then((user)=>res.status(200).json({
+            user:user,
+            msg:'User registered successfully'
+        }))
+            .catch((err)=>res.status(400).json({error:err}))
+    }
+)
 
 
 
-route.post('/register',upload.single('image'),(req,res,next)=>{
+
+    route.post('/register',upload.single('image'),(req,res,next)=>{
   const image = req.file.path;
     userModel.register(req.body.username,req.body.email,req.body.password,req.body.phone,req.body.postal,image,req.body.role)
     .then((user)=>res.status(200).json({

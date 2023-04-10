@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import TimeAgo from "react-timeago";
 
 function Message(props) {
@@ -6,6 +6,10 @@ function Message(props) {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"))
     // console.log("message")
     // console.log(message)
+    // const [checked, setChecked] = useState(false);
+    // const toggleChecked = () => {
+    //     setChecked(!checked);
+    // }
     return (
         <div key={message._id}
              className="userChat">
@@ -14,14 +18,25 @@ function Message(props) {
                     <div className="userChatInfoRight">
 
                         <div className="userChatInfo darker">
-                            <div className="right userInfo">
-                                <div className="user" >
-                                    <i className="fa fa-ellipsis-v"/>
-                                    <span className="username">{message.sender.username}</span>
-                                    <img src="../../../../../assets/User/images/inner-page/user/default.png"
-                                         data-toggle="tooltip" data-placement="top" title={message.sender.username}
-                                         className="right-img"
-                                    />
+                            <div className="row">
+                                {/*<div className="chatbox-message-dropdown left-icon col-2">*/}
+                                {/*    <i className="bx bx-dots-vertical-rounded chatbox-message-dropdown-toggle"*/}
+                                {/*    onClick={toggleChecked}/>*/}
+                                {/*    <ul className={checked?"chatbox-message-dropdown-menu show":"chatbox-message-dropdown-menu "}>*/}
+                                {/*        <li>*/}
+                                {/*            <a href="#">Report</a>*/}
+                                {/*        </li>*/}
+                                {/*    </ul>*/}
+                                {/*</div>*/}
+                                <div className="right userInfo ">
+
+                                    <div className="user" >
+                                        <span className="username">{message.sender.username}</span>
+                                        <img src="../../../../../assets/User/images/inner-page/user/default.png"
+                                             data-toggle="tooltip" data-placement="top" title={message.sender.username}
+                                             className="right-img"
+                                        />
+                                    </div>
                                 </div>
                             </div>
                             <div className="message">
