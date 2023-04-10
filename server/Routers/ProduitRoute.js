@@ -19,9 +19,10 @@ const upload = multer({ storage: storage });
 
 //const { KNN } = require('ml-knn');
 
-const trainModel = (products) => {
-  const X = products.map((product) => [product.description.length, product.category.length]);
-  const Y = products.map((product) => product.price);
+const trainModel = (products, category) => {
+  const categoryProducts = products.filter((product) => product.category === category);
+  const X = categoryProducts.map((product) => [product.description.length]);
+  const Y = categoryProducts.map((product) => product.price);
   const knn = new mlKnn(X, Y, {k: 5});
   return knn;
 };
@@ -29,7 +30,6 @@ const trainModel = (products) => {
 
 router.post('/', upload.array('images', 10), async (req, res) => {
   const { name, description, price, category } = req.body;
-
   const images = req.files.map(file => `public/upload/${file.filename}`);
 
   try {
@@ -37,10 +37,10 @@ router.post('/', upload.array('images', 10), async (req, res) => {
     if (price) {
       product = await products.createProduct(name, description, price, category, images);
     } else {
-      const allProducts = await products.AllProducts();
-      const knn = trainModel(allProducts);
-      const estimatedPrice = knn.predict([[description.length, category.length]]);
-      product = await products.createProduct(name, description, estimatedPrice[0], category, images);
+      const allProducts = await Product.AllProducts();
+      const knn = trainModel(allProducts, category);
+      const estimatedPrice = knn.predict([[description.length]]);
+      product = await Product.createProduct(name, description, estimatedPrice[0], category, images);
     }
 
     res.status(200).json({
@@ -57,8 +57,8 @@ router.get('/estimate', async (req, res) => {
   try {
     const { description, category } = req.query;
     const allProducts = await products.AllProducts();
-    const knn = trainModel(allProducts);
-    const estimatedPrice = knn.predict([[description.length, category.length]]);
+    const knn = trainModel(allProducts, category);
+    const estimatedPrice = knn.predict([[description.length]]);
     res.status(200).json({ estimatedPrice: estimatedPrice[0] });
   } catch (err) {
     console.error(err);
@@ -67,7 +67,6 @@ router.get('/estimate', async (req, res) => {
 });
 
 module.exports = router;
-
 
 
 

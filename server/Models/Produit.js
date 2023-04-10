@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const ml = require('ml-knn');
+const mlKnn = require('ml-knn');
+//const products = require('../models/Produit');
 
 const productSchema = new mongoose.Schema({
   name: {
@@ -36,15 +37,21 @@ const Product = mongoose.model('Product', productSchema);
 const url = process.env.URL;
 const k = 5; // number of nearest neighbors to use in regression
 
+const trainModel = (products, category) => {
+  const categoryProducts = products.filter((product) => product.category === category);
+  const X = categoryProducts.map((product) => [product.description.length]);
+  const Y = categoryProducts.map((product) => product.price);
+  const knn = new mlKnn(X, Y, {k: 5});
+  return knn;
+};
+
 // get a trained model and estimate the price of a product
 exports.estimatePrice = async (description, category) => {
   try {
     await mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
-    const products = await Product.find();
-    const X = products.map((product) => [product.description.length, product.category.length]);
-    const Y = products.map((product) => product.price);
-    const knn = new ml.KernelDensity(k, X, Y);
-    const estimatedPrice = knn.predict([[description.length, category.length]]);
+    const allProducts = await products.AllProducts();
+    const knn = trainModel(allProducts, category);
+    const estimatedPrice = knn.predict([[description.length]]);
     mongoose.disconnect();
     return { estimatedPrice: estimatedPrice[0] };
   } catch (error) {
@@ -68,11 +75,9 @@ exports.createProduct = async (name, description, price, category, images) => {
       product.price = price;
       await product.save();
     } else {
-      const products = await Product.find();
-      const X = products.map((product) => [product.description.length, product.category.length]);
-      const Y = products.map((product) => product.price);
-      const knn = new ml.KernelDensity(k, X, Y);
-      const estimatedPrice = knn.predict([[description.length, category.length]]);
+      const allProducts = await products.AllProducts();
+      const knn = trainModel(allProducts, category);
+      const estimatedPrice = knn.predict([[description.length]]);
       product.price = estimatedPrice[0];
 
       images.forEach((image) => {
@@ -92,6 +97,7 @@ exports.createProduct = async (name, description, price, category, images) => {
     throw error;
   }
 };
+
 
 
 
