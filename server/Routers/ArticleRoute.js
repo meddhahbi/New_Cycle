@@ -3,6 +3,9 @@ const route = require('express').Router();
 const articles = require('../Models/Article');
 const multer = require('multer');
 const path = require('path');
+const cheerio = require('cheerio');
+const axios = require('axios');
+
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -62,8 +65,9 @@ route.post('/',upload.single('photo'),(req,res,next)=>{
       });
   });
 
-  route.put('/:id',(req,res,next)=>{
-    articles.updateArticle(req.params.id, req.body.title, req.body.content, req.body.image, req.body.author)
+  route.put('/:id',upload.single('photo'),(req,res,next)=>{
+    const image = req.file.path;
+    articles.updateArticle(req.params.id, req.body.title, req.body.content, req.body.author,image)
     .then((article)=>res.status(200).json({
         article:article,
         msg:'article updated successfully'
@@ -82,5 +86,11 @@ route.get('/', (req, res, next) => {
       .then((article) => res.status(200).json({ article: article }))
       .catch((err) => res.status(400).json({ error: err }));
   });
+
+
+
+ 
+
+
 
 module.exports = route;

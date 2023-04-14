@@ -4,9 +4,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import { Link } from "react-router-dom";
-
-
-
+import { LoadAssociation } from './LoadAssociation';
 
 
 
@@ -21,9 +19,30 @@ export default function RegisterAssociation(){
     const [password, setPassword] = useState('');
     const [phone, setPhone] = useState('');
     const [postal, setPostal] = useState('');
+    const [docVerif, setDocVerif] = useState(null);
     //const [docVerif, setDocVerif]=useState('');
+    // const [isLoading, setIsLoading] = useState(true);
+    // useEffect(()=>{
+    //     setTimeout(()=>setIsLoading(false), 1500);
+    // })
+   // const [isLoading, setIsLoading] = useState(false); // new state variable to track loading status
+  //  const history = useHistory();
+  const [isLoading, setIsLoading] = useState(false);
+//   useEffect(()=>{
+//     setTimeout(()=>setIsLoading(true), 5000);
+// })
+   
+
+
+// const redirectTimer = setTimeout(() => {
+//     history.push('/login');
+//   }, 5000);
+
 
     //console.log(docVerif,12);
+
+
+  
 
     const [errors, setErrors] = useState(
         {
@@ -98,32 +117,48 @@ export default function RegisterAssociation(){
     const register=(e)=>{
         e.preventDefault();
         console.log("form submitted");
-        console.log("form data", name, email, password, phone, postal);
+        console.log("form data", name, email, password, phone, postal,docVerif);
 
 
         //? Form valid
         if(formValidation()){
 
 
-            const data = { 
-                name,
-                email,
-                password,
-                phone,
-                postal,
-               // docVerif,
-            };
-            const url='localhost:3001/association/register'
-            axios.post(url, data)
+
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('email', email);
+            formData.append('password', password);
+            formData.append('phone', phone);
+            formData.append('postal', postal);
+            formData.append('docVerif', docVerif);
+            // const data = { 
+            //     name,
+            //     email,
+            //     password,
+            //     phone,
+            //     postal,
+            //    // docVerif,
+            // };
+            const url='http://localhost:3001/association/register'
+            axios.post(url, formData)
             .then(response => {
+
+                const updateUrl = `http://localhost:3001/association/verifDoc/${email}`
+                console.log(updateUrl);
+                axios.put(updateUrl);
+
+
                         console.log(response.data); // Handle response data
-                        toast.success("User created successfuly...");
+                        toast.success("Association created successfuly...");
                         setName('');
                         setEmail('');
                         setPassword('');
                         setPhone('');
                         setPostal('');
-                        //setDocVerif('');
+                        setDocVerif(null);
+                        setIsLoading(true);
+                    
                     })
                     .catch(error => {
                         console.error(error); // Handle error
@@ -135,6 +170,8 @@ export default function RegisterAssociation(){
 
         }else{
             console.log("from invalid");
+            setIsLoading(false); // set loading state to false
+             //history.push('/home');
         }
 
     
@@ -150,7 +187,13 @@ export default function RegisterAssociation(){
 
 
 
-    return <div>
+    return<div>
+          {isLoading ? (
+        <LoadAssociation />
+      ) : (
+        
+     <div>
+        
     <section className="breadscrumb-section pt-0">
         <Toaster />
             <div className="container-fluid-lg">
@@ -310,7 +353,7 @@ export default function RegisterAssociation(){
                                         </div>
                                     
                                     </div> */}
-    
+                                     <input type="file" accept="application/pdf" onChange={(e) => setDocVerif(e.target.files[0])} />
     
     
     
@@ -370,6 +413,8 @@ export default function RegisterAssociation(){
                 </div>
             </div>
         </section>
+        </div>
+      )}
         </div>
     
 

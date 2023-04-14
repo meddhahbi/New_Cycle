@@ -16,9 +16,16 @@ import ProfileForm from "./Components/UserInterface/Pages/profileForm";
 
 import BlogList from './Components/BlogInterface/BlogList';
 import AddBlog from './Components/BlogInterface/addBlog'
+
 import GetBlog from './Components/BlogInterface/getBlog'
 
 import Plan from './Components/UserInterface/Pages/Plan';
+
+import Dashboard from './Components/AdminInterface/Pages/Dashboard';
+import UpdateBlog from './Components/BlogInterface/updateBlog';
+import Scraped from './Components/BlogInterface/scraped';
+
+
 
 
 
@@ -26,57 +33,60 @@ function App() {
   return (
     <div>
       <Routes>
-      <Route path="/" element={<User />}>
+      <Route exact path="/" element={<User />}>
 
-        <Route index element={<Home />} />
+        <Route exact index element={<Home />} />
         {/*<Route  path='/login' element={<Login />} />*/}
-        <Route  path='/register' element={<Register />} />
-        <Route  path='/forgot' element={<Forgot />} />
+        <Route exact path='/register' element={<Register />} />
+        <Route exact path='/forgot' element={<Forgot />} />
         {/* <Route path="/reset/:id" element={<ResetPassword />}/> */}
-        <Route path='/loginAssociation' element={<LoginAssociation />} />
-        <Route  path='/login' element={<Login />} />
+        <Route exact path='/loginAssociation' element={<LoginAssociation />} />
+        <Route exact path='/login' element={<Login />} />
 
-        <Route  path='/registerAssociation' element={<RegisterAssociation />} />
+        <Route exact path='/registerAssociation' element={<RegisterAssociation />} />
 
 
-          <Route path='/me' element={<UserProfile />} />
-          <Route path='/edit_me' element={<ProfileForm />} />
+          <Route exact path='/me' element={<UserProfile />} />
+          <Route  exact path='/edit_me' element={<ProfileForm />} />
 
-          <Route path='/blog' element={<BlogList />} />
-          <Route path='/addBlog' element={<AddBlog />} />
+
+          <Route exact path='/blog' element={<BlogList />} />
+          <Route exact path='/addBlog' element={<AddBlog />} />
+          
          
 
-          <Route path='/subscribe' element={<Plan />} />
+          <Route exact path='/subscribe' element={<Plan />} />
 
 
-
-
+          <Route exact  path='/subscribe' element={<Plan />} />
+          <Route exact path='/scraped' element={<Scraped />} />
+        
 
 
       </Route>
 
-
-
-          {/* <Route  path='/register' element={<Register />} />
-          <Route  path='/forgot' element={<Forgot />} /> */}
-          {/* <Route path="/reset/:id" element={<ResetPassword />}/> */}
-          {/* <Route path='/loginAssociation' element={<LoginAssociation />} /> */}
-          <Route path='/confirm/:activationCode' element={<ActivationPage />} />
+      <Route exact path='/confirm/:activationCode' element={<ActivationPage />} />
   
-        <Route path='/reset/:id' element={<ResetPassword />}/>
-        <Route path='/getBlog/:id' element={<GetBlog />} />
 
-
-
-        <Route path="/admin" element={<Admin />}>
+        <Route exact path='/reset/:id' element={<ResetPassword />}/>
+        <Route exact path='/getBlog/:id' element={<GetBlog />} />
+        <Route exact path='/updateBlog/:id' element={<UpdateBlog />} />
         
+
+      <Route exact path='/reset/:id' element={<ResetPassword />}/>
+
+
+
+
+        <Route exact path="admin" element={<Admin />}>
+        <Route exact path='dashboard' element={<Dashboard />} />
 
         
         
         </Route>
 
         
-        <Route path='/confirm/:activationCode' element={<ActivationPage />} />
+        {/* <Route path='/confirm/:activationCode' element={<ActivationPage />} /> */}
 
         <Route path='*' element={<PageNotFound/>}/> 
 

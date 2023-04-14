@@ -3,6 +3,10 @@ const userModel = require('../Models/User');
 const path = require('path');
 const passport = require("passport");
 const multer = require('multer');
+const axios = require('axios');
+const cheerio = require('cheerio');
+const articles = require('../Models/Article')
+
 
 
 // route.get('/', (req,res,next)=>{
@@ -212,6 +216,8 @@ route.get('/verifySubs/:email',(req,res,next)=>{
 });
 
 
+
+
 route.get('/users',(req,res,next)=>{
   userModel.getAllUsers()
   .then((doc)=>res.status(200).json(doc))
@@ -239,6 +245,79 @@ route.get('/users/count',(req,res,next)=>{
 
 
 
+
+
+
+
+
+
+
+
+route.get('/users',(req,res,next)=>{
+  userModel.getAllUsers()
+  .then((doc)=>res.status(200).json(doc))
+  .catch((err)=>res.status(400).json(err))
+});
+
+
+route.get('/users/count',(req,res,next)=>{
+  userModel.getAllUsersCount()
+  .then((doc)=>res.status(200).json(doc))
+  .catch((err)=>res.status(400).json(err))
+})
+
+// const storage = multer.diskStorage({
+//   destination:(req,file,cb)=>{
+//     cb(null,'./publlic')
+//   },
+//   filename:(req,res,cb)=>{
+//     const filename = `${Date.now()}_${file.originalname}`;
+//     cb(null,filename);
+//   }
+// })
+// const upload = multer({storage}).single('receipt');
+
+route.get('/scrape', (req, res) => {
+  return new Promise(async (resolve, reject) => { // Wrap the route handler in a Promise
+    try {
+      // Fetch HTML content
+      const response = await axios.get('https://www.theguardian.com/uk');
+      const $ = cheerio.load(response.data);
+
+      // Extract data
+      const articles = [];
+      $('.js-headline-text').each((index, element) => {
+        const title = $(element).text();
+        const description = $(element).closest('.js-headline-text').next('.js-teaser').text();
+        const link = $(element).attr('href');
+        const image = $(element).closest('.js-headline-text').prev('.js-thumbnail').find('img').attr('src'); // Add image extraction
+
+        // Add to articles array
+        articles.push({ title, description, link , image});
+      });
+
+      // Resolve the Promise with the scraped data
+      resolve({ message: 'Scraping completed!', articles });
+    } catch (error) {
+      // Reject the Promise with an error object
+      reject({ error: 'Failed to scrape data' });
+    }
+  })
+  .then(data => {
+    // Send a successful response with the scraped data
+    res.json(data);
+  })
+  .catch(error => {
+    // Handle the error and send an appropriate response
+    res.status(500).json(error);
+  });
+});
+
+route.get('/latest', (req, res, next) => {
+  articles.getLastThreeArticles()
+    .then((articles) => res.status(200).json({ articles: articles }))
+    .catch((err) => res.status(400).json({ error: err.message }));
+});
 
 
 
