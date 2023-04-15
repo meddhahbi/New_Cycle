@@ -19,18 +19,11 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  images: [
-    {
-      url: {
-        type: String,
-        required: true
-      },
-      caption: {
-        type: String,
-        required: false
-      }
-    }
-  ]
+  images: {type:String, required: true},
+  productOwner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+},
 });
 
 const Product = mongoose.model('Product', productSchema);
@@ -61,14 +54,17 @@ exports.estimatePrice = async (description, category) => {
 };
 
 // create a product with estimated price or provided price
-exports.createProduct = async (name, description, price, category, images) => {
+exports.createProduct = async (name, description, price, category, images,idUser) => {
   try {
+    console.log(idUser)
     await mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
     let product = new Product({
       name: name,
       description: description,
       category: category,
-      images: []
+      images: images.split("uploads")[1],
+      productOwner: idUser,
+      
     });
 
     if (price) {
@@ -80,20 +76,14 @@ exports.createProduct = async (name, description, price, category, images) => {
       const estimatedPrice = knn.predict([[description.length]]);
       product.price = estimatedPrice[0];
 
-      images.forEach((image) => {
-        product.images.push({
-          url: image,
-          caption: ''
-        });
-      });
 
       await product.save();
     }
 
-    mongoose.disconnect();
+    //mongoose.disconnect();
     return product;
   } catch (error) {
-    mongoose.disconnect();
+   // mongoose.disconnect();
     throw error;
   }
 };
@@ -109,16 +99,16 @@ exports.AllProducts = () => {
         .then(() => {
           Product.find({})
             .then((products) => {
-              mongoose.disconnect();
+             // mongoose.disconnect();
               resolve(products);
             })
             .catch((err) => {
-              mongoose.disconnect();
+             // mongoose.disconnect();
               reject({ message: "Failed to retrieve products from database", error: err });
             });
         })
         .catch((err) => {
-          mongoose.disconnect();
+        //  mongoose.disconnect();
           reject({ message: "Failed to connect to database", error: err });
         });
     });
@@ -131,16 +121,16 @@ exports.AllProducts = () => {
         .then(() => {
           Product.findById(id)
             .then((product) => {
-              mongoose.disconnect();
+            //  mongoose.disconnect();
               resolve(product);
             })
             .catch((err) => {
-              mongoose.disconnect();
+           //   mongoose.disconnect();
               reject({ message: "Failed to retrieve product from database", error: err });
             });
         })
         .catch((err) => {
-          mongoose.disconnect();
+        //  mongoose.disconnect();
           reject({ message: "Failed to connect to database", error: err });
         });
     });
@@ -153,16 +143,16 @@ exports.AllProducts = () => {
         .then(() => {
           Product.findByIdAndUpdate(id, updates, { new: true })
             .then((product) => {
-              mongoose.disconnect();
+           //   mongoose.disconnect();
               resolve(product);
             })
             .catch((err) => {
-              mongoose.disconnect();
+          //    mongoose.disconnect();
               reject({ message: "Failed to update product in database", error: err });
             });
         })
         .catch((err) => {
-          mongoose.disconnect();
+      //    mongoose.disconnect();
           reject({ message: "Failed to connect to database", error: err });
         });
     });
@@ -175,16 +165,16 @@ exports.AllProducts = () => {
         .then(() => {
           Product.findByIdAndDelete(id)
             .then(() => {
-              mongoose.disconnect();
+         //     mongoose.disconnect();
               resolve();
             })
             .catch((err) => {
-              mongoose.disconnect();
+       //       mongoose.disconnect();
               reject({ message: "Failed to delete product from database", error: err });
             });
         })
         .catch((err) => {
-          mongoose.disconnect();
+      //    mongoose.disconnect();
           reject({ message: "Failed to connect to database", error: err });
         });
     });

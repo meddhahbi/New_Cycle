@@ -67,16 +67,11 @@ function AllProducts() {
         <p>{product.description}</p>
         <h3>{product.price}DT</h3>
         <p>{product.category}</p>
-        <div>
-          {product.images.map(images => (
-            <img
-              src={`../${images.url}`}
-              alt={images.caption}
-              key={images._id}
-              style={{ maxWidth: '300px', maxHeight: '300px' }}
-            />
-          ))}
-        </div>
+        <a href="blog-detail.html" class="blog-image">
+                                    
+                                {product.images && <img  width="400" height="200" src={`http://localhost:3001/${(product.images)}`}  />}
+                                </a>
+
         <button onClick={() => deleteProduct(product._id)}>Supprimer</button>
         <button onClick={() => updateProduct(product._id)}>modifier</button>
         <button onClick={() => CreateProduct(product)}>new</button>

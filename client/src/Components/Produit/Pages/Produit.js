@@ -6,7 +6,7 @@ const CreateProduct = () => {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(null);
   const [category, setCategory] = useState("");
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState("");
   const [manualPrice, setManualPrice] = useState(null);
   const [created, setCreated] = useState(false);
 
@@ -17,11 +17,11 @@ const CreateProduct = () => {
     formData.append("description", description);
     formData.append("price", manualPrice !== null ? manualPrice : price || 0); // add a default value of 0 for price
     formData.append("category", category);
-    for (let i = 0; i < images.length; i++) {
-      formData.append("images", images[i]);
-    }
+    
+      formData.append("images", images);
+    
     try {
-      const res = await axios.post("http://localhost:3001/produit", formData);
+      const res = await axios.post("http://localhost:3001/produit", formData, config);
       console.log(res.data);
       setCreated(true);
       window.location.href = "AllProduit";
@@ -45,6 +45,13 @@ const CreateProduct = () => {
       setManualPrice(null);
     }
   };
+
+
+  const config = {
+    headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+};
 
   useEffect(() => {
     const fetchPrice = async () => {
@@ -139,10 +146,17 @@ const CreateProduct = () => {
           />
         </div>
       )}
-      <div>
-        <label htmlFor="images">Images</label>
-        <input type="file" id="images" multiple onChange={handleImageChange} />
-      </div>
+       <div className="mb-3">
+          <label htmlFor="images" className="form-label">
+            Photo
+          </label>
+          <input
+            type="file"
+            className="form-control"
+            id="images"
+            onChange={(e) => setImages(e.target.files[0])}
+          />
+        </div>
       <button type="submit">Create Product</button>
     </form>
   );

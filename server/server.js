@@ -32,7 +32,7 @@ app.use(
 );
 
 
-
+app.use(express.static('uploads'));
 
 
 //? reception et envoie de données avec le format json 

@@ -3,19 +3,33 @@ const router = express.Router();
 const products = require('../models/Produit');
 const multer = require('multer');
 var mlKnn = require('ml-knn');
-
+const path = require('path');
+const {protect} = require('../middleware/authmiddleware');
 
 
 const storage = multer.diskStorage({
-  destination: function(req, file, cb) {
-    cb(null, 'public/upload/');
+  destination: function (req, file, cb) {
+    cb(null, './uploads'); // set the destination folder for uploaded files
   },
-  filename: function(req, file, cb) {
-    cb(null, Date.now() + '-' + file.originalname);
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '_' + file.originalname); // set the filename for uploaded files
   }
 });
 
-const upload = multer({ storage: storage });
+const fileFilter = function (req, file, cb) {
+  // set the file filter for uploaded files
+  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+    cb(null, true);
+  } else {
+    cb(new Error('Invalid file type'), false);
+  }
+};
+
+const upload = multer({
+  storage: storage,
+  fileFilter: fileFilter
+});
+
 
 //const { KNN } = require('ml-knn');
 
@@ -28,10 +42,60 @@ const trainModel = (products, category) => {
 };
 
 
-router.post('/', upload.array('images', 10), async (req, res) => {
-  const { name, description, price, category } = req.body;
-  const images = req.files.map(file => `public/upload/${file.filename}`);
 
+
+
+
+
+
+
+
+
+
+router.route('/').post(protect, upload.single('images'), async (req, res) => {
+ console.log(req.user)
+  const { name, description, price, category } = req.body;
+  //const images = req.files.map(file => `public/upload/${file.filename}`);
+  const images = req.file.path;
+  try {
+    let product;
+    if (price) {
+      product = await products.createProduct(name, description, price, category, images,req.user._id);
+    } else {
+      const allProducts = await Product.AllProducts();
+      const knn = trainModel(allProducts, category);
+      const estimatedPrice = knn.predict([[description.length]]);
+      product = await Product.createProduct(name, description, estimatedPrice[0], category, images,req.user._id);
+    }
+
+    res.status(200).json({
+      product: product,
+      message: 'Product created successfully'
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: 'Failed to create product' });
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+router.post('/', upload.single('images'), async (req, res) => {
+  const { name, description, price, category } = req.body;
+  //const images = req.files.map(file => `public/upload/${file.filename}`);
+  const images = req.file.path;
   try {
     let product;
     if (price) {
@@ -52,7 +116,7 @@ router.post('/', upload.array('images', 10), async (req, res) => {
     res.status(400).json({ message: 'Failed to create product' });
   }
 });
-
+*/
 router.get('/estimate', async (req, res) => {
   try {
     const { description, category } = req.query;
