@@ -19,6 +19,7 @@ import AddBlog from './Components/BlogInterface/addBlog'
 
 import Plan from './Components/UserInterface/Pages/Plan';
 import Dashboard from './Components/AdminInterface/Pages/Dashboard';
+import Donation from './Components/UserInterface/Pages/Donation';
 
 
 
@@ -44,7 +45,8 @@ function App() {
           <Route path='/blog' exact element={<BlogList />} />
           <Route path='/addBlog' exact element={<AddBlog />} />
 
-          <Route path='/subscribe' element={<Plan />} />
+          <Route path='/subscribe' exact element={<Plan />} />
+          <Route path='/donate' exact element={<Donation />} />
 
       </Route>
 
