@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 
 export default function Home(){
     return <div className="theme-color-2 bg-effect">
@@ -13,9 +14,9 @@ export default function Home(){
                                 <h1 className="fw-bold w-100">100% transparency</h1>
                                 <h3 className="text-content fw-light">Fruit & Vegetables</h3>
                                 <p className="d-sm-block d-none">Free shipping on all your order. we deliver you enjoy</p>
-                                <button onClick="location.href = 'shop-left-sidebar.html';"
+                             <Link to="/donate">   <button 
                                     className="btn mt-sm-4 btn-2 theme-bg-color text-white mend-auto btn-2-animation">Donate
-                                    Now</button>
+                                    Now</button></Link>
                             </div>
                         </div>
                     </div>
@@ -30,8 +31,8 @@ export default function Home(){
                             <div>
                                 <h4 className="fw-bold">No Poverty</h4>
                                 <h5 className="text-center">Let's eradicate poverty</h5><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-                                <button className="btn bg-white theme-color mt-3 home-button mx-auto btn-2"
-                                    onClick="location.href = 'shop-left-sidebar.html';">Donate Now</button>
+                                <Link to="/donate">    <button className="btn bg-white theme-color mt-3 home-button mx-auto btn-2"
+                                    >Donate Now</button></Link>
                             </div>
                         </div>
                     </div>
