@@ -9,7 +9,11 @@ const articleSchema = new mongoose.Schema({
   content: { type: String, required: true },
   author: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
-  photo: { type: String }
+  photo: { type: String },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+}
 });
 
 var Article = mongoose.model('Article', articleSchema);
@@ -17,7 +21,7 @@ var url = process.env.URL;
 
 
 
-exports.createArticle = (title, content, author, photo) => {
+exports.createArticle = (title, content, author, photo,userId) => {
   return new Promise((resolve, reject) => {
     mongoose.connect(url, {
       useNewUrlParser: true,
@@ -28,7 +32,8 @@ exports.createArticle = (title, content, author, photo) => {
         title:title,
         content:content,
         author:author,
-        photo: photo.split("uploads")[1]
+        photo: photo.split("uploads")[1],
+        user:userId
        
       });
       console.log()

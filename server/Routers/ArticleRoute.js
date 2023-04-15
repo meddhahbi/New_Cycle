@@ -5,6 +5,7 @@ const multer = require('multer');
 const path = require('path');
 const cheerio = require('cheerio');
 const axios = require('axios');
+const {protect} = require('../middleware/authmiddleware');
 
 
 const storage = multer.diskStorage({
@@ -31,7 +32,18 @@ const upload = multer({
 });
 
 
+route.post('/',protect,upload.single('photo'),(req,res,next)=>{
+  const image = req.file.path;
+  console.log(req.user);
+    articles.createArticle(req.body.title,req.body.content,req.body.author,image,req.user._id)
+    .then((article)=>res.status(200).json({
+        article:article,
+        msg:'Article created successfully'
+    }))
+    .catch((err)=>res.status(400).json({error:err}));
+})
 
+/*
 route.post('/',upload.single('photo'),(req,res,next)=>{
   const image = req.file.path;
 //console.log("image")
@@ -44,7 +56,7 @@ route.post('/',upload.single('photo'),(req,res,next)=>{
     .catch((err)=>res.status(400).json({error:err}));
 })
 
-
+*/
 
   route.delete('/:id', (req, res) => {
     const articleId = req.params.id;

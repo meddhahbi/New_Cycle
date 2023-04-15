@@ -123,6 +123,7 @@ export default function Register(){
                         setImage(null);
                     })
                     .catch(error => {
+                        console.log("test");
                         console.error(error); // Handle error
                         toast.error("Failed...");
                     });
