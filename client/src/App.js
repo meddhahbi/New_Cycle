@@ -27,7 +27,6 @@ import Donation from './Components/UserInterface/Pages/Donation';
 import { useState, useEffect } from 'react';
 
 
-import Dashboard from './Components/AdminInterface/Pages/Dashboard';
 import UpdateBlog from './Components/BlogInterface/updateBlog';
 import Scraped from './Components/BlogInterface/scraped';
 
@@ -68,7 +67,7 @@ function App() {
           
          
 
-          <Route exact path='/subscribe' element={<Plan />} />
+         
 
           <Route path='/me' exact element={<UserProfile />} />
           <Route path='/edit_me' exact element={<ProfileForm />} />
@@ -78,7 +77,7 @@ function App() {
           <Route path='/subscribe' exact element={<Plan />} />
           <Route path='/donate' exact element={<Donation />} />
 
-          <Route exact  path='/subscribe' element={<Plan />} />
+
           <Route exact path='/scraped' element={<Scraped />} />
         
 
@@ -98,7 +97,6 @@ function App() {
         <Route exact path='/updateBlog/:id' element={<UpdateBlog />} />
         
 
-      <Route exact path='/reset/:id' element={<ResetPassword />}/>
 
      
      

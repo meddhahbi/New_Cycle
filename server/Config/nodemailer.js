@@ -37,3 +37,5 @@ module.exports.sendResetPassword = (email,cnt)=>{
        
     }).catch((err)=>console.log(err));
 }
+
+
