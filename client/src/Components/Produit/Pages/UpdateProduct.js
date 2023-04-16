@@ -1,61 +1,131 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
+
 const UpdateProduct = () => {
-  const [product, setProduct] = useState({
-    name: '',
-    price: '',
-    category: '',
-    description: '',
-    image: ''
-  });
-  const [id, setId] = useState('');
+  
+    const { id } = useParams();
+    const [name, setName] = useState("");
+    const [price, setPrice] = useState("");
+    const [category, setCategory] = useState("");
+    const [description, setDescription] = useState("");
+    const [images, setImages] = useState("");
 
-  const handleChange = (e) => {
-    if (e.target.name === 'id') {
-      setId(e.target.value);
-    } else {
-      setProduct({
-        ...product,
-        [e.target.name]: e.target.value
+    const handleSubmit = (event) => {
+      event.preventDefault();
+    
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('price', price);
+      formData.append('category', category);
+      formData.append('description', description);
+      formData.append('images', images);
+    
+      axios.put(`http://localhost:3001/produit/${id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(response => {
+        console.log(response.data);
+        setName('');
+        setPrice('');
+        setCategory('');
+        setDescription('');
+        setImages(null);
+
+        window.location.href = "AllProduit";
+      
+      }).catch(error => {
+        console.log(error.response.data);
+        
       });
-    }
-  };
+    };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    axios.put(`http://localhost:3001/produit/${id}`, product)
-      .then(res => {
-        console.log(res.data);
-      })
-      .catch(err => console.log(err));
-  };
 
+
+  
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="name">Name:</label>
-        <input type="text" id="name" name="name" value={product.name} onChange={handleChange} />
-      </div>
-      <div>
-        <label htmlFor="price">Price:</label>
-        <input type="text" id="price" name="price" value={product.price} onChange={handleChange} />
-      </div>
-      <div>
-        <label htmlFor="category">Category:</label>
-        <input type="text" id="category" name="category" value={product.category} onChange={handleChange} />
-      </div>
-      <div>
-        <label htmlFor="description">Description:</label>
-        <textarea id="description" name="description" value={product.description} onChange={handleChange}></textarea>
-      </div>
-      <div>
-        <label htmlFor="image">Image:</label>
-        <input type="text" id="image" name="image" value={product.image} onChange={handleChange} />
-      </div>
-      <button type="submit">Update Product</button>
-    </form>
+     <div> 
+          
+        <section>
+    <div className="container">
+      <h1>Update Product</h1>
+      <form onSubmit={handleSubmit}>
+        <div className="mb-3">
+          <label htmlFor="name" className="form-label">
+          name
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="name"
+            placeholder="Enter title"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="description" className="form-label">
+          Description
+          </label>
+          <textarea
+            className="form-control"
+            id="description"
+            rows="3"
+            placeholder="Enter content"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          ></textarea>
+        </div>
+        <div className="mb-3">
+          <label htmlFor="category" className="form-label">
+          Category
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="category"
+            placeholder="Enter author name"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="price" className="form-label">
+          Price
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="price"
+            placeholder="Enter author name"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+          />
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="images" className="form-label">
+            Photo
+          </label>
+          <input
+            type="file"
+            className="form-control"
+            id="images"
+            onChange={(e) => setImages(e.target.files[0])}
+          />
+        </div>
+        <button type="submit" className="btn btn-animation">
+          Add product
+        </button>
+      </form>
+    </div>
+    </section>
+    
+    </div>
   );
 };
 
 export default UpdateProduct;
+

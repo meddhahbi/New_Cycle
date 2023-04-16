@@ -83,14 +83,6 @@ router.route('/').post(protect, upload.single('images'), async (req, res) => {
 
 
 
-
-
-
-
-
-
-
-
 /*
 router.post('/', upload.single('images'), async (req, res) => {
   const { name, description, price, category } = req.body;
@@ -156,17 +148,24 @@ router.delete('/:id', (req, res) => {
 });
 
 // Update a product
-router.put('/:id',(req,res,next)=>{
-  const productId = req.params.id;
-  const { name, description, price, category, imageCatalogue } = req.body;
 
-  products.updateProduct(productId, price, category, name, description, imageCatalogue)
-  .then((product)=>res.status(200).json({
-      product:product,
-      msg:'Product updated successfully'
-  }))
-  .catch((err)=>res.status(400).json({error:err}));
+router.put('/:id', upload.single('images'), (req, res, next) => {
+  //const images = req.file.path;
+  products.updateProduit(req.params.id, req.body.name, req.body.description, req.body.price, req.body.category)
+    .then((product) => res.status(200).json({
+      product: product,
+      msg: 'Product updated successfully'
+    }))
+    .catch((err) => res.status(400).json({ error: err }));
 });
+
+router.get('/', (req, res, next) => {
+  products.AllProducts()
+    .then((products) => res.status(200).json({ products: products }))
+    .catch((err) => res.status(400).json({ error: err }));
+});
+
+
 
 // Get all products
 router.get('/all', (req, res, next) => {

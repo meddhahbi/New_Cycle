@@ -137,24 +137,31 @@ exports.AllProducts = () => {
   };
   
 
-  exports.updateProduct = (id, updates) => {
+  exports.updateProduit = (name, description, price, category, images) => {
     return new Promise((resolve, reject) => {
-      mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
-        .then(() => {
-          Product.findByIdAndUpdate(id, updates, { new: true })
-            .then((product) => {
-           //   mongoose.disconnect();
-              resolve(product);
-            })
-            .catch((err) => {
-          //    mongoose.disconnect();
-              reject({ message: "Failed to update product in database", error: err });
-            });
-        })
-        .catch((err) => {
-      //    mongoose.disconnect();
-          reject({ message: "Failed to connect to database", error: err });
-        });
+      mongoose.connect(url, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+      }).then(() => {
+        Product.findByIdAndUpdate(id, {
+          name: name,
+          description: description,
+          price: price,
+          category:category,
+          images: images.split("uploads")[1]
+        }, {new: true})
+          .then((Product) => {
+           // mongoose.disconnect();
+            resolve(Product);
+          })
+          .catch((err) => {
+           // mongoose.disconnect();
+            reject(err);
+          });
+      }).catch((err) => {
+        //mongoose.disconnect();
+        reject(err);
+      });
     });
   };
   
