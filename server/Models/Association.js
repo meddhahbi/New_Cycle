@@ -211,10 +211,35 @@ verifDoc = (email) => {
 }
 
 
+getStatus=(email)=>{
+    return new Promise((resolve,reject)=>{
+        mongoose.connect(url,{
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        }).then(()=>{
+            return Association.findOne({email: email});
+        }).then((association)=>{
+          resolve(association.isActive);
+        }).catch((err)=>{
+            reject(err);
+        })
+    }).catch((err)=>{
+        reject(err);
+    })
+}
+
+
+
+
+
+
 
 module.exports = {
     Association,
    login,
    register,
    verifDoc,
+
+   getStatus,
+
 };

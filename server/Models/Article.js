@@ -3,17 +3,18 @@ const fs = require('fs');
 
 
 
-
 const articleSchema = new mongoose.Schema({
   title: { type: String, required: true },
   content: { type: String, required: true },
   author: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
+
   photo: { type: String },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
 }
+
 });
 
 var Article = mongoose.model('Article', articleSchema);
@@ -21,12 +22,15 @@ var url = process.env.URL;
 
 
 
+
 exports.createArticle = (title, content, author, photo,userId) => {
+
   return new Promise((resolve, reject) => {
     mongoose.connect(url, {
       useNewUrlParser: true,
       useUnifiedTopology: true
     }).then(() => {
+
      
       const article = new Article({
         title:title,
@@ -43,11 +47,11 @@ exports.createArticle = (title, content, author, photo,userId) => {
         reject({ message: "Failed to save article to database", error: err });
       });
     }).catch((err) => {
+
       reject({ message: "Failed to connect to database", error: err });
     });
   });
 };
-
 
   exports.deleteArticle = (id) => {
     return new Promise((resolve, reject) => {
@@ -103,7 +107,9 @@ exports.createArticle = (title, content, author, photo,userId) => {
         useUnifiedTopology: true
       }).then(() => {
         Article.find().lean().then((articles) => {
+
          // mongoose.disconnect();
+
   
           // Convert photo buffer to base64-encoded string
           articles = articles.map((article) => {

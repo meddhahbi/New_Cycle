@@ -17,9 +17,15 @@ import ProfileForm from "./Components/UserInterface/Pages/profileForm";
 import BlogList from './Components/BlogInterface/BlogList';
 import AddBlog from './Components/BlogInterface/addBlog'
 
+
 import GetBlog from './Components/BlogInterface/getBlog'
 
+
 import Plan from './Components/UserInterface/Pages/Plan';
+import Dashboard from './Components/AdminInterface/Pages/Dashboard';
+import Donation from './Components/UserInterface/Pages/Donation';
+import { useState, useEffect } from 'react';
+
 
 import Dashboard from './Components/AdminInterface/Pages/Dashboard';
 import UpdateBlog from './Components/BlogInterface/updateBlog';
@@ -30,24 +36,31 @@ import Scraped from './Components/BlogInterface/scraped';
 
 
 function App() {
+
   return (
     <div>
+      
       <Routes>
-      <Route exact path="/" element={<User />}>
+
+      <Route path="/" exact element={<User />}>
+
 
         <Route exact index element={<Home />} />
         {/*<Route  path='/login' element={<Login />} />*/}
-        <Route exact path='/register' element={<Register />} />
-        <Route exact path='/forgot' element={<Forgot />} />
+
+        <Route  path='/register' exact element={<Register />} />
+        <Route  path='/forgot' exact element={<Forgot />} />
         {/* <Route path="/reset/:id" element={<ResetPassword />}/> */}
-        <Route exact path='/loginAssociation' element={<LoginAssociation />} />
-        <Route exact path='/login' element={<Login />} />
+        <Route path='/loginAssociation' exact element={<LoginAssociation />} />
+        <Route  path='/login' exact element={<Login />} />
+
 
         <Route exact path='/registerAssociation' element={<RegisterAssociation />} />
 
 
-          <Route exact path='/me' element={<UserProfile />} />
-          <Route  exact path='/edit_me' element={<ProfileForm />} />
+
+        
+        
 
 
           <Route exact path='/blog' element={<BlogList />} />
@@ -57,6 +70,13 @@ function App() {
 
           <Route exact path='/subscribe' element={<Plan />} />
 
+          <Route path='/me' exact element={<UserProfile />} />
+          <Route path='/edit_me' exact element={<ProfileForm />} />
+        
+
+
+          <Route path='/subscribe' exact element={<Plan />} />
+          <Route path='/donate' exact element={<Donation />} />
 
           <Route exact  path='/subscribe' element={<Plan />} />
           <Route exact path='/scraped' element={<Scraped />} />
@@ -65,8 +85,13 @@ function App() {
 
       </Route>
 
-      <Route exact path='/confirm/:activationCode' element={<ActivationPage />} />
+     
   
+
+      <Route path='/confirm/:activationCode' exact element={<ActivationPage />} />
+  
+      <Route path='/reset/:id' exact element={<ResetPassword />}/>
+
 
         <Route exact path='/reset/:id' element={<ResetPassword />}/>
         <Route exact path='/getBlog/:id' element={<GetBlog />} />
@@ -75,15 +100,20 @@ function App() {
 
       <Route exact path='/reset/:id' element={<ResetPassword />}/>
 
+     
+     
 
 
-
-        <Route exact path="admin" element={<Admin />}>
-        <Route exact path='dashboard' element={<Dashboard />} />
+     
+            
+        <Route path="admin" exact element={<Admin />}>
+        <Route path='' exact element={<Dashboard />} />
 
         
+       
         
         </Route>
+    
 
         
         {/* <Route path='/confirm/:activationCode' element={<ActivationPage />} /> */}

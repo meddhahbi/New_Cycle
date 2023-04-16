@@ -1,9 +1,10 @@
 import React, {useEffect} from 'react';
 import { useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import styles from "./style/styles.module.css"
 import LoadingPage from "../../Loading";
+import { isLoggedIn } from '../../../AuthGuard';
 
 
 export default function AssociationLogin(){
@@ -37,6 +38,9 @@ export default function AssociationLogin(){
                 console.log(res.token[0])
                 localStorage.removeItem("error");
                 localStorage.setItem("token", res.token[0]);
+                // localStorage.setItem("token", res.token[0]);
+               // localStorage.setItem("mail", res.token[3]);
+                localStorage.setItem("role", res.token[2]);
                 if(res.token[2]==="association"){
                     window.location = "/";
                 }
@@ -57,7 +61,7 @@ export default function AssociationLogin(){
          // }
       }
    };
-    return <div>
+    return !isLoggedIn() ? ( <div>
 
         {/* {isLoading ? <LoadingPage/> : */}
             <div>
@@ -202,12 +206,16 @@ export default function AssociationLogin(){
                     </div>
                 </section>
             </div>
-        {/* } */}
+
+}
 
 
 
 
 
 
-    </div>
+
+    </div>):(
+    <Navigate to={"/"} />
+  )
 }
