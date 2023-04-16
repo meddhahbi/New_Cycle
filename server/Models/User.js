@@ -365,7 +365,7 @@ getAllUsers=()=>{
             useNewUrlParser: true,
             useUnifiedTopology: true
         }).then(()=>{
-            return User.find();
+            return User.find({ role: 'client' });
         }).then((doc)=>{
             resolve(doc);
         }).catch((err)=>{

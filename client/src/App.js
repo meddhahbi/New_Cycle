@@ -20,12 +20,15 @@ import AddBlog from './Components/BlogInterface/addBlog'
 import Plan from './Components/UserInterface/Pages/Plan';
 import Dashboard from './Components/AdminInterface/Pages/Dashboard';
 import Donation from './Components/UserInterface/Pages/Donation';
+import { useState, useEffect } from 'react';
 
 
 
 function App() {
+
   return (
     <div>
+      
       <Routes>
       <Route path="/" exact element={<User />}>
 
@@ -55,13 +58,18 @@ function App() {
       <Route path='/reset/:id' exact element={<ResetPassword />}/>
 
 
+     
+     
 
+     
+            
         <Route path="admin" exact element={<Admin />}>
         <Route path='' exact element={<Dashboard />} />
-
         
+       
         
         </Route>
+    
 
         
         {/* <Route path='/confirm/:activationCode' element={<ActivationPage />} /> */}

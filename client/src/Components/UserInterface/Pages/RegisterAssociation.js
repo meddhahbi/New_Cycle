@@ -3,9 +3,10 @@
 import { useState } from 'react';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { LoadAssociation } from './LoadAssociation';
 import { LoadAssociationFalse } from './LoadAssociationFalse';
+import { isLoggedIn } from '../../../AuthGuard';
 
 
 
@@ -204,7 +205,7 @@ export default function RegisterAssociation(){
 
 
 
-    return<div>
+    return !isLoggedIn() ? (<div>
     {isLoading ? (
   <LoadAssociation />
 ) : isLoadFalse ? (
@@ -434,7 +435,9 @@ export default function RegisterAssociation(){
         </section>
         </div>
       )}
-        </div>
+        </div>):(
+    <Navigate to={"/"} />
+  )
     
 
 
