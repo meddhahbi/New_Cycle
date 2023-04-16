@@ -210,6 +210,7 @@ verifDoc = (email) => {
     })
 }
 
+
 getStatus=(email)=>{
     return new Promise((resolve,reject)=>{
         mongoose.connect(url,{
@@ -232,10 +233,13 @@ getStatus=(email)=>{
 
 
 
+
 module.exports = {
     Association,
    login,
    register,
    verifDoc,
+
    getStatus,
+
 };

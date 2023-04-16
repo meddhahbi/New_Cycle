@@ -17,10 +17,21 @@ import ProfileForm from "./Components/UserInterface/Pages/profileForm";
 import BlogList from './Components/BlogInterface/BlogList';
 import AddBlog from './Components/BlogInterface/addBlog'
 
+
+import GetBlog from './Components/BlogInterface/getBlog'
+
+
 import Plan from './Components/UserInterface/Pages/Plan';
 import Dashboard from './Components/AdminInterface/Pages/Dashboard';
 import Donation from './Components/UserInterface/Pages/Donation';
 import { useState, useEffect } from 'react';
+
+
+import Dashboard from './Components/AdminInterface/Pages/Dashboard';
+import UpdateBlog from './Components/BlogInterface/updateBlog';
+import Scraped from './Components/BlogInterface/scraped';
+
+
 
 
 
@@ -30,41 +41,74 @@ function App() {
     <div>
       
       <Routes>
+
       <Route path="/" exact element={<User />}>
 
-        <Route index element={<Home />} />
+
+        <Route exact index element={<Home />} />
         {/*<Route  path='/login' element={<Login />} />*/}
+
         <Route  path='/register' exact element={<Register />} />
         <Route  path='/forgot' exact element={<Forgot />} />
         {/* <Route path="/reset/:id" element={<ResetPassword />}/> */}
         <Route path='/loginAssociation' exact element={<LoginAssociation />} />
         <Route  path='/login' exact element={<Login />} />
 
-        <Route  path='/registerAssociation' element={<RegisterAssociation />} />
 
+        <Route exact path='/registerAssociation' element={<RegisterAssociation />} />
+
+
+
+        
+        
+
+
+          <Route exact path='/blog' element={<BlogList />} />
+          <Route exact path='/addBlog' element={<AddBlog />} />
+          
+         
+
+          <Route exact path='/subscribe' element={<Plan />} />
 
           <Route path='/me' exact element={<UserProfile />} />
           <Route path='/edit_me' exact element={<ProfileForm />} />
-          <Route path='/blog' exact element={<BlogList />} />
-          <Route path='/addBlog' exact element={<AddBlog />} />
+        
+
 
           <Route path='/subscribe' exact element={<Plan />} />
           <Route path='/donate' exact element={<Donation />} />
 
+          <Route exact  path='/subscribe' element={<Plan />} />
+          <Route exact path='/scraped' element={<Scraped />} />
+        
+
+
       </Route>
+
+     
+  
 
       <Route path='/confirm/:activationCode' exact element={<ActivationPage />} />
   
       <Route path='/reset/:id' exact element={<ResetPassword />}/>
 
 
+        <Route exact path='/reset/:id' element={<ResetPassword />}/>
+        <Route exact path='/getBlog/:id' element={<GetBlog />} />
+        <Route exact path='/updateBlog/:id' element={<UpdateBlog />} />
+        
+
+      <Route exact path='/reset/:id' element={<ResetPassword />}/>
+
      
      
+
 
      
             
         <Route path="admin" exact element={<Admin />}>
         <Route path='' exact element={<Dashboard />} />
+
         
        
         

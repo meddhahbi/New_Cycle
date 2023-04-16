@@ -18,6 +18,7 @@ export default function Register(){
     const [postal, setPostal] = useState('');
     const [image, setImage] = useState(null);
 
+
     const [isLoading, setIsLoading] = useState(true);
     useEffect(()=>{
         setTimeout(()=>setIsLoading(false), 1500);
@@ -128,6 +129,7 @@ export default function Register(){
                         setImage(null);
                     })
                     .catch(error => {
+                        console.log("test");
                         console.error(error); // Handle error
                         toast.error("Failed...");
                     });

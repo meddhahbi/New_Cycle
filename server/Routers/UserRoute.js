@@ -4,6 +4,12 @@ const path = require('path');
 const passport = require("passport");
 const multer = require('multer');
 
+const axios = require('axios');
+const cheerio = require('cheerio');
+const articles = require('../Models/Article')
+
+
+
 
 // route.get('/', (req,res,next)=>{
 //     userModel.testConnect().then((msg)=>res.send(msg)).catch((err)=>res.send(err))
@@ -187,7 +193,9 @@ route.put('/block/:_id',(req,res,next)=>{
   .then(()=>res.status(200).json({
       msg:'User blocked successfully'
   }))
-  .catch((err)=>res.status(400).json({error:err}));
+
+  .catch((err)=>res.status(400).json({msg:"User not found"}));
+
 });
 
 
@@ -235,6 +243,84 @@ route.get('/users/count',(req,res,next)=>{
 //   }
 // })
 // const upload = multer({storage}).single('receipt');
+
+
+route.get('/scrape', (req, res) => {
+  return new Promise(async (resolve, reject) => { // Wrap the route handler in a Promise
+    try {
+      // Fetch HTML content
+      const response = await axios.get('https://www.theguardian.com/uk');
+      const $ = cheerio.load(response.data);
+
+      // Extract data
+      const articles = [];
+      $('.js-headline-text').each((index, element) => {
+        const title = $(element).text();
+        const description = $(element).closest('.js-headline-text').next('.js-teaser').text();
+        const link = $(element).attr('href');
+        const image = $(element).closest('.js-headline-text').prev('.js-thumbnail').find('img').attr('src'); // Add image extraction
+
+        // Add to articles array
+        articles.push({ title, description, link , image});
+      });
+
+      // Resolve the Promise with the scraped data
+      resolve({ message: 'Scraping completed!', articles });
+    } catch (error) {
+      // Reject the Promise with an error object
+      reject({ error: 'Failed to scrape data' });
+    }
+  })
+  .then(data => {
+    // Send a successful response with the scraped data
+    res.json(data);
+  })
+  .catch(error => {
+    // Handle the error and send an appropriate response
+    res.status(500).json(error);
+  });
+});
+
+route.get('/latest', (req, res, next) => {
+  articles.getLastThreeArticles()
+    .then((articles) => res.status(200).json({ articles: articles }))
+    .catch((err) => res.status(400).json({ error: err.message }));
+});
+
+
+
+// Endpoint for scraping product data
+route.get('/alibaba', async (req, res) => {
+  try {
+    // Fetch HTML from alibaba.com
+    const response = await axios.get('https://www.amazon.com/s?crid=36QNR0DBY6M7J&k=shelves&ref=glow_cls&refresh=1&sprefix=s%2Caps%2C309');
+    const html = response.data;
+
+    // Parse HTML with Cheerio
+    const $ = cheerio.load(html);
+
+    // Extract product data
+    const products = [];
+    $('div.sg-col-4-of-12.s-result-item.s-asin.sg-col-4-of-16.sg-col.sg-col-4-of-20').each((_idx, el) => {
+      const shelf = $(el)
+      const title = shelf.find('span.a-size-base-plus.a-color-base.a-text-normal').text()
+      const image = shelf.find('img.s-image').attr('src')
+      const link = shelf.find('a.a-link-normal.a-text-normal').attr('href')
+      
+      
+
+      products.push(title,image,link)
+  });
+
+    
+
+    res.status(200).json({ message: 'Scraping successful!', products });
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
 
 
 

@@ -29,7 +29,9 @@ export default function UserProfile() {
 
     
 
+
     return isLoggedIn() ? (<div>
+
         {isLoading ? <LoadingPage/> :
             <section className="user-dashboard-section section-b-space">
                 <div className="container-fluid-lg">

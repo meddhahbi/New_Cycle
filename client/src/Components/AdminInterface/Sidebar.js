@@ -14,7 +14,9 @@ export default function Sidebar(){
                                 <div className="category-list">
                                     <img src="../../assets/User/images/logo/shortlist.png" className="blur-up lazyload" alt="" />
                                     <h5>
+
                                     <Link to="/admin">All users</Link>
+
                                     </h5>
                                 </div>
                             </li>

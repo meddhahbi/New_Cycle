@@ -16,6 +16,7 @@ app.use(cors()); // Use this after the variable declaration
 
 const session = require("express-session");
 const articleRoutes = require('./Routers/ArticleRoute');
+const commentRoutes = require('./Routers/commentRouter');
  
 //const app = express();
 
@@ -62,6 +63,7 @@ require("./auth/google-auth")(passport);
 require("./auth/facebook-auth")(passport);
 
 app.use('/article', articleRoutes);
+app.use('/comment', commentRoutes);
 
 app.use('/chat', chatRoute);
 
