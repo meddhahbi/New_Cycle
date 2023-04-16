@@ -1,5 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
+import { Navigate } from "react-router";
+import { isLoggedIn } from "../../../AuthGuard";
 
 
 export default function Forgot() {
@@ -25,7 +27,7 @@ export default function Forgot() {
           }, 5000); // hide error message after 5 seconds
       }
     };
-    return <section className="log-in-section section-b-space forgot-section">
+    return  !isLoggedIn() ? ( <section className="log-in-section section-b-space forgot-section">
     <div className="container-fluid-lg w-100">
         <div className="row">
             <div className="col-xxl-6 col-xl-5 col-lg-6 d-lg-block d-none ms-auto">
@@ -65,5 +67,7 @@ export default function Forgot() {
             </div>
         </div>
     </div>
-</section>
+</section>):(
+    <Navigate to={"/"} />
+)
 }

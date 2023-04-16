@@ -1,7 +1,22 @@
 import { Link } from "react-router-dom";
+import LoadingPage from "../../Loading";
+import { useState } from "react";
+import React, {useEffect} from 'react';
+
+
+
+
 
 export default function Home(){
-    return <div className="theme-color-2 bg-effect">
+
+    const [isLoading, setIsLoading] = useState(true);
+
+      useEffect(()=>{
+        setTimeout(()=>setIsLoading(false), 1500);
+    })
+
+
+    return  <div> {isLoading ? <LoadingPage/> : <div className="theme-color-2 bg-effect">
     <section className="home-section-2 home-section-small section-b-space">
         <div className="container-fluid-lg">
             <div className="row g-4">
@@ -278,7 +293,8 @@ export default function Home(){
 
 
 
-
-
     </div>
+}
+    </div>
+     
 }

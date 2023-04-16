@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import LoadingPage from "../../Loading";
-import {Link} from "react-router-dom";
+import {Link, Navigate} from "react-router-dom";
+import { isLoggedIn } from '../../../AuthGuard';
 
 export default function UserProfile() {
 
@@ -28,7 +29,7 @@ export default function UserProfile() {
 
     
 
-    return <div>
+    return isLoggedIn() ? (<div>
         {isLoading ? <LoadingPage/> :
             <section className="user-dashboard-section section-b-space">
                 <div className="container-fluid-lg">
@@ -1746,7 +1747,9 @@ export default function UserProfile() {
 
 
         }
-    </div>
+    </div>):(
+        <Navigate to={"/"} />
+    )
 };
 
 

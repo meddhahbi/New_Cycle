@@ -1,8 +1,10 @@
-import { useState } from 'react';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
-import { Link } from "react-router-dom";
-
+import { Link, Navigate } from "react-router-dom";
+import { isLoggedIn } from '../../../AuthGuard';
+import LoadingPage from "../../Loading";
+import React, {useEffect} from 'react';
+import { useState } from "react";
 
 
 
@@ -16,7 +18,10 @@ export default function Register(){
     const [postal, setPostal] = useState('');
     const [image, setImage] = useState(null);
 
-
+    const [isLoading, setIsLoading] = useState(true);
+    useEffect(()=>{
+        setTimeout(()=>setIsLoading(false), 1500);
+    })
     const [errors, setErrors] = useState(
         {
             username: '',
@@ -143,7 +148,8 @@ export default function Register(){
 
 
 
-    return <div>
+    return  !isLoggedIn() ? ( <div>
+    {isLoading ? <LoadingPage/> : <div>
 <section className="breadscrumb-section pt-0">
     <Toaster />
         <div className="container-fluid-lg">
@@ -166,10 +172,6 @@ export default function Register(){
             </div>
         </div>
     </section>
-
-
-
-
 
     <section className="log-in-section section-b-space">
         <div className="container-fluid-lg w-100">
@@ -344,6 +346,12 @@ export default function Register(){
             </div>
         </div>
     </section>
+
     </div>
+}
+    </div>)
+    :(
+        <Navigate to={"/"} />
+    )
 }
 
