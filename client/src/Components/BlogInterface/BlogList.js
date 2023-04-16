@@ -19,7 +19,7 @@ function BlogList() {
   return (
     <div>
 
-        <section class="breadscrumb-section pt-0">
+      
 
 
     <section class="breadscrumb-section pt-0">
