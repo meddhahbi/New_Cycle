@@ -8,6 +8,7 @@ const axios = require('axios');
 const {protect} = require('../middleware/authmiddleware');
 
 
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, './uploads'); // set the destination folder for uploaded files
@@ -57,6 +58,22 @@ route.post('/',upload.single('photo'),(req,res,next)=>{
 })
 
 */
+
+route.post('/', (req, res, next) => {
+  // Convert the base64-encoded photo data to a Buffer
+  //const photo = Buffer.from(req.body.photo, 'base64');
+  
+  articles.createArticle(req.body.title, req.body.content, req.body.author,req.body.photo)
+    .then((article) => res.status(200).json({
+      article: article,
+      message: 'Article created successfully'
+    }))
+    .catch((err) => {
+      console.error(err);
+      res.status(400).json({ message: 'Failed to create article' });
+    });
+});
+
 
   route.delete('/:id', (req, res) => {
     const articleId = req.params.id;

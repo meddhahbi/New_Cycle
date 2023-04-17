@@ -365,7 +365,9 @@ getAllUsers=()=>{
             useNewUrlParser: true,
             useUnifiedTopology: true
         }).then(()=>{
-            return User.find();
+
+            return User.find({ role: 'client' });
+
         }).then((doc)=>{
             resolve(doc);
         }).catch((err)=>{
@@ -419,6 +421,7 @@ getAllUsersCount = () => {
 // }
 
 
+
 const block = async (_id) => {
     try {
         await mongoose.connect(url, {
@@ -448,6 +451,7 @@ const block = async (_id) => {
 
 
 
+
 module.exports = {
     User,
     login,
@@ -461,13 +465,5 @@ module.exports = {
     getAllUsers,
     getAllUsersCount,
 
-   
 };
-
-
-
-
-
-
-
 

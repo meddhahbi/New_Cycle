@@ -3,9 +3,11 @@ const userModel = require('../Models/User');
 const path = require('path');
 const passport = require("passport");
 const multer = require('multer');
+
 const axios = require('axios');
 const cheerio = require('cheerio');
 const articles = require('../Models/Article')
+
 
 
 
@@ -191,7 +193,9 @@ route.put('/block/:_id',(req,res,next)=>{
   .then(()=>res.status(200).json({
       msg:'User blocked successfully'
   }))
+
   .catch((err)=>res.status(400).json({msg:"User not found"}));
+
 });
 
 
@@ -216,8 +220,6 @@ route.get('/verifySubs/:email',(req,res,next)=>{
 });
 
 
-
-
 route.get('/users',(req,res,next)=>{
   userModel.getAllUsers()
   .then((doc)=>res.status(200).json(doc))
@@ -242,40 +244,6 @@ route.get('/users/count',(req,res,next)=>{
 // })
 // const upload = multer({storage}).single('receipt');
 
-
-
-
-
-
-
-
-
-
-
-
-route.get('/users',(req,res,next)=>{
-  userModel.getAllUsers()
-  .then((doc)=>res.status(200).json(doc))
-  .catch((err)=>res.status(400).json(err))
-});
-
-
-route.get('/users/count',(req,res,next)=>{
-  userModel.getAllUsersCount()
-  .then((doc)=>res.status(200).json(doc))
-  .catch((err)=>res.status(400).json(err))
-})
-
-// const storage = multer.diskStorage({
-//   destination:(req,file,cb)=>{
-//     cb(null,'./publlic')
-//   },
-//   filename:(req,res,cb)=>{
-//     const filename = `${Date.now()}_${file.originalname}`;
-//     cb(null,filename);
-//   }
-// })
-// const upload = multer({storage}).single('receipt');
 
 route.get('/scrape', (req, res) => {
   return new Promise(async (resolve, reject) => { // Wrap the route handler in a Promise
@@ -351,8 +319,6 @@ route.get('/alibaba', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
-
-
 
 
 

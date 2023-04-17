@@ -62,4 +62,19 @@ route.put('/verifDoc/:email',(req,res,next)=>{
   .catch((err)=>{res.status(400).json({error:err});console.log(err)});
 })
 
+
+
+
+
+
+route.get('/getStatus/:email',(req,res,next)=>{
+  associationModel.getStatus(req.params.email)
+  .then((isActive) => {
+    res.status(200).json({  isActive });
+  })
+.catch((err)=>{res.status(400).json({error:err});console.log(err)});
+  })
+
+
+
 module.exports = route;
