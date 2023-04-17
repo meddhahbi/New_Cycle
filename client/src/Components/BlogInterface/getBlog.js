@@ -13,28 +13,30 @@ function GetBlog() {
     const [comment, setComment] = useState('');
     const [comments, setComments] = useState([]);
 
-    useEffect(() => {
-        fetch(`http://localhost:3001/comment`) 
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Failed to retrieve comments from server");
-            }
-            return response.json();
-          })
-          .then((data) => {
-            setComments(data.cmt);
-          })
+    // useEffect(() => {
+    //     fetch(`http://localhost:3001/comment`) 
+    //       .then((response) => {
+    //         if (!response.ok) {
+    //           throw new Error("Failed to retrieve comments from server");
+    //         }
+    //         return response.json();
+    //       })
+    //       .then((data) => {
+    //         setComments(data.cmt);
+    //       })
           
-      }, [comments]);
+    //   }, [comments]);
 
    
 
     useEffect(() => {
       fetch(`http://localhost:3001/article/${id}`)
         .then(res => res.json())
-        .then(data => setArticle(data.article))
+        .then(data => {setArticle(data.article)    
+        setComments(data.article.commentList)
+        })
         .catch(error => console.log(error));
-    }, [id]);
+    }, [id,comments]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -42,16 +44,17 @@ function GetBlog() {
     
 
         try {
-          const { data } = await axios.post(`http://localhost:3001/comment`, {
-            comment,
-          });
-          setComment('');
-
-            
-        } catch (error) {
-     
-
-        }
+            const { data } = await axios.post(`http://localhost:3001/comment`, {
+              comment,
+              articleId: id 
+            }, {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}` 
+              }
+            });
+            setComment('');
+          } catch (error) {
+          }
       };
 
   return (
@@ -121,7 +124,7 @@ function GetBlog() {
                         <div class="leave-title">
                             <h3>Comments</h3>
                         </div>
-                        {comments.map((comment) => (
+                         {comments.map((comment) => (
                         <div class="user-comment-box">
                             <ul>
                                 <li>
@@ -146,7 +149,7 @@ function GetBlog() {
                             
                             </ul>
                         </div>
-                         ))}
+                         ))} 
              </div>
                
              

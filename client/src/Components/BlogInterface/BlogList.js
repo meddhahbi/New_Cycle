@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 function BlogList() {
   const [articles, setArticles] = useState([]);
+  const [latestArticles, setLatestArticles] = useState([]);
 
   useEffect(() => {
     
@@ -12,7 +13,9 @@ function BlogList() {
       .then(data => setArticles(data.articles))
       .catch(error => console.log(error));
   }, []);
-  
+
+
+
 
   return (
     <div>
@@ -39,6 +42,7 @@ function BlogList() {
     </section>
         <section>
         <div class="accordion left-accordion-box" id="accordionPanelsStayOpenExample">
+        
                             <div class="accordion-item">
                                 <h2 class="accordion-header" id="panelsStayOpen-headingOne">
                                     <button class="accordion-button" type="button" data-bs-toggle="collapse"
@@ -47,10 +51,13 @@ function BlogList() {
                                         Recent Post
                                     </button>
                                 </h2>
+                               
                                 <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show"
                                     aria-labelledby="panelsStayOpen-headingOne">
                                     <div class="accordion-body pt-0">
+                                    
                                         <div class="recent-post-box">
+                                            
                                             <div class="recent-box">
                                                 <a href="blog-detail.html" class="recent-image">
                                                     <img src="../assets/images/inner-page/blog/1.jpg"
@@ -61,7 +68,7 @@ function BlogList() {
                                                     <a href="blog-detail.html">
                                                         <h5 class="recent-name">Green onion knife and salad placed</h5>
                                                     </a>
-                                                    <h6>25 Jan, 2022 <i data-feather="thumbs-up"></i></h6>
+                                                    <h6>aefhainjf <i data-feather="thumbs-up"></i></h6>
                                                 </div>
                                             </div>
 
@@ -70,8 +77,10 @@ function BlogList() {
                                         
                                             
                                         </div>
+                                        
                                     </div>
                                 </div>
+                               
                             </div>
                             </div>
         </section>

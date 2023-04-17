@@ -7,13 +7,18 @@ const fs = require('fs');
 const articleSchema = new mongoose.Schema({
   title: { type: String, required: true },
   content: { type: String, required: true },
-  author: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
   photo: { type: String },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-}
+
+},
+commentList: [{
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "Comment",
+  
+}]
 });
 
 var Article = mongoose.model('Article', articleSchema);
@@ -21,7 +26,7 @@ var url = process.env.URL;
 
 
 
-exports.createArticle = (title, content, author, photo,userId) => {
+const createArticle = (title, content, photo,userId) => {
   return new Promise((resolve, reject) => {
     mongoose.connect(url, {
       useNewUrlParser: true,
@@ -31,10 +36,9 @@ exports.createArticle = (title, content, author, photo,userId) => {
       const article = new Article({
         title:title,
         content:content,
-        author:author,
         photo: photo.split("uploads")[1],
-        user:userId
-       
+        user:userId,
+      
       });
       console.log()
       article.save().then((article) => {
@@ -49,7 +53,7 @@ exports.createArticle = (title, content, author, photo,userId) => {
 };
 
 
-  exports.deleteArticle = (id) => {
+  const deleteArticle = (id) => {
     return new Promise((resolve, reject) => {
       mongoose.connect(url, {
         useNewUrlParser: true,
@@ -69,7 +73,7 @@ exports.createArticle = (title, content, author, photo,userId) => {
     });
   };
 
-  exports.updateArticle = (id, title, content, author,photo) => {
+  const updateArticle = (id, title, content, author,photo) => {
     return new Promise((resolve, reject) => {
       mongoose.connect(url, {
         useNewUrlParser: true,
@@ -78,7 +82,6 @@ exports.createArticle = (title, content, author, photo,userId) => {
         Article.findByIdAndUpdate(id, {
           title: title,
           content: content,
-          author: author,
           photo: photo.split("uploads")[1]
         }, {new: true})
           .then((article) => {
@@ -96,7 +99,7 @@ exports.createArticle = (title, content, author, photo,userId) => {
     });
   };
 
-  exports.getAllArticles = () => {
+  const getAllArticles = () => {
     return new Promise((resolve, reject) => {
       mongoose.connect(url, {
         useNewUrlParser: true,
@@ -125,19 +128,24 @@ exports.createArticle = (title, content, author, photo,userId) => {
     });
   };
 
-  exports.getArticleById = (id) => {
+  const getArticleById = (id) => {
     return new Promise((resolve, reject) => {
       mongoose.connect(url, {
         useNewUrlParser: true,
         useUnifiedTopology: true
       }).then(() => {
-        Article.findById(id).exec().then((article) => {
-          //mongoose.disconnect();
-          resolve(article);
-        }).catch((err) => {
-          //mongoose.disconnect();
-          reject(err);
-        });
+      
+        // Article.findById(id).exec().then((article) => {
+        //   article.populate("commentList");
+        //   //mongoose.disconnect();
+        //   resolve(article);
+        // }).catch((err) => {
+        //   //mongoose.disconnect();
+        //   reject(err);
+        // });
+       const article = Article.findOne({_id:id}).populate("commentList");
+       //console.log(article);
+       resolve(article);
       }).catch((err) => {
         //mongoose.disconnect();
         reject(err);
@@ -145,7 +153,7 @@ exports.createArticle = (title, content, author, photo,userId) => {
     });
   };
 
-  exports.getLastThreeArticles = async () => {
+  const getLastThreeArticles = async () => {
     try {
       const articles = await Article.find()
         .sort({ createdAt: -1 }) // Sort by descending order of createdAt field
@@ -159,4 +167,14 @@ exports.createArticle = (title, content, author, photo,userId) => {
 
   
   
-  //module.exports = Article;
+  module.exports = {
+ Article,
+ createArticle,
+ updateArticle,
+ deleteArticle,
+ getAllArticles,
+ getArticleById,
+ getLastThreeArticles
+
+   
+};
