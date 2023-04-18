@@ -29,6 +29,7 @@ import { useState, useEffect } from 'react';
 
 import UpdateBlog from './Components/BlogInterface/updateBlog';
 import Scraped from './Components/BlogInterface/scraped';
+import DashboardAssociation from './Components/UserInterface/Pages/DashboardAssociation';
 
 
 
@@ -57,18 +58,9 @@ function App() {
         <Route exact path='/registerAssociation' element={<RegisterAssociation />} />
 
 
-
-        
-        
-
-
           <Route exact path='/blog' element={<BlogList />} />
           <Route exact path='/addBlog' element={<AddBlog />} />
           
-         
-
-         
-
           <Route path='/me' exact element={<UserProfile />} />
           <Route path='/edit_me' exact element={<ProfileForm />} />
         
@@ -80,7 +72,7 @@ function App() {
 
           <Route exact path='/scraped' element={<Scraped />} />
         
-
+          <Route exact path='/association' element={<DashboardAssociation />} />
 
       </Route>
 
@@ -92,7 +84,6 @@ function App() {
       <Route path='/reset/:id' exact element={<ResetPassword />}/>
 
 
-        <Route exact path='/reset/:id' element={<ResetPassword />}/>
         <Route exact path='/getBlog/:id' element={<GetBlog />} />
         <Route exact path='/updateBlog/:id' element={<UpdateBlog />} />
         

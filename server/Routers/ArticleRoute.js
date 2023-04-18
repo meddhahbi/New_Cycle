@@ -9,6 +9,7 @@ const {protect} = require('../middleware/authmiddleware');
 
 
 
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, './uploads'); // set the destination folder for uploaded files
@@ -118,7 +119,10 @@ route.get('/', (req, res, next) => {
 
 
 
- 
+  
+
+
+
 
 
 
