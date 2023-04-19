@@ -25,6 +25,7 @@
     "googleapis": "^112.0.0",
     "joi": "^17.9.1",
     "jsonwebtoken": "^9.0.0",
+    "ml-knn": "^3.0.0",
     "moment": "^2.29.4",
     "mongoose": "^7.0.3",
     "multer": "^1.4.5-lts.1",
@@ -33,15 +34,10 @@
     "passport-facebook": "^3.0.0",
     "passport-google-oauth20": "^2.0.0",
     "path": "^0.12.7",
-
-    "pdf-parse": "^1.1.1",
-    "pdf-parser": "^1.0.5",
-
     "pdf-lib": "^1.17.1",
     "pdf-parse": "^1.1.1",
     "pdf-parser": "^1.0.5",
     "pdfjs": "^2.4.7",
-
     "stripe": "^11.16.0",
     "uuid": "^9.0.0"
   }
