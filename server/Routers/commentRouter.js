@@ -1,6 +1,7 @@
 const express = require('express');
 const route = require('express').Router();
 const comment = require('../Models/Comment');
+const {Comment} = require('../Models/Comment');
 const {protect} = require('../middleware/authmiddleware');
 
 
@@ -24,5 +25,23 @@ route.post('/',protect,(req,res,next)=>{
         
     }))
     .catch((err)=>res.status(400).json({error:err}));
+})
+
+route.get('/commentByArticle/:id',(req,res,next)=>{
+
+    // console.log(req.params.id);
+    // comment.getCommentsByArticle(req.params.id)
+    // .then((cmt)=>res.status(200).json({
+    //     cmt:cmt
+        
+    // }))
+    // .catch((err)=>res.status(400).json({error:err}));
+    Comment.find({article:req.params.id}).populate("user","username image").then((comments) => {
+        console.log()
+        res.send(comments);
+      }).catch((err) => {
+       console.log(err.message)
+      });
+      
 })
   module.exports = route;

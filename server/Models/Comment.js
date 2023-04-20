@@ -67,10 +67,22 @@ const createComment = (comment,articleId,userId) => {
     });
   };
 
+  const getCommentsByArticle =(idArticle) =>{
+    
+        Comment.find({article:idArticle}).populate("user","username image").then((comments) => {
+
+          resolve(comments);
+        }).catch((err) => {
+         console.log(err.message)
+        });
+      }
+  
+
   module.exports = {
     Comment,
     createComment,
-    getAllComment
+    getAllComment,
+    getCommentsByArticle
 
 
 };
