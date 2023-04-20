@@ -26,7 +26,7 @@ let schemaUser = mongoose.Schema({
         end: {type:Date,default:null}, 
         nextPayment: {type:Date,default:null}, 
     },
-    image:{type:String},
+    image:{type:String, default:"default.jpg"},
     role: { type: String, enum: ['client', 'admin'], default: 'client' }
 });
 

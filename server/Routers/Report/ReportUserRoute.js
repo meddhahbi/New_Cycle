@@ -55,7 +55,7 @@ router.route("/").post(protect, async (req, res) => {
                 if(rep.reporter._id.toString() === req.user._id.toString()){
 
                     console.log("you already reported this client")
-                    res.status(400).send({error:"already reported"})
+                    res.status(200).send({error:"already reported"})
                     return 0
                 }
             }

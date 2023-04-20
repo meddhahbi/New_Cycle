@@ -6,6 +6,8 @@ import style from "./style.css"
 import {Link} from "react-router-dom";
 import Message from "./Message";
 import Chat from "./Chat";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const Chats = (props) => {
     const [isLoading, setIsLoading] = useState(true);
     const [messages, setMessages] = useState([]);
@@ -16,6 +18,8 @@ const Chats = (props) => {
     const textAreaRef = useRef(null);
     const [other, setOther] = useState();
     const [reported, setReported] = useState();
+    const [finalDeal, setFinalDeal] = useState();
+    const [dealt, setDealt] = useState(false);
     const navigate = useNavigate();
     const userInfo = JSON.parse(localStorage.getItem("userInfo"))
     const elementRef = useRef();
@@ -36,12 +40,73 @@ const Chats = (props) => {
         console.log("reported")
         console.log(reported)
     }
+    const badWords=async(msg)=>{
+        let response;
+        const encodedParams = new URLSearchParams();
+        encodedParams.append("content", msg.content);
+        encodedParams.append("censor-character", "*");
+
+        const url = 'https://neutrinoapi-bad-word-filter.p.rapidapi.com/bad-word-filter';
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/x-www-form-urlencoded',
+                'X-RapidAPI-Key': 'fe35a5a121msh34466f5ccd34a87p197183jsn8202a7d1a226',
+                'X-RapidAPI-Host': 'neutrinoapi-bad-word-filter.p.rapidapi.com'
+            },
+            body: encodedParams
+        };
+
+        fetch(url, options)
+            .then(res => res.json())
+            .then(json => {
+                console.log(json);
+                response = json;
+            })
+            .catch(err => console.error('error:' + err));
+        return response;
+    }
 
     const getMessages = async ()=>{
-
-        let { data:messages } = await axios.get("http://localhost:3001/message/"+chatId, config)
-        setMessages(messages);
+        // let url = `http://localhost:3001/message/${chatId}?page=${currentPage}&limit=${limit}`
+        let url = `http://localhost:3001/message/${chatId}`
+        // console.log(url)
+        const {data:msgs}=await axios.get(url, config)
+        // console.log(msgs)
+        setMessages(msgs.messages)
+        // setMessages(messages);
         return messages
+    }
+
+    const getDeal = async ()=>{
+
+        let { data:deal } = await axios.get("http://localhost:3001/chat/deal/"+chatId, config)
+
+        setDealt(deal);
+        return deal
+    }
+
+    const getFinalDeal = async ()=>{
+
+        let { data:deal } = await axios.get("http://localhost:3001/chat/total_deal/"+chatId, config)
+        console.log(deal)
+        setFinalDeal(deal);
+        return deal
+    }
+
+    const acceptDeal = async ()=>{
+
+        try{
+            let { data:deal } = await axios.put("http://localhost:3001/chat/deal/",
+                {chatId:chatId},
+                config)
+            console.log(deal)
+            setDealt(true);
+        }
+        catch (e) {
+            console.error(e.message)
+        }
     }
     const getChats = async ()=>{
         const { data:chats } = await axios.get("http://localhost:3001/chat", config);
@@ -78,6 +143,7 @@ const Chats = (props) => {
         e.preventDefault();
         try {
             const url = "/message"
+            badWords(newMessage).then()
             const { data } = await axios.post("/message", {
                 content: newMessage,
                 chatId: localStorage.getItem("chats"),
@@ -103,20 +169,15 @@ const Chats = (props) => {
             messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
     useEffect(()=>{
-        const intervalId = setInterval(() => {
-            // count+=1;
-            // console.log("message" + count)
-        }, 1000);
 
 
+        getDeal().then()
         getOther().then(()=>{})
         getChats().then()
-        getMessages().then(
-            ()=>{
-            }
-        )
 
         if(isLoading){
+
+
             window.scrollTo(0, document.body.scrollHeight)
 
 
@@ -135,10 +196,23 @@ const Chats = (props) => {
             }, 1000);
         }
 
+        // return () => {
+        //     clearInterval(intervalId);
+        // };
+    },[chatId, messages])
+    useEffect( ()=>{
+
+        const intervalId = setInterval(() => {
+            // count+=1;
+            // console.log("message" + count)
+            getFinalDeal().then()
+            getMessages().then()
+        }, 3000);
         return () => {
             clearInterval(intervalId);
         };
-    },[chatId, messages])
+    }, [getFinalDeal, getMessages])
+
 
 
     // const [checked, setChecked] = useState(false);
@@ -157,19 +231,51 @@ const Chats = (props) => {
             try{
                 const{data:rep} = await axios.post(reportUserUrl,{
                     userId:reported._id
-                }, config)
-                console.log(rep)
+                }, config).then(async rep => {
+                    console.log(rep.data)
+                    let data = rep.data
+                    if (!data.error){
+                        await axios.post("/reportUserDetail",{
+                            reportId:data._id,
+                            reason: selectedReason
+                        },config).then(rep=>{
+                            console.log(rep.data)
+                            toast.success(reported.username+' reported successfully!', {
+                                position: toast.POSITION.TOP_CENTER,
+                                autoClose: 3000,
+                                hideProgressBar: true,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: true,
+                                progress: undefined,
+                            });
+                        })
+
+                    }
+                    else{
+                        console.log(data.error)
+                        toast.error('You already reported '+reported.username+'!', {
+                            position: toast.POSITION.TOP_CENTER,
+                            autoClose: 3000,
+                            hideProgressBar: true,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+                    }
+
+                })
+                // console.log(rep)
+
+
             }
             catch (e) {
-                console.log(e.message)
+                console.log(e)
             }
-        //
-        //     setIsLoading(true)
-        //     setChecked(false)
-        //
-        //     setTimeout(()=>{
-        //         setIsLoading(false)
-        //     }, 1000)
+    };
+    const handleDeal=()=>{
+        acceptDeal().then()
     };
     return (
         <div ref={elementRef}>
@@ -178,6 +284,7 @@ const Chats = (props) => {
                 className="chats row container-fluid"
 
             >
+                <ToastContainer/>
                 <div className="offcanvas offcanvas-collapse order-xl-2 col-5" id="primaryMenu">
                     <div className="offcanvas-header navbar-shadow">
                         <h5>Chats</h5>
@@ -196,6 +303,7 @@ const Chats = (props) => {
                                             }
                                                aria-current="true" onClick={()=>{
                                                 // console.log(chat.latestMessage)
+
                                             }}
 
                                                key={chat._id}
@@ -243,6 +351,7 @@ const Chats = (props) => {
                                             <Chat
                                                 chat={chat}
                                                 setIsLoading={setIsLoading}
+                                                setFinalDeal={setFinalDeal}
                                                 isLoading={isLoading}
                                                 userInfo={userInfo}
                                                 onSetReported={handleSetReported}
@@ -268,6 +377,23 @@ const Chats = (props) => {
 
 
                     <div className="col-7 list-messages" id="list-messages">
+                        <div className="right" style={{height: "25px"}}>
+                            {!dealt ?
+                                <div className=""
+                                     style={{cursor:"pointer", backgroundColor:"tomato", color:"white", borderRadius:"10px", width:"25px"}}
+                                     data-bs-toggle="modal"
+                                     data-bs-target="#dealUser"
+                                ><i className="fa fa-times" style={{fontSize:"large", marginTop:"5px"}}/>
+                                </div>
+                                :
+                                <div className=""
+                                     style={{backgroundColor:"green", color:"white", borderRadius:"10px", width:"25px"}}
+                                ><i className="fa fa-check" style={{fontSize:"large", marginTop:"5px"}}/>
+                                </div>
+
+                            }
+
+                        </div>
                         {messages?.sort((a,b)=>b.createdAt - a.createdAt).map((message) => (
                             <Message message={message}/>
                         ))}
@@ -277,15 +403,21 @@ const Chats = (props) => {
                     </div>
                     <div className="send-message fixed-bottom">
                         <form action="" onSubmit={handleSubmit} className="chatbox-message-form">
-                            {/*<input value={newMessage} type="text" className="form-control chat-input" placeholder="write something"*/}
-                            {/*       onChange={handleChange}*/}
-                            {/*/>*/}
                             <div ref={messagesEndRef}/>
+
                             <div className="input-group">
-                                <textarea ref={textAreaRef}
-                                        name="send" id="" rows="1" value={newMessage} className=" form-control chat-input"
-                                        onChange={handleChange} placeholder="write something" onKeyDown={handleKeyDown}/>
-                                <button className="btn btn-outline-default"><i className="fa fa-paper-plane"/></button>
+                                {!finalDeal?
+                                <>
+                                    <textarea ref={textAreaRef}
+                                          name="send" id="" rows="1" value={newMessage} className=" form-control chat-input"
+                                          onChange={handleChange} placeholder="write something" onKeyDown={handleKeyDown}/>
+                                    <button className="btn btn-outline-default"><i className="fa fa-paper-plane"/></button>
+                                </>:
+                                    <div className="already-dealt" style={{width:"100%", backgroundColor:"#cdcdcd"}}>
+                                        <div className="already-dealt-c">already dealt!</div>
+                                        <hr/>
+                                    </div>
+                                }
                             </div>
                         </form>
                     </div>
@@ -301,7 +433,7 @@ const Chats = (props) => {
                 <div className="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title" id="exampleModalLabel2">Edit Profile</h5>
+                            <h5 className="modal-title" id="exampleModalLabel2">report the client</h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                 <i className="fa-solid fa-xmark"></i>
                             </button>
@@ -328,6 +460,29 @@ const Chats = (props) => {
                             </button>
                             <button type="button" data-bs-dismiss="modal"
                                     className="btn theme-bg-color btn-md fw-bold text-light" onClick={ReportUser}>Save changes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="modal fade theme-modal" id="dealUser" tabIndex="-1"
+                 aria-labelledby="exampleModalLabel2"
+                 aria-hidden="true">
+                <div className="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="exampleModalLabel2">Confirm the Deal ?</h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                <i className="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-animation btn-md fw-bold"
+                                    data-bs-dismiss="modal">Close
+                            </button>
+                            <button type="button" data-bs-dismiss="modal"
+                                    className="btn theme-bg-color btn-md fw-bold text-light" onClick={handleDeal}>Confirm
                             </button>
                         </div>
                     </div>

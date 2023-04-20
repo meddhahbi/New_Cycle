@@ -43,7 +43,7 @@ route.put("/setOffline",protect ,async(req, res, next)=>{
         await User.findByIdAndUpdate(req.body.userId, {isOnline:false})
             .then((user)=>res.status(200).json({
             user:user,
-            msg:'User registered successfully'
+            msg:'User offlined successfully'
         }))
             .catch((err)=>res.status(400).json({error:err}))
     }
@@ -107,6 +107,31 @@ route.get("/checkPass/:pass",protect, async (req, res, next)=>{
          }
      )
          .catch((err)=>res.status(400).json({error:err}));
+
+})
+route.put("/updatePass",protect, async (req, res, next)=>{
+
+    bcrypt.hash(req.body.newPass,10).then((password)=>{
+        // console.log(password)
+        // console.log(req.body.newPass)
+        User.findByIdAndUpdate(req.user._id,{password:password}).then(user=>{
+            res.status(200).send(user)
+
+        })
+
+    })
+        .catch((err)=>res.status(400).json({error:err}))
+
+     // bcrypt.compare(req.params.pass, req.user.password).then((same)=> {
+     //         if (same) {
+     //             res.status(200).json({
+     //                 msg: 'same pass'
+     //             })
+     //         } else
+     //             res.status(200).json({error:"pass are not the same"});
+     //     }
+     // )
+     //    .catch((err)=>res.status(400).json({error:err}));
 
 })
 

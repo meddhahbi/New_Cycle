@@ -1,9 +1,13 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import TimeAgo from "react-timeago";
 
 function Message(props) {
     const {message} = props;
+
     const userInfo = JSON.parse(localStorage.getItem("userInfo"))
+    useEffect(()=>{
+
+    },[])
     // console.log("message")
     // console.log(message)
     // const [checked, setChecked] = useState(false);
@@ -32,10 +36,18 @@ function Message(props) {
 
                                     <div className="user" >
                                         <span className="username">{message.sender.username}</span>
-                                        <img src="../../../../../assets/User/images/inner-page/user/default.png"
-                                             data-toggle="tooltip" data-placement="top" title={message.sender.username}
-                                             className="right-img"
-                                        />
+                                        {message.sender.image?
+                                            <img src={"http://localhost:3001/"+message.sender.image}
+                                                 data-toggle="tooltip" data-placement="top" title={message.sender.username}
+                                                 className="right-img"
+                                            />
+                                        :
+                                            <img src="../../../../../assets/User/images/inner-page/user/default.png"
+                                                 data-toggle="tooltip" data-placement="top" title={message.sender.username}
+                                                 className="right-img"
+                                            />
+                                        }
+
                                     </div>
                                 </div>
                             </div>
@@ -48,10 +60,17 @@ function Message(props) {
                     :
                     <div className="userChatInfo">
                         <div className="user">
-                            <img src="../../../../../assets/User/images/inner-page/user/default.png"
-                                 alt={message.sender.username}
-                                 className="left-img"
-                            />
+                            {message.sender.image?
+                                <img src={"http://localhost:3001/"+message.sender.image}
+                                     data-toggle="tooltip" data-placement="top" title={message.sender.username}
+                                     className="left-img"
+                                />
+                                :
+                                <img src="../../../../../assets/User/images/inner-page/user/default.png"
+                                     data-toggle="tooltip" data-placement="top" title={message.sender.username}
+                                     className="left-img"
+                                />
+                            }
                             <span className="username">{message.sender.username}</span>
                         </div>
 

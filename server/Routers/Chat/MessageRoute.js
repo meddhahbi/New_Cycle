@@ -41,20 +41,19 @@ router.route("/").post(protect, async (req, res)=> {
 });
 
 router.route("/:chatId").get(protect,async (req, res) => {
+    // const { page, limit } = req.query;
+    // console.log("page")
+    // console.log(page)
     try {
         // console.log(req.params.chatId);
         let messages = await Message.find({ chat: req.params.chatId })
-            .populate("sender", "username email")
+            // .skip((page - 1) * limit)
+            // .limit(15)
+            .sort({ createdAt: 'desc' })
+            .populate("sender", "username email image")
             .populate("chat")
-            // .map(
-            //     message=>({
-            //         content:message.content.replace(/\n/g, "<br/>")
-            //     })
-            // )
-        // const modifiedMessages = messages.map((message)=>({
-        //     content:message.content.replace(/\n/g, '<br/>')
-        // }))
-        res.json(messages);
+        const count = await Message.find({ chat: req.params.chatId }).countDocuments();
+        res.json({ messages, count });
     } catch (error) {
         res.status(400);
         throw new Error(error.message);

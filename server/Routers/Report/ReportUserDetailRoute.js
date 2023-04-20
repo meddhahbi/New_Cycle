@@ -12,7 +12,7 @@ router.route("/all").get(protectAdmin, async (req, res)=> {
         return res.sendStatus(400);
     }
     try {
-        ReportUserDetail.find({report:reportId}).then((reports)=>{
+        Report_User_Detail.find({report:reportId}).then((reports)=>{
             res.status(200).send(reports);
         })
 
@@ -49,12 +49,20 @@ router.route("/").post(protect, async (req, res)=> {
                     .populate("report")
                 reportDetail = await User.populate(reportDetail,{
                     path:"report.reported",
-                    select:"username email"
+                    select:"_id username email"
                 })
                 let reportUser = ReportUser.findOne({_id:reportId}).then(
                     async (report)=>{
-                        report.reports.push(reportDetail._id);
+                        console.log(reportDetail._id)
                         console.log(report)
+                        if (report.reports)
+                        report.reports.push(reportDetail._id);
+                        else{
+                            report.reports = []
+                            report.reports.push(reportDetail._id);
+                            console.log("report")
+                            console.log(report.reports)
+                        }
 
                         // ReportUser.findByIdAndUpdate(reportId,{reports:[reports]});
                         await report.save()

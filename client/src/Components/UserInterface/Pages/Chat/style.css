@@ -12,6 +12,8 @@
 .userChat{
     /*transform: scaleY(-1);*/
     /*overflow: auto;*/
+    display: flex;
+    flex-direction: column-reverse;
 }
 .list-messages{
     /*transform: scaleY(-1);*/
@@ -46,13 +48,15 @@ html, body{
     background-color: white;
     padding: 5px;
 }
-.messages-content{
+.messageContainer{
+    /*transform: scaleY(-1);*/
 }
 .chats{
     overflow: auto;
     background-color: #f3f3f3;
     margin-bottom: 80px;
 }
+
 .userChatInfo{
     width: 85%;
     border: 2px solid #cbcbcb;
@@ -60,6 +64,7 @@ html, body{
     border-radius: 20px;
     padding: 10px ;
     margin: 10px;
+    /*transform: scaleY(-1);*/
 }
 #primaryMenu{
     height: 100vh;
@@ -108,6 +113,19 @@ html, body{
 .time-right {
     float: right;
     color: #666666;
+}
+/*.active{*/
+/*    background-color: #0e947a;*/
+/*}*/
+
+.fa-check, .fa-times, .already-dealt{
+    display: flex;
+    align-items: center; /* center content vertically */
+    justify-content: center; /* center content horizontally */
+}
+.already-dealt div{
+    font-size: x-large;
+    color: grey;
 }
 
 .time-left {

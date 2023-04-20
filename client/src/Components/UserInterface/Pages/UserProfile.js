@@ -3,6 +3,7 @@ import axios from "axios";
 import LoadingPage from "../../Loading";
 import {Link} from "react-router-dom";
 import {useNavigate} from "react-router";
+import {toast, ToastContainer} from "react-toastify";
 // import {UserState} from "../../../Context/userProvider"
 export default function UserProfile() {
     const config = {
@@ -17,9 +18,12 @@ export default function UserProfile() {
     const [isLoading, setIsLoading] = useState(true);
     const [profile, setProfile] = useState(null);
     const [oldPass, setOldPass] = useState(null);
+    const [showOldPass, setShowOldPass] = useState(false);
+    const [showNewPass, setShowNewPass] = useState(false);
     const [passError, setPassError] = useState(null);
     const [passValid, setPassValid] = useState(null);
     const [newPass, setNewPass] = useState(null);
+    const [image, setImage] = useState(null);
     const navigate = useNavigate();
     const checkPass = async(pass)=>{
         // if(pass.length>0){
@@ -78,6 +82,7 @@ export default function UserProfile() {
                     console.log(check.error)
                     setPassError(check.error)
                     setPassValid(null)
+                    setShowNewPass(false)
                 }
                 else if(check.msg){
                     console.log(check.msg)
@@ -88,14 +93,51 @@ export default function UserProfile() {
         )
 
 
+
     }
 
-    
 
+    const handleChangePass = async()=>{
+        const url = "http://localhost:3001/updatePass"
+        if(passValid!==null){
+            // console.log(newPass)
+            const {data:user} = await axios.put(url,{newPass:newPass}, config).then(()=>{
+                toast.success(' your password was updated successfully!', {
+                    position: toast.POSITION.TOP_CENTER,
+                    autoClose: 3000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            })
+            setOldPass(null)
+            setNewPass(null)
+            console.log(user)
+        }
+    };
+    let newPassOnChange = (e)=>{
+            setNewPass(e.target.value)
+        console.log(e.target.value)
+    };
+    const handleToggleClick = () => {
+        setShowOldPass(!showOldPass);
+    };
+    let handleNewToggleClick = () => {
+        setShowNewPass(!showNewPass);
+    };
+    let profileImageOnChange=(e)=>{
+        const formData = new FormData()
+        console.log(e.target.files[0])
+        // setImage(e.target.files[0].name)
+        formData.append('image', image.split("uploads\\")[1]);
+    };
     return <div>
         {isLoading ? <LoadingPage/> :
             <section className="user-dashboard-section section-b-space">
                 <div className="container-fluid-lg">
+                    <ToastContainer/>
                     <div className="row">
                         <div className="col-xxl-3 col-lg-4">
                             <div className="dashboard-left-sidebar">
@@ -114,7 +156,7 @@ export default function UserProfile() {
                                     <div className="profile-contain">
                                         <div className="profile-image">
                                             {/* <div className="position-relative">
-                                                <img src="../../../../assets/User/images/inner-page/user/default.png"
+                                                <img src="../../../../assets/User/images/inner-page/user/default.jpg"
                                                      className="blur-up lazyload update_img" alt=""/>
                                                 <div className="cover-icon">
                                                     <i className="fa-solid fa-pen">
@@ -127,7 +169,7 @@ export default function UserProfile() {
                                                      className="blur-up lazyload update_img" alt=""/>
                                                 <div className="cover-icon">
                                                     <i className="fa-solid fa-pen">
-                                                        <input type="file" onChange="readURL(this,0)"/>
+                                                        <input type="file" accept="image/jpeg, image/png" onChange={profileImageOnChange}/>
                                                     </i>
                                                 </div>
                                             </div>
@@ -1813,27 +1855,43 @@ export default function UserProfile() {
                     <div className="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
                         <div className="modal-content">
                             <div className="modal-header">
-                                <h5 className="modal-title" id="exampleModalLabel2">Edit Profile</h5>
+                                <h5 className="modal-title" id="exampleModalLabel2">Edit Password</h5>
                                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                     <i className="fa-solid fa-xmark"></i>
                                 </button>
                             </div>
                             <div className="modal-body">
                                 <div className="row g-4">
-                                    <div className="col-xxl-12">
+                                    <div className="col-xxl-10">
                                             <div className="form-floating theme-form-floating">
-                                                <input type="password" className="form-control" id="pname" onChange={oldPassOnChange}/>
+                                                <input type={showOldPass ? 'text' : 'password'} className="form-control" id="pname" disabled={passValid!==null} value={oldPass} onChange={oldPassOnChange}/>
                                                 <label htmlFor="pname">your Password</label>
                                             </div>
                                     </div>
+                                    <div className="col-xxl-2">
+                                        <div className="form-floating theme-form-floating">
+                                            <button onClick={handleToggleClick} className={showOldPass ? 'form-control btn btn-outline-danger' : 'form-control btn btn-outline-success'}>
+                                                {showOldPass ? 'Hide' : 'Show'}
+                                            </button>
+                                        </div>
+                                    </div>
 
                                     {passValid?
-                                        <div className="col-12">
-                                            <div className="form-floating theme-form-floating">
-                                                <input type="text" className="form-control" id="address1"/>
-                                                <label htmlFor="address1">New Password</label>
+                                        <>
+                                            <div className="col-xxl-10">
+                                                <div className="form-floating theme-form-floating">
+                                                    <input type={showNewPass ? 'text' : 'password'} className="form-control" id="newPass" value={newPass} onChange={newPassOnChange}/>
+                                                    <label htmlFor="address1" >New Password</label>
+                                                </div>
                                             </div>
-                                        </div>
+                                            <div className="col-xxl-2">
+                                                <div className="form-floating theme-form-floating">
+                                                    <button onClick={handleNewToggleClick} className={showNewPass ? 'form-control btn btn-outline-danger' : 'form-control btn btn-outline-success'}>
+                                                        {showNewPass ? 'Hide' : 'Show'}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </>
                                         :
                                         ""
                                     }
@@ -1850,7 +1908,9 @@ export default function UserProfile() {
                                         data-bs-dismiss="modal">Close
                                 </button>
                                 <button type="button" data-bs-dismiss="modal"
-                                        className="btn theme-bg-color btn-md fw-bold text-light">Save changes
+                                        className="btn theme-bg-color btn-md fw-bold text-light"
+                                        onClick={handleChangePass}
+                                >Save changes
                                 </button>
                             </div>
                         </div>

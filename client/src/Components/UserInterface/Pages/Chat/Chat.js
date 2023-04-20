@@ -60,19 +60,19 @@ function Chat(props) {
                     <div className="col-9 chat-cont">
 
                         <a href="#" className={
-                            localStorage.getItem("chats") === chat._id?"list-group-item list-group-item-action py-3 lh-sm active col-9":"list-group-item list-group-item-action py-3 lh-sm col-9"
+                            localStorage.getItem("chats") === chat._id?"list-group-item list-group-item-action active col-9":"list-group-item list-group-item-action col-9"
                         }
                            aria-current="true" onClick={()=>{
                             // console.log(chat.latestMessage)
                             setIsLoading(true)
 
                             localStorage.setItem("chats", chat._id)
-                            // setTimeout(()=>{
-                            //
-                            //     window.scrollTo(0, document.body.scrollHeight)
-                            //     setIsLoading(false)
-                            //
-                            // }, 1000)
+                            setTimeout(()=>{
+
+                                // window.scrollTo(0, document.body.scrollHeight)
+                                setIsLoading(false)
+
+                            }, 1000)
                         }}
 
                            key={chat._id}
