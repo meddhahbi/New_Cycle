@@ -1,8 +1,8 @@
+ 
+
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 // import TimeAgo from 'react-timeago'
-
-
 
 
 
@@ -25,7 +25,7 @@ function BlogList() {
   return (
     <div>
 
-
+       
 
 
     <section class="breadscrumb-section pt-0">
@@ -51,37 +51,6 @@ function BlogList() {
         </div>
     </section>
 
-
-        <section>
-        <div class="accordion left-accordion-box" id="accordionPanelsStayOpenExample">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-                                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                        data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
-                                        aria-controls="panelsStayOpen-collapseOne">
-                                        Recent Post
-                                    </button>
-                                </h2>
-                                <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show"
-                                    aria-labelledby="panelsStayOpen-headingOne">
-                                    <div class="accordion-body pt-0">
-                                        <div class="recent-post-box">
-                                            <div class="recent-box">
-                                                <a href="blog-detail.html" class="recent-image">
-                                                    <img src="../assets/images/inner-page/blog/1.jpg"
-                                                        class="img-fluid blur-up lazyload" alt=""/>
-                                                </a>
-
-                                                <div class="recent-detail">
-                                                    <a href="blog-detail.html">
-                                                        <h5 class="recent-name">Green onion knife and salad placed</h5>
-                                                    </a>
-                                                    <h6>25 Jan, 2022 <i data-feather="thumbs-up"></i></h6>
-                                                </div>
-                                            </div>
-
-                                           
-
      
     
 
@@ -101,9 +70,7 @@ function BlogList() {
 
                                 {article.photo && <img  width="400" height="200" src={`http://localhost:3001/${(article.photo)}`}  />}
 
-
-                                {article.photo && <img src={`data:image/jpeg;base64,${(article.photo).toString('base64')}`}  />}
-
+                           
 
                                 </a>
 
@@ -122,10 +89,7 @@ function BlogList() {
                                         Read More <i className="fa-solid fa-right-long"></i>
                                         </Link>
 
-
-                                    <button onclick="location.href = 'blog-detail.html';" class="blog-button">Read
-                                        More <i class="fa-solid fa-right-long"></i></button>
-
+                                    
 
                                 </div>
                             </div>
