@@ -1,9 +1,12 @@
 const route = require('express').Router();
 const userModel = require('../Models/User');
+const {User} = require('../Models/User');
 const path = require('path');
+const { protect } = require("../middleware/authmiddleware");
 const passport = require("passport");
 const multer = require('multer');
 
+const bcrypt = require('bcrypt');
 const axios = require('axios');
 const cheerio = require('cheerio');
 const articles = require('../Models/Article')
@@ -40,10 +43,21 @@ const upload = multer({
   fileFilter: fileFilter
 });
 
+route.put("/setOffline",protect ,async(req, res, next)=>{
+    console.log("offline")
+        await User.findByIdAndUpdate(req.body.userId, {isOnline:false})
+            .then((user)=>res.status(200).json({
+            user:user,
+            msg:'User offlined successfully'
+        }))
+            .catch((err)=>res.status(400).json({error:err}))
+    }
+)
 
 
 
-route.post('/register',upload.single('image'),(req,res,next)=>{
+
+    route.post('/register',upload.single('image'),(req,res,next)=>{
   const image = req.file.path;
     userModel.register(req.body.username,req.body.email,req.body.password,req.body.phone,req.body.postal,image,req.body.role)
     .then((user)=>res.status(200).json({
@@ -86,13 +100,55 @@ route.get("/me/:mail", async (req, res, next)=>{
     // console.log(user.email);
     
 })
+route.get("/checkPass/:pass",protect, async (req, res, next)=>{
+
+     bcrypt.compare(req.params.pass, req.user.password).then((same)=> {
+             if (same) {
+                 res.status(200).json({
+                     msg: 'same pass'
+                 })
+             } else
+                 res.status(200).json({error:"pass are not the same"});
+         }
+     )
+         .catch((err)=>res.status(400).json({error:err}));
+
+})
+route.put("/updatePass",protect, async (req, res, next)=>{
+
+    bcrypt.hash(req.body.newPass,10).then((password)=>{
+        // console.log(password)
+        // console.log(req.body.newPass)
+        User.findByIdAndUpdate(req.user._id,{password:password}).then(user=>{
+            res.status(200).send(user)
+
+        })
+
+    })
+        .catch((err)=>res.status(400).json({error:err}))
+
+     // bcrypt.compare(req.params.pass, req.user.password).then((same)=> {
+     //         if (same) {
+     //             res.status(200).json({
+     //                 msg: 'same pass'
+     //             })
+     //         } else
+     //             res.status(200).json({error:"pass are not the same"});
+     //     }
+     // )
+     //    .catch((err)=>res.status(400).json({error:err}));
+
+})
 
 route.put("/client/me/update/:mail",async(req, res, next)=>{
     userModel.updateProfile(req.params.mail, req.body.username, req.body.phone, req.body.postal)
-        .then((user)=>res.status(200).json({
-            user:user,
-            msg:'User Updated'
-        }))
+        .then((user)=> {
+            console.log("updated")
+            res.status(200).json({
+                user: user,
+                msg: 'User Updated'
+            })
+        })
 
         .catch((err)=>res.status(400).json({error:err}));
     // console.log(user.email);

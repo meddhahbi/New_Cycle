@@ -5,10 +5,19 @@ const chatSchema = new mongoose.Schema({
             // required: true
         },
         users: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+        product:{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Product",
+        },
         latestMessage: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Message",
         },
+        dealt: {
+            type:[Boolean],
+            default:[false, false]
+        }
+
     },
 
     { timestamps: true })

@@ -1,40 +1,146 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import LoadingPage from "../../Loading";
+import {useNavigate} from "react-router";
 import {Link, Navigate} from "react-router-dom";
+import {toast, ToastContainer} from "react-toastify";
+// import {UserState} from "../../../Context/userProvider"
 import { isLoggedIn } from '../../../AuthGuard';
-
 export default function UserProfile() {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+    };
+
 
     // console.log(url)
     // // console.log("data",data)
     const [isLoading, setIsLoading] = useState(true);
     const [profile, setProfile] = useState(null);
-    useEffect(()=>{
-        const getData= async ()=>{
-            const url = "http://localhost:3001/me/" + localStorage.getItem("mail");
-            const response = await fetch(url);
-            const json = await response.json();
-            const user = json.user;
-            console.log(user.image);
-            if(response.ok){
-                setProfile(user);
-                console.log(profile)
+    const [oldPass, setOldPass] = useState(null);
+    const [showOldPass, setShowOldPass] = useState(false);
+    const [showNewPass, setShowNewPass] = useState(false);
+    const [passError, setPassError] = useState(null);
+    const [passValid, setPassValid] = useState(null);
+    const [newPass, setNewPass] = useState(null);
+    const [image, setImage] = useState(null);
+    const navigate = useNavigate();
+    const checkPass = async(pass)=>{
+        // if(pass.length>0){
+            try {
+                if(pass.length>0){
+                    const { data:check } = await axios.get("/checkPass/"+pass, config);
+                    return check
+                }
             }
+            catch (e){
+                console.log(e.message)
+            }
+        // }
+        // return null
+    }
 
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    const getData= async ()=> {
+        const url = "http://localhost:3001/me/" + localStorage.getItem("mail");
+        const response = await fetch(url);
+        const json = await response.json();
+        const user = json.user;
+        console.log(user.image);
+        if (response.ok) {
+            setProfile(user);
+            console.log(profile)
+        } else {
+
+            setProfile(userInfo);
         }
-        getData()
-        setIsLoading(false);
+    }
+    useEffect(()=>{
+
+        if(isLoading){
+            // const {user} = UserState();
+            console.log("userInfo");
+
+            if (!userInfo) {
+                console.log("no user")
+                navigate("/login",{});
+
+            }
+            setProfile(userInfo)
+
+
+            setTimeout(()=> {
+                setIsLoading(false)
+            }, 1000);
+        }
+
     },[])
+    const oldPassOnChange =async (e)=>{
+        const check = checkPass(e.target.value).then(
+            (check)=>{
+                if(check.error){
+                    console.log(check.error)
+                    setPassError(check.error)
+                    setPassValid(null)
+                    setShowNewPass(false)
+                }
+                else if(check.msg){
+                    console.log(check.msg)
+                    setPassError(null)
+                    setPassValid(check.msg)
+                }
+            }
+        )
 
-    
 
+
+    }
+
+
+    const handleChangePass = async()=>{
+        const url = "http://localhost:3001/updatePass"
+        if(passValid!==null){
+            // console.log(newPass)
+            const {data:user} = await axios.put(url,{newPass:newPass}, config).then(()=>{
+                toast.success(' your password was updated successfully!', {
+                    position: toast.POSITION.TOP_CENTER,
+                    autoClose: 3000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            })
+            setOldPass(null)
+            setNewPass(null)
+            console.log(user)
+        }
+    };
+    let newPassOnChange = (e)=>{
+            setNewPass(e.target.value)
+        console.log(e.target.value)
+    };
+    const handleToggleClick = () => {
+        setShowOldPass(!showOldPass);
+    };
+    let handleNewToggleClick = () => {
+        setShowNewPass(!showNewPass);
+    };
+    let profileImageOnChange=(e)=>{
+        const formData = new FormData()
+        console.log(e.target.files[0])
+        // setImage(e.target.files[0].name)
+        formData.append('image', image.split("uploads\\")[1]);
+    };
+    // return <div>
 
     return isLoggedIn() ? (<div>
-
         {isLoading ? <LoadingPage/> :
             <section className="user-dashboard-section section-b-space">
                 <div className="container-fluid-lg">
+                    <ToastContainer/>
                     <div className="row">
                         <div className="col-xxl-3 col-lg-4">
                             <div className="dashboard-left-sidebar">
@@ -53,7 +159,7 @@ export default function UserProfile() {
                                     <div className="profile-contain">
                                         <div className="profile-image">
                                             {/* <div className="position-relative">
-                                                <img src="../../../../assets/User/images/inner-page/user/default.png"
+                                                <img src="../../../../assets/User/images/inner-page/user/default.jpg"
                                                      className="blur-up lazyload update_img" alt=""/>
                                                 <div className="cover-icon">
                                                     <i className="fa-solid fa-pen">
@@ -62,11 +168,11 @@ export default function UserProfile() {
                                                 </div>
                                             </div> */}
                                             <div className="position-relative">
-                                                <img src={profile && profile.image}
+                                                <img src={profile && "http://localhost:3001/"+profile.image}
                                                      className="blur-up lazyload update_img" alt=""/>
                                                 <div className="cover-icon">
                                                     <i className="fa-solid fa-pen">
-                                                        <input type="file" onChange="readURL(this,0)"/>
+                                                        <input type="file" accept="image/jpeg, image/png" onChange={profileImageOnChange}/>
                                                     </i>
                                                 </div>
                                             </div>
@@ -242,7 +348,9 @@ export default function UserProfile() {
                                                     <div className="dashboard-detail">
                                                         <h6 className="text-content">MARK JECNO</h6>
                                                         <h6 className="text-content">vicki.pope@gmail.com</h6>
-                                                        <a href="javascript:void(0)">Change Password</a>
+                                                        <a href="javascript:void(0)"
+                                                           data-bs-toggle="modal"
+                                                           data-bs-target="#editPassword">Change Password</a>
                                                     </div>
                                                 </div>
 
@@ -1494,7 +1602,7 @@ export default function UserProfile() {
                                                                     <td>
                                                                         <a href="javascript:void(0)">●●●●●●
                                                                             <span data-bs-toggle="modal"
-                                                                                  data-bs-target="#editProfile">Edit</span></a>
+                                                                                  data-bs-target="#editPassword">Edit</span></a>
                                                                     </td>
                                                                 </tr>
                                                                 </tbody>
@@ -1739,6 +1847,73 @@ export default function UserProfile() {
                                 </button>
                                 <button type="button" data-bs-dismiss="modal"
                                         className="btn theme-bg-color btn-md fw-bold text-light">Save changes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="modal fade theme-modal" id="editPassword" tabIndex="-1"
+                     aria-labelledby="exampleModalLabel2"
+                     aria-hidden="true">
+                    <div className="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title" id="exampleModalLabel2">Edit Password</h5>
+                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                    <i className="fa-solid fa-xmark"></i>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                <div className="row g-4">
+                                    <div className="col-xxl-10">
+                                            <div className="form-floating theme-form-floating">
+                                                <input type={showOldPass ? 'text' : 'password'} className="form-control" id="pname" disabled={passValid!==null} value={oldPass} onChange={oldPassOnChange}/>
+                                                <label htmlFor="pname">your Password</label>
+                                            </div>
+                                    </div>
+                                    <div className="col-xxl-2">
+                                        <div className="form-floating theme-form-floating">
+                                            <button onClick={handleToggleClick} className={showOldPass ? 'form-control btn btn-outline-danger' : 'form-control btn btn-outline-success'}>
+                                                {showOldPass ? 'Hide' : 'Show'}
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {passValid?
+                                        <>
+                                            <div className="col-xxl-10">
+                                                <div className="form-floating theme-form-floating">
+                                                    <input type={showNewPass ? 'text' : 'password'} className="form-control" id="newPass" value={newPass} onChange={newPassOnChange}/>
+                                                    <label htmlFor="address1" >New Password</label>
+                                                </div>
+                                            </div>
+                                            <div className="col-xxl-2">
+                                                <div className="form-floating theme-form-floating">
+                                                    <button onClick={handleNewToggleClick} className={showNewPass ? 'form-control btn btn-outline-danger' : 'form-control btn btn-outline-success'}>
+                                                        {showNewPass ? 'Hide' : 'Show'}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </>
+                                        :
+                                        ""
+                                    }
+                                    {passError?
+                                        <div style={{textAlign:'left', color:'orangered'}}>
+                                            {passError}
+                                        </div>
+                                    :
+                                    ""}
+                                </div>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-animation btn-md fw-bold"
+                                        data-bs-dismiss="modal">Close
+                                </button>
+                                <button type="button" data-bs-dismiss="modal"
+                                        className="btn theme-bg-color btn-md fw-bold text-light"
+                                        onClick={handleChangePass}
+                                >Save changes
                                 </button>
                             </div>
                         </div>

@@ -1,6 +1,5 @@
 
-
-import { BoltLoader } from "react-awesome-loaders";
+// import { BoltLoader } from "react-awesome-loaders";
 import './style/loader.css';
 import React, { useEffect, useState } from 'react';
 
@@ -36,11 +35,13 @@ export const LoadAssociation = () => {
 
   return (
     <div className="loader">
-   <center>     <BoltLoader
-        className={"loaderbolt"}
-        boltColor={"#3CB371"}
-        backgroundBlurColor={"#3CB371"}
-      /><br/><br/><br/><br/>
+   <center>
+     {/*<BoltLoader*/}
+     {/*   className={"loaderbolt"}*/}
+     {/*   boltColor={"#3CB371"}*/}
+     {/*   backgroundBlurColor={"#3CB371"}*/}
+     {/* />*/}
+      <br/><br/><br/><br/>
       {/* <h2>Please wait Verification for the document</h2> */}
       {showFirstMessage ? (
           <h2>Please wait Verification for the document</h2>
@@ -51,5 +52,3 @@ export const LoadAssociation = () => {
     </div>
   );
 };
-
-

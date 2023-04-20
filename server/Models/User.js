@@ -13,6 +13,8 @@ let schemaUser = mongoose.Schema({
     phone:{ type: Number, required: false },
     postal:{ type: Number, required: false },
     isActive : {type:Boolean,default:false},
+    isOnline : {type:Boolean,default:false},
+    isReported : {type:Boolean,default:false},
     activationCode:String,
     googleId: String,
     secret: String,
@@ -24,7 +26,7 @@ let schemaUser = mongoose.Schema({
         end: {type:Date,default:null}, 
         nextPayment: {type:Date,default:null}, 
     },
-    image:{type:String},
+    image:{type:String, default:"default.jpg"},
     role: { type: String, enum: ['client', 'admin'], default: 'client' }
 });
 
@@ -97,11 +99,9 @@ register=(username,email,password,phone,postal,image,role)=>{
 }
 
 currentUser=async(email)=>{
-    console.log(email)
     try{
         return User.findOne({ email:email})
         .then((user)=>{
-            console.log(user.username)
             return user
         })
         .catch((err)=>res.status(400).json({error:err}));
@@ -112,15 +112,16 @@ currentUser=async(email)=>{
 }
 updateProfile=(user_email, username, phone, postal)=>{
     try{
+        console.log("trying")
         return User.findOne({ email:user_email})
             .then(async(user)=>{
                 console.log(user.username)
-                if (user.username !== username && username)
+                if ((user.username !== username||user.phone!==phone||user.postal!==postal) && username && postal && phone)
+                {
                     user.username = username;
-                if (user.phone !== phone && phone)
                     user.phone = phone;
-                if (user.postal !== postal && postal)
                     user.postal = postal;
+                }
                 return await user.save()
             })
             .catch((err)=>res.status(400).json({error:err}));
@@ -137,7 +138,8 @@ login=(email,password)=>{
             useUnifiedTopology: true
         }).then(()=>{
             return User.findOne({ email:email})
-        }).then((user)=>{
+        }).then(async(user)=>{
+
             if(user){
                 bcrypt.compare(password, user.password).then((same)=>{
                     if(same){
@@ -164,7 +166,9 @@ login=(email,password)=>{
                         
                         console.log("same password");
                         jwt.decode();
-                        resolve([token,"token", user.role, user.email]);
+                        user.isOnline = true
+                        user.save()
+                        resolve([token,"token", user.role, user.email, user]);
 
 
                     }else{

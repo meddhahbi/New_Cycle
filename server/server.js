@@ -5,7 +5,9 @@ require('dotenv').config();
 const userRoute = require('./Routers/UserRoute');
 const chatRoute = require('./Routers/Chat/ChatRoute');
 const messageRoute = require('./Routers/Chat/MessageRoute');
-const associationRoute = require('./Routers/AssociationRoute');
+const reportUserRoute = require('./Routers/Report/ReportUserRoute');
+const reportUserDetailRoute = require('./Routers/Report/ReportUserDetailRoute');
+const associationRoute = require('./Routers/AssociationRoute')
 var cors = require('cors');
 const passport = require("passport");
 const { Connect } = require("./Config/connect");
@@ -70,6 +72,10 @@ app.use('/produit', produitRoutes);
 app.use('/chat', chatRoute);
 
 app.use('/message', messageRoute);
+
+app.use('/reportUser', reportUserRoute);
+
+app.use('/reportUserDetail', reportUserDetailRoute);
 
 
 

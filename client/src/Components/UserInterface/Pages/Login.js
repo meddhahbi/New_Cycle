@@ -4,7 +4,7 @@ import axios from "axios";
 import { Link, Navigate } from "react-router-dom";
 import styles from "./style/styles.module.css"
 import LoadingPage from "../../Loading";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { isLoggedIn } from '../../../AuthGuard';
 
 
@@ -49,10 +49,11 @@ export default function Login(){
             else{
                 console.log(res)
                 console.log(res.token[0])
-                localStorage.removeItem("error");
+                localStorage.clear();
                 localStorage.setItem("token", res.token[0]);
                 localStorage.setItem("mail", res.token[3]);
                 localStorage.setItem("role", res.token[2]);
+                localStorage.setItem("userInfo", JSON.stringify(res.token[4]));
                 if(res.token[2]==="client"){
                     window.location = "/";
                     // navigate('/',{replace:true, state: { profile: profile }});

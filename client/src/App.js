@@ -1,5 +1,5 @@
 import './App.css';
-import { Route, Routes } from 'react-router';
+import {Route, Routes, useNavigate} from 'react-router';
 import User from './Components/UserInterface/User';
 import Admin from './Components/AdminInterface/Admin';
 import Home from './Components/UserInterface/Pages/Home';
@@ -25,6 +25,8 @@ import GetBlog from './Components/BlogInterface/getBlog'
 
 
 import Plan from './Components/UserInterface/Pages/Plan';
+import authMiddleware from "./middleware/middleware";
+import Chats from "./Components/UserInterface/Pages/Chat/Chats";
 import Dashboard from './Components/AdminInterface/Pages/Dashboard';
 import Donation from './Components/UserInterface/Pages/Donation';
 
@@ -35,7 +37,6 @@ import { useState, useEffect } from 'react';
 import UpdateBlog from './Components/BlogInterface/updateBlog';
 import Scraped from './Components/BlogInterface/scraped';
 import DashboardAssociation from './Components/UserInterface/Pages/DashboardAssociation';
-
 
 
 
@@ -66,6 +67,16 @@ function App() {
 
 
         <Route exact path='/registerAssociation' element={<RegisterAssociation />} />
+
+
+          <Route path='/me' element={<UserProfile />}/>
+          <Route path='/edit_me' element={<ProfileForm />}/>
+          <Route path='/subscribe' element={<Plan />} />
+          <Route path='/client_messages' element={<Chats />} />
+
+
+
+
 
 
 

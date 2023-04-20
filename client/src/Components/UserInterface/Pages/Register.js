@@ -106,7 +106,7 @@ export default function Register(){
             formData.append('password', password);
             formData.append('phone', phone);
             formData.append('postal', postal);
-            formData.append('image', image);
+            formData.append('image', image.split("uploads\\")[1]);
 
 
             // const data = { 
