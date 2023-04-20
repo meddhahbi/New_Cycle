@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import LoadingPage from "../../Loading";
-import {Link} from "react-router-dom";
 import {useNavigate} from "react-router";
+import {Link, Navigate} from "react-router-dom";
 import {toast, ToastContainer} from "react-toastify";
 // import {UserState} from "../../../Context/userProvider"
+import { isLoggedIn } from '../../../AuthGuard';
 export default function UserProfile() {
     const config = {
         headers: {
@@ -133,7 +134,9 @@ export default function UserProfile() {
         // setImage(e.target.files[0].name)
         formData.append('image', image.split("uploads\\")[1]);
     };
-    return <div>
+    // return <div>
+
+    return isLoggedIn() ? (<div>
         {isLoading ? <LoadingPage/> :
             <section className="user-dashboard-section section-b-space">
                 <div className="container-fluid-lg">
@@ -1921,7 +1924,9 @@ export default function UserProfile() {
 
 
         }
-    </div>
+    </div>):(
+        <Navigate to={"/"} />
+    )
 };
 
 

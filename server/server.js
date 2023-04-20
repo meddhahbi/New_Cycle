@@ -7,8 +7,7 @@ const chatRoute = require('./Routers/Chat/ChatRoute');
 const messageRoute = require('./Routers/Chat/MessageRoute');
 const reportUserRoute = require('./Routers/Report/ReportUserRoute');
 const reportUserDetailRoute = require('./Routers/Report/ReportUserDetailRoute');
-const associationRoute = require('./Routers/AssociationRoute');
-const productRoute = require('./Routers/ProductRoute');
+const associationRoute = require('./Routers/AssociationRoute')
 var cors = require('cors');
 const passport = require("passport");
 const { Connect } = require("./Config/connect");
@@ -19,6 +18,8 @@ app.use(cors()); // Use this after the variable declaration
 
 const session = require("express-session");
 const articleRoutes = require('./Routers/ArticleRoute');
+const commentRoutes = require('./Routers/commentRouter');
+const produitRoutes = require('./Routers/ProduitRoute');
  
 //const app = express();
 
@@ -57,7 +58,6 @@ connection();
 
 app.use('/',userRoute);
 app.use('/association',associationRoute);
-app.use('/product',productRoute);
 
 
 app.use(passport.initialize());
@@ -66,6 +66,8 @@ require("./auth/google-auth")(passport);
 require("./auth/facebook-auth")(passport);
 
 app.use('/article', articleRoutes);
+app.use('/comment', commentRoutes);
+app.use('/produit', produitRoutes);
 
 app.use('/chat', chatRoute);
 
@@ -79,7 +81,7 @@ app.use('/reportUserDetail', reportUserDetailRoute);
 
 //*test pour la connection de la base de données
 //app.get('/',userRoute);
-
-
-
 app.listen(3001, ()=>console.log('server run in port 3001'));
+
+
+//app.listen(3001, ()=>console.log('server run in port 3001'));

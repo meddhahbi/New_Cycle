@@ -3,6 +3,8 @@ const route = require('express').Router();
 const associationModel = require('../Models/Association');
 const path = require('path');
 const multer = require('multer');
+const associationArticle = require('../Models/AssociationArticle')
+
 
 
 
@@ -61,5 +63,48 @@ route.put('/verifDoc/:email',(req,res,next)=>{
   })
   .catch((err)=>{res.status(400).json({error:err});console.log(err)});
 })
+
+
+
+
+
+
+route.get('/getStatus/:email',(req,res,next)=>{
+  associationModel.getStatus(req.params.email)
+  .then((isActive) => {
+    res.status(200).json({  isActive });
+  })
+.catch((err)=>{res.status(400).json({error:err});console.log(err)});
+  })
+
+
+  route.post('/addPost',(req,res,next)=>{
+    // const image = req.file.path;
+     console.log(req.association);
+     associationArticle.createArticle(req.body.associationName,req.body.title,req.body.description,req.body.quantity)
+       .then((article)=>res.status(200).json({
+           associationArticle:article,
+           msg:'Article created successfully'
+       }))
+       .catch((err)=>res.status(400).json({error:err}));
+   })
+
+
+
+
+  route.get('/articles',(req,res,next)=>{
+    associationArticle.AllArticles()
+    .then((doc)=>res.status(200).json(doc))
+    .catch((err)=>res.status(400).json(err))
+  });
+
+  route.get('/recent-posts', async (req, res) => {
+    associationArticle.getRecent()
+    .then((doc)=>res.status(200).json(doc))
+    .catch((err)=>res.status(400).json(err))
+  });
+
+
+
 
 module.exports = route;

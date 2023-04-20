@@ -249,7 +249,7 @@ exports.resetPassword=(email)=>{
                     resolve(sendResetPassword(email,cnt));
                     return true;
                 }else{
-                    mongoose.disconnect();
+                    //mongoose.disconnect();
                     reject('this email does not exist');
                 }
             });
@@ -267,7 +267,7 @@ exports.updatePassword = async (_id, password) => {
     });
     const user = await User.findById(_id);
     if (!user) {
-        mongoose.disconnect();
+        //mongoose.disconnect();
         throw new Error('User not found');
       }
       console.log(_id);
@@ -275,11 +275,11 @@ exports.updatePassword = async (_id, password) => {
       console.log(hashedPassword);
       user.password = hashedPassword;
       const updatedUser = await user.save();
-      mongoose.disconnect();
+      //mongoose.disconnect();
       return updatedUser;
     } catch (err) {
       console.log(err);
-      mongoose.disconnect();
+      //mongoose.disconnect();
       throw new Error('Failed to update password');
     }
     
@@ -369,7 +369,9 @@ getAllUsers=()=>{
             useNewUrlParser: true,
             useUnifiedTopology: true
         }).then(()=>{
-            return User.find();
+
+            return User.find({ role: 'client' });
+
         }).then((doc)=>{
             resolve(doc);
         }).catch((err)=>{
@@ -422,29 +424,36 @@ getAllUsersCount = () => {
 //       }
 // }
 
-block = async (_id) => {
+
+
+const block = async (_id) => {
     try {
-    await mongoose.connect(url, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    });
-    const user = await User.findById(_id);
-    if (!user) {
-        //mongoose.disconnect();
-        throw new Error('User not found');
-      }
-      console.log(_id);
-      user.isBlocked = true;
-      const updatedUser = await user.save();
-    //  mongoose.disconnect();
-      return updatedUser;
+        await mongoose.connect(url, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        });
+
+        const user = await User.findById(_id);
+
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        console.log(_id);
+        user.isBlocked = true;
+        const updatedUser = await user.save();
+
+       // mongoose.disconnect();
+
+        return updatedUser;
     } catch (err) {
-      console.log(err);
-     // mongoose.disconnect();
-      throw new Error('Failed to block user');
+        console.log(err);
+        //mongoose.disconnect();
+        throw new Error('Failed to block user');
     }
-    
 };
+
+
 
 
 module.exports = {
@@ -459,4 +468,6 @@ module.exports = {
     verifySubscription,
     getAllUsers,
     getAllUsersCount,
+
 };
+

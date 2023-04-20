@@ -7,6 +7,11 @@ const passport = require("passport");
 const multer = require('multer');
 
 const bcrypt = require('bcrypt');
+const axios = require('axios');
+const cheerio = require('cheerio');
+const articles = require('../Models/Article')
+
+
 
 
 // route.get('/', (req,res,next)=>{
@@ -244,7 +249,9 @@ route.put('/block/:_id',(req,res,next)=>{
   .then(()=>res.status(200).json({
       msg:'User blocked successfully'
   }))
-  .catch((err)=>res.status(400).json({error:err}));
+
+  .catch((err)=>res.status(400).json({msg:"User not found"}));
+
 });
 
 
@@ -294,9 +301,46 @@ route.get('/users/count',(req,res,next)=>{
 // const upload = multer({storage}).single('receipt');
 
 
+route.get('/scrape', (req, res) => {
+  return new Promise(async (resolve, reject) => { // Wrap the route handler in a Promise
+    try {
+      // Fetch HTML content
+      const response = await axios.get('https://www.theguardian.com/uk');
+      const $ = cheerio.load(response.data);
 
+      // Extract data
+      const articles = [];
+      $('.js-headline-text').each((index, element) => {
+        const title = $(element).text();
+        const description = $(element).closest('.js-headline-text').text();
+        const link = $(element).attr('href');
+        const image = $(element).closest('.js-headline-text').find('.js-media-image img').attr('src'); // Fix image extraction
+        // Add to articles array
+        articles.push({ title, description, link , image});
+      });
 
+      // Resolve the Promise with the scraped data
+      resolve({ message: 'Scraping completed!', articles });
+    } catch (error) {
+      // Reject the Promise with an error object
+      reject({ error: 'Failed to scrape data' });
+    }
+  })
+  .then(data => {
+    // Send a successful response with the scraped data
+    res.json(data);
+  })
+  .catch(error => {
+    // Handle the error and send an appropriate response
+    res.status(500).json(error);
+  });
+});
 
+route.get('/latest', (req, res, next) => {
+  articles.getLastThreeArticles()
+    .then((articles) => res.status(200).json({ articles: articles }))
+    .catch((err) => res.status(400).json({ error: err.message }));
+});
 
 
 

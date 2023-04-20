@@ -2,13 +2,29 @@ const mongoose = require('mongoose');
 const fs = require('fs');
 
 
+
 const articleSchema = new mongoose.Schema({
   title: { type: String, required: true },
   content: { type: String, required: true },
-  author: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
-  photo: { type: String }
-});
+
+  photo: { type: String },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+
+
+},
+commentList: [{
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "Comment",
+  
+}]
+}
+
+
+);
+
 
 var Article = mongoose.model('Article', articleSchema);
 var url = process.env.URL;
@@ -16,56 +32,61 @@ var url = process.env.URL;
 
 
 
-exports.createArticle = (title, content, author, photoBuffer) => {
+const createArticle = (title, content, photo,userId) => {
+
+
   return new Promise((resolve, reject) => {
     mongoose.connect(url, {
       useNewUrlParser: true,
       useUnifiedTopology: true
     }).then(() => {
-      // Create an article object with the image buffer and photo buffer
-      const article = new Article({
-        title,
-        content,
-        author,
-        photo: photoBuffer
-       
-      });
 
+     
+      const article = new Article({
+        title:title,
+        content:content,
+        photo: photo.split("uploads")[1],
+        user:userId,
+      
+      });
+      console.log()
       article.save().then((article) => {
-        mongoose.disconnect();
         resolve(article);
       }).catch((err) => {
-        mongoose.disconnect();
         reject({ message: "Failed to save article to database", error: err });
       });
     }).catch((err) => {
-      mongoose.disconnect();
+
       reject({ message: "Failed to connect to database", error: err });
     });
   });
 };
-  
-  exports.deleteArticle = (id) => {
+
+
+  const deleteArticle = (id) => {
+
+
+
     return new Promise((resolve, reject) => {
       mongoose.connect(url, {
         useNewUrlParser: true,
         useUnifiedTopology: true
       }).then(() => {
         Article.findByIdAndDelete(id).then((article) => {
-          mongoose.disconnect();
+          //mongoose.disconnect();
           resolve(article);
         }).catch((err) => {
-          mongoose.disconnect();
+         // mongoose.disconnect();
           reject(err);
         });
       }).catch((err) => {
-        mongoose.disconnect();
+       // mongoose.disconnect();
         reject(err);
       });
     });
   };
 
-  exports.updateArticle = (id, title, content, image, author) => {
+  const updateArticle = (id, title, content, author,photo) => {
     return new Promise((resolve, reject) => {
       mongoose.connect(url, {
         useNewUrlParser: true,
@@ -74,32 +95,33 @@ exports.createArticle = (title, content, author, photoBuffer) => {
         Article.findByIdAndUpdate(id, {
           title: title,
           content: content,
-          image: image,
-          author: author
+          photo: photo.split("uploads")[1]
         }, {new: true})
           .then((article) => {
-            mongoose.disconnect();
+           // mongoose.disconnect();
             resolve(article);
           })
           .catch((err) => {
-            mongoose.disconnect();
+           // mongoose.disconnect();
             reject(err);
           });
       }).catch((err) => {
-        mongoose.disconnect();
+        //mongoose.disconnect();
         reject(err);
       });
     });
   };
 
-  exports.getAllArticles = () => {
+  const getAllArticles = () => {
     return new Promise((resolve, reject) => {
       mongoose.connect(url, {
         useNewUrlParser: true,
         useUnifiedTopology: true
       }).then(() => {
         Article.find().lean().then((articles) => {
-          mongoose.disconnect();
+
+         // mongoose.disconnect();
+
   
           // Convert photo buffer to base64-encoded string
           articles = articles.map((article) => {
@@ -111,35 +133,63 @@ exports.createArticle = (title, content, author, photoBuffer) => {
   
           resolve(articles);
         }).catch((err) => {
-          mongoose.disconnect();
+          //mongoose.disconnect();
           reject(err);
         });
       }).catch((err) => {
-        mongoose.disconnect();
+       // mongoose.disconnect();
         reject(err);
       });
     });
   };
 
-  exports.getArticleById = (id) => {
+  const getArticleById = (id) => {
     return new Promise((resolve, reject) => {
       mongoose.connect(url, {
         useNewUrlParser: true,
         useUnifiedTopology: true
       }).then(() => {
-        Article.findById(id).exec().then((article) => {
-          mongoose.disconnect();
-          resolve(article);
-        }).catch((err) => {
-          mongoose.disconnect();
-          reject(err);
-        });
+      
+        // Article.findById(id).exec().then((article) => {
+        //   article.populate("commentList");
+        //   //mongoose.disconnect();
+        //   resolve(article);
+        // }).catch((err) => {
+        //   //mongoose.disconnect();
+        //   reject(err);
+        // });
+       const article = Article.findOne({_id:id}).populate("commentList");
+       //console.log(article);
+       resolve(article);
       }).catch((err) => {
-        mongoose.disconnect();
+        //mongoose.disconnect();
         reject(err);
       });
     });
   };
 
+  const getLastThreeArticles = async () => {
+    try {
+      const articles = await Article.find()
+        .sort({ createdAt: -1 }) // Sort by descending order of createdAt field
+        .limit(3); // Limit to 3 documents
+      return articles;
+    } catch (err) {
+      throw new Error('Failed to get last three articles');
+    }
+  };
+
+
   
-  //module.exports = Article;
+  
+  module.exports = {
+ Article,
+ createArticle,
+ updateArticle,
+ deleteArticle,
+ getAllArticles,
+ getArticleById,
+ getLastThreeArticles
+
+   
+};

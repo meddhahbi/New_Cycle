@@ -3,8 +3,12 @@
 import { useState } from 'react';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
-import { Link } from "react-router-dom";
+
+import { Link, Navigate } from "react-router-dom";
 import { LoadAssociation } from './LoadAssociation';
+import { LoadAssociationFalse } from './LoadAssociationFalse';
+import { isLoggedIn } from '../../../AuthGuard';
+
 
 
 
@@ -28,6 +32,10 @@ export default function RegisterAssociation(){
    // const [isLoading, setIsLoading] = useState(false); // new state variable to track loading status
   //  const history = useHistory();
   const [isLoading, setIsLoading] = useState(false);
+
+  const [isLoadFalse, setIsLoadFalse] = useState(false);
+
+
 //   useEffect(()=>{
 //     setTimeout(()=>setIsLoading(true), 5000);
 // })
@@ -146,18 +154,36 @@ export default function RegisterAssociation(){
 
                 const updateUrl = `http://localhost:3001/association/verifDoc/${email}`
                 console.log(updateUrl);
-                axios.put(updateUrl);
+
+                axios.put(updateUrl)
+
+
+
 
 
                         console.log(response.data); // Handle response data
-                        toast.success("Association created successfuly...");
+                       // toast.success("Association created successfuly...");
+
                         setName('');
                         setEmail('');
                         setPassword('');
                         setPhone('');
                         setPostal('');
                         setDocVerif(null);
-                        setIsLoading(true);
+
+                        const getStatusUrl = `http://localhost:3001/association/getStatus/${email}`
+                        axios.get(getStatusUrl).then(res=>{
+                            console.log(res.data.isActive);
+                            if(res.data.isActive == false){
+                                setIsLoadFalse(true);
+        
+                            }else{
+                                setIsLoading(true);
+                            }
+                        })
+                       // setIsLoading(true);
+                    
+
                     
                     })
                     .catch(error => {
@@ -187,10 +213,14 @@ export default function RegisterAssociation(){
 
 
 
-    return<div>
-          {isLoading ? (
-        <LoadAssociation />
-      ) : (
+
+    return !isLoggedIn() ? (<div>
+    {isLoading ? (
+  <LoadAssociation />
+) : isLoadFalse ? (
+  <LoadAssociationFalse />
+) : (
+
         
      <div>
         
@@ -415,8 +445,11 @@ export default function RegisterAssociation(){
         </section>
         </div>
       )}
-        </div>
-    
+
+        </div>):(
+    <Navigate to={"/"} />
+  )
+
 
 
     

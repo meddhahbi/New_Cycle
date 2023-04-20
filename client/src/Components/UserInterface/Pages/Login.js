@@ -1,10 +1,11 @@
 import React, {useEffect} from 'react';
 import { useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import styles from "./style/styles.module.css"
 import LoadingPage from "../../Loading";
 import { useNavigate } from 'react-router';
+import { isLoggedIn } from '../../../AuthGuard';
 
 
 export default function Login(){
@@ -78,7 +79,7 @@ export default function Login(){
       }
    };
 
-    return <div>
+    return !isLoggedIn() ? (<div>
         {isLoading ? <LoadingPage/> :
             <div>
                 <section className="breadscrumb-section pt-0">
@@ -223,5 +224,7 @@ export default function Login(){
 
             </div>
         }
-  </div>
+  </div>):(
+    <Navigate to={"/"} />
+  )
 }
