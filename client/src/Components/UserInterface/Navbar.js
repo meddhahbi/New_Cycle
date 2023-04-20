@@ -27,16 +27,16 @@ export default function Navbar(){
         getData()
     },[]);
 
-    const [isSubscribed, setIsSubscribed] = useState(false);
+  //  const [isSubscribed, setIsSubscribed] = useState(false);
 
-    const url="https://localhost:3001/verifySubs/" + localStorage.getItem("mail");
+  // const url="https://localhost:3001/verifySubs/" + localStorage.getItem("mail");
 
-    useEffect(() => {
-        fetch(url)
-          .then(response => response.json())
-          .then(data => setIsSubscribed(data.isSubscribed))
-          .catch(error => console.error(error));
-      }, []);
+    // useEffect(() => {
+    //     fetch(url)
+    //       .then(response => response.json())
+    //       .then(data => setIsSubscribed(data.isSubscribed))
+    //       .catch(error => console.error(error));
+    //   }, []);
 
 //   const subscriptionStatus=(e)=>{
 //     e.preventDefault();
@@ -802,17 +802,11 @@ export default function Navbar(){
                                 </div>
                             </div>
                         </div>
-                        {isSubscribed || !localStorage.getItem("token") ?
-                        <div className="header-nav-right">
-                            <button className="btn deal-button" data-bs-toggle="modal" data-bs-target="#deal-box">
-                                <i data-feather="zap"></i>
-                                <Link to="/subscribe">
-                                <span>Take your subscription</span></Link>  
-                            </button>
-                        </div>:
+                        
+                        
 
                         <div className="header-nav-right">
-                        </div>}
+                        </div>
 
 
 

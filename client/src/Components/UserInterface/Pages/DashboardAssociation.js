@@ -6,104 +6,127 @@ import toast, { Toaster } from 'react-hot-toast';
 export default function DashboardAssociation(){
 
 
-    const [association, setAssociation] = useState('');
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const [quantity, setQuantity] = useState('');
+    // const [association, setAssociation] = useState('');
+    // const [title, setTitle] = useState('');
+    // const [description, setDescription] = useState('');
+    // const [quantity, setQuantity] = useState('');
   //  const [image, setImage] = useState(null);
 
-    const [errors, setErrors] = useState(
-        {
-            title: '',
-            description: '',
-            quantity: '',
-          //  image:'',
-        }
-    )
+    // const [errors, setErrors] = useState(
+    //     {
+    //         title: '',
+    //         description: '',
+    //         quantity: '',
+    //       //  image:'',
+    //     }
+    // )
 
 
-    const formValidation=()=>{
+    // const formValidation=()=>{
 
-        let status=true;
-        let localErrors={
-            title: '',
-            description: '',
-            quantity: '',
-          //  image: '',
-           // ...errors
-        }
-
-
-        if(title==""){
-            localErrors.title='Title is required';
-            status=false;
-        }
-        if(description==""){
-            localErrors.description='Description is required';
-            status=false;
-        }
-        if(quantity==""){
-            localErrors.quantity='quantity is required';
-            status=false;
-        }
-        // if(image==""){
-        //     localErrors.image='image is required';
-        //     status=false;
-        // }
+    //     let status=true;
+    //     let localErrors={
+    //         title: '',
+    //         description: '',
+    //         quantity: '',
+    //       //  image: '',
+    //        // ...errors
+    //     }
 
 
-
-        setErrors(localErrors);
-        console.log(localErrors);
-        console.log(status);
-        return status;
-
-    }
-
-
-    const addPost=(e)=>{
-        e.preventDefault();
-        console.log("form submitted");
-        console.log("form data", title, description, quantity);
-
-        if(formValidation()){
+    //     if(title==""){
+    //         localErrors.title='Title is required';
+    //         status=false;
+    //     }
+    //     if(description==""){
+    //         localErrors.description='Description is required';
+    //         status=false;
+    //     }
+    //     if(quantity==""){
+    //         localErrors.quantity='quantity is required';
+    //         status=false;
+    //     }
+    //     // if(image==""){
+    //     //     localErrors.image='image is required';
+    //     //     status=false;
+    //     // }
 
 
 
-            const formData = new FormData();
-            formData.append('title', title);
-            formData.append('description', description);
-            formData.append('quantity', quantity);
-           // formData.append('image', image);
+    //     setErrors(localErrors);
+    //     console.log(localErrors);
+    //     console.log(status);
+    //     return status;
+
+    // }
 
 
-            const url='http://localhost:3001/article/addPost'
-            axios.post(url, formData)
-            .then(response => {
-                        console.log(response.data); // Handle response data
-                        toast.success("User created successfuly...");
-                        setTitle('');
-                        setDescription('');
-                        setQuantity('');
-                       // setImage(null);
-                    })
-                    .catch(error => {
-                        console.log("test");
-                        console.error(error); // Handle error
-                        toast.error("Failed...");
-                    });
+    // const addPost=(e)=>{
+    //     e.preventDefault();
+    //     console.log("form submitted");
+    //     console.log("form data", title, description, quantity);
+
+    //     if(formValidation()){
+
+
+
+    //         const formData = new FormData();
+    //         formData.append('title', title);
+    //         formData.append('description', description);
+    //         formData.append('quantity', quantity);
+    //        // formData.append('image', image);
+
+
+    //         const url='http://localhost:3001/article/addPost'
+    //         axios.post(url, formData)
+    //         .then(response => {
+    //                     console.log(response.data); // Handle response data
+    //                     toast.success("User created successfuly...");
+    //                     setTitle('');
+    //                     setDescription('');
+    //                     setQuantity('');
+    //                    // setImage(null);
+    //                 })
+    //                 .catch(error => {
+    //                     console.log("test");
+    //                     console.error(error); // Handle error
+    //                     toast.error("Failed...");
+    //                 });
     
 
 
 
-        }else{
-            console.log("from invalid");
-        }
+    //     }else{
+    //         console.log("from invalid");
+    //     }
 
 
 
 
-    }
+    // }
+    const [association, setAssociation] = useState('');
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [quantity, setQuantity] = useState(0);
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+      
+        const data = {
+        association,
+        title,
+          description,
+          quantity
+        };
+      
+        axios.post('http://localhost:3001/association/addPost', data)
+          .then((res) => {
+            console.log(res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      };
 
 
 return <div>
@@ -695,39 +718,33 @@ return <div>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form  onSubmit={addPost}>
-
-                    <div class="mb-3">
-                            <label htmlFor="country" class="form-label">Association</label>
-                            <input type="text" class="form-control" id="country" value="107 Veltri Drive" />
+                <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                            <label htmlFor="association" className="form-label">Association</label>
+                            <input type="text" className="form-control" id="association" value={association} onChange={(e) => setAssociation(e.target.value)} />
                         </div>
-
-                        <div class="mb-3">
-                            <label for="companyName" class="form-label">Title</label>
-                            <input type="text" class="form-control" value={title} onChange={(e)=>setTitle(e.target.value)}   />
+                        <div className="mb-3">
+                            <label htmlFor="title" className="form-label">Title</label>
+                            <input type="text" className="form-control" id="title" value={title} onChange={(e) => setTitle(e.target.value)} />
                         </div>
-                        <div class="mb-3">
-                            <label htmlFor="emailAddress" class="form-label">Description</label>
-                            <textarea type="text"  class="form-control" value={description} onChange={(e)=>setDescription(e.target.value)} />
+                        <div className="mb-3">
+                            <label htmlFor="description" className="form-label">Description</label>
+                            <textarea className="form-control" id="description" value={description} onChange={(e) => setDescription(e.target.value)} />
                         </div>
-                        
-                        <div class="mb-3">
-                            <label htmlFor="employees" class="form-label">Quantity</label>
-                            <input type="number" class="form-control" value={quantity} onChange={(e)=>setQuantity(e.target.value)}  />
+                        <div className="mb-3">
+                            <label htmlFor="quantity" className="form-label">Quantity</label>
+                            <input type="number" className="form-control" id="quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
                         </div>
-                        {/* <div class="mb-3">
-                            <label htmlFor="category" class="form-label">Image</label>
-                            <input type="file" class="form-control" value={image} onChange={(e)=>setImage(e.target.value)} />
-                        </div> */}
-    
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-animation btn-md fw-bold"
-                        data-bs-dismiss="modal">Cancle</button>
-                    <button type="submit" class="btn theme-bg-color btn-md fw-bold text-light"
-                        >Save</button>
-                </div>
+                        {/* <button type="submit" className="btn btn-primary">Submit</button> */}
+                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-animation btn-md fw-bold"
+                                                data-bs-dismiss="modal">Cancle</button>
+                                            <button type="submit" class="btn theme-bg-color btn-md fw-bold text-light"
+                                                >Save</button>
+                                        </div>
+                        </form>
+                                        </div>
+              
             </div>
         </div>
     </div>

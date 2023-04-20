@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const products = require('../models/Produit');
+const products = require('../Models/Produit.js');
 const multer = require('multer');
 var mlKnn = require('ml-knn');
 const path = require('path');
@@ -44,14 +44,6 @@ const trainModel = (products, category) => {
 
 
 
-
-
-
-
-
-
-
-
 router.route('/').post(protect, upload.single('images'), async (req, res) => {
  console.log(req.user)
   const { name, description, price, category } = req.body;
@@ -77,9 +69,6 @@ router.route('/').post(protect, upload.single('images'), async (req, res) => {
     res.status(400).json({ message: 'Failed to create product' });
   }
 });
-
-
-
 
 
 
@@ -122,7 +111,7 @@ router.get('/estimate', async (req, res) => {
   }
 });
 
-module.exports = router;
+// module.exports = router;
 
 
 
