@@ -4,16 +4,19 @@ import LoadingPage from "../../Loading";
 
 
 
+
 export default function Donation(){
 
 
     const [articles, setArticles] = useState([]);
     const [recents, setRecent] = useState([]);
 
+
     const [isLoading, setIsLoading] = useState(true);
     useEffect(()=>{
         setTimeout(()=>setIsLoading(false), 1500);
     })
+
 
     useEffect(() => {
     
@@ -38,6 +41,7 @@ export default function Donation(){
     })
           .catch(error => console.log(error));
       }, []);
+
 
 
 
@@ -135,6 +139,7 @@ export default function Donation(){
         </div>
                                     </div>
 
+
                 <div className="col-xxl-3 col-xl-4 col-lg-5 order-lg-1">
                     <div className="left-sidebar-box wow fadeInUp">
                         <div className="left-search-box">
@@ -156,7 +161,9 @@ export default function Donation(){
                                 <div id="panelsStayOpen-collapseOne" className="accordion-collapse collapse show"
                                     aria-labelledby="panelsStayOpen-headingOne">
                                     <div className="accordion-body pt-0">
+
                                     {recents.map(recent => (
+
                                         <div className="recent-post-box">
                                             <div className="recent-box">
                                                 <a href="blog-detail.html" className="recent-image">
@@ -166,6 +173,7 @@ export default function Donation(){
 
                                                 <div className="recent-detail">
                                                     <a href="blog-detail.html">
+
                                                         <h5 className="recent-name">{recent.title}</h5>
                                                     </a>
                                                     <h6>{new Date(recent.createdAt).toLocaleString()} <i data-feather="thumbs-up"></i></h6>
@@ -175,11 +183,12 @@ export default function Donation(){
                                           
                                         </div>
                                          ))} 
+
                                     </div>
                                 </div>
                             </div>
 
-                                
+
 
                            
                         </div>

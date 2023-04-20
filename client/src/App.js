@@ -27,7 +27,9 @@ import GetBlog from './Components/BlogInterface/getBlog'
 import Plan from './Components/UserInterface/Pages/Plan';
 import Dashboard from './Components/AdminInterface/Pages/Dashboard';
 import Donation from './Components/UserInterface/Pages/Donation';
+
 import { useState, useEffect } from 'react';
+
 
 
 import UpdateBlog from './Components/BlogInterface/updateBlog';
@@ -46,12 +48,14 @@ function App() {
       <Routes>
 
       <Route path="/" exact element={<User />}>
+
     <Route  path='/produit' element={<Produit />} />
 
           <Route  path='/AllProduit' element={<AllProduit />} />
 
         <Route exact index element={<Home />} />
         {/*<Route  path='/login' element={<Login />} />*/}
+
 
         <Route  path='/register' exact element={<Register />} />
         <Route  path='/forgot' exact element={<Forgot />} />
@@ -60,7 +64,9 @@ function App() {
         <Route  path='/login' exact element={<Login />} />
 
 
+
         <Route exact path='/registerAssociation' element={<RegisterAssociation />} />
+
 
 
           <Route exact path='/blog' element={<BlogList />} />
@@ -74,6 +80,13 @@ function App() {
           <Route path='/subscribe' exact element={<Plan />} />
           <Route path='/donate' exact element={<Donation />} />
 
+          <Route path='/me' exact element={<UserProfile />} />
+          <Route path='/edit_me' exact element={<ProfileForm />} />
+        
+
+
+          <Route path='/subscribe' exact element={<Plan />} />
+          <Route path='/donate' exact element={<Donation />} />
 
           <Route exact path='/scraped' element={<Scraped />} />
         
@@ -82,8 +95,9 @@ function App() {
       </Route>
 
      
-  
+
   <Route  path='/UpdateProduct/:id' element={<UpdateProduct />} />
+
       <Route path='/confirm/:activationCode' exact element={<ActivationPage />} />
   
       <Route path='/reset/:id' exact element={<ResetPassword />}/>
@@ -92,6 +106,12 @@ function App() {
         <Route exact path='/getBlog/:id' element={<GetBlog />} />
         <Route exact path='/updateBlog/:id' element={<UpdateBlog />} />
         
+
+
+      <Route exact path='/reset/:id' element={<ResetPassword />}/>
+
+     
+     
 
 
      

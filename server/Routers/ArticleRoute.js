@@ -37,7 +37,7 @@ const upload = multer({
 route.post('/',protect,upload.single('photo'),(req,res,next)=>{
   const image = req.file.path;
   console.log(req.user);
-    articles.createArticle(req.body.title,req.body.content,req.body.author,image,req.user._id)
+    articles.createArticle(req.body.title,req.body.content,image,req.user._id)
     .then((article)=>res.status(200).json({
         article:article,
         msg:'Article created successfully'
@@ -97,7 +97,7 @@ route.post('/', (req, res, next) => {
 
   route.put('/:id',upload.single('photo'),(req,res,next)=>{
     const image = req.file.path;
-    articles.updateArticle(req.params.id, req.body.title, req.body.content, req.body.author,image)
+    articles.updateArticle(req.params.id, req.body.title, req.body.content,image)
     .then((article)=>res.status(200).json({
         article:article,
         msg:'article updated successfully'

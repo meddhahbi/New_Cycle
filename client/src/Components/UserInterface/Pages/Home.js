@@ -2,7 +2,9 @@ import { Link } from "react-router-dom";
 import LoadingPage from "../../Loading";
 import { useState } from "react";
 import React, {useEffect} from 'react';
+
 import './style/home.css';
+
 
 
 
@@ -15,9 +17,11 @@ export default function Home(){
       useEffect(()=>{
         setTimeout(()=>setIsLoading(false), 1500);
     })
+
     const whiteText = {
         color: 'white'
       }
+
 
     return  <div> {isLoading ? <LoadingPage/> : <div className="theme-color-2 bg-effect">
     <section className="home-section-2 home-section-small section-b-space">
@@ -93,6 +97,7 @@ export default function Home(){
         </div>
     </section>
 
+
    
     <section class="category-section-2">
         <div class="container-fluid-lg">
@@ -109,10 +114,12 @@ export default function Home(){
                                         alt="" />
                                 </a>
                                 <div class="category-name">
+
                                     <h6>Oils, Rofined & Ghee</h6>
                                 </div>
                             </div>
                         </div>
+
 
                         <div className="oneCat">
                             <div class="shop-category-box border-0 wow fadeIn" data-wow-delay="0.05s">
@@ -121,10 +128,12 @@ export default function Home(){
                                         alt="" />
                                 </a>
                                 <div class="category-name">
+
                                     <h6>Rice, Flour & Grains</h6>
                                 </div>
                             </div>
                         </div>
+
 
                         <div className="oneCat">
                             <div class="shop-category-box border-0 wow fadeIn" data-wow-delay="0.1s">
@@ -133,10 +142,12 @@ export default function Home(){
                                         alt="" />
                                 </a>
                                 <div class="category-name">
+
                                     <h6>Food Cupboard</h6>
                                 </div>
                             </div>
                         </div>
+
 
                         <div className="oneCat">
                             <div class="shop-category-box border-0 wow fadeIn" data-wow-delay="0.15s">
@@ -145,6 +156,7 @@ export default function Home(){
                                         alt="" />
                                 </a>
                                 <div class="category-name">
+
                                     <h6>Dals & Pulses</h6>
                                 </div>
                             </div>
@@ -157,10 +169,12 @@ export default function Home(){
                                         alt="" />
                                 </a>
                                 <div class="category-name">
+
                                     <h6>Drinks & Beverages</h6>
                                 </div>
                             </div>
                         </div>
+
 
                         <div className="oneCat">
                             <div class="shop-category-box border-0 wow fadeIn" data-wow-delay="0.25s">
@@ -169,10 +183,12 @@ export default function Home(){
                                         alt="" />
                                 </a>
                                 <div class="category-name">
+
                                     <h6>Fresh Fruits & Vegetables</h6>
                                 </div>
                             </div>
                         </div>
+
 
                         <div className="oneCat">
                             <div class="shop-category-box border-0 wow fadeIn" data-wow-delay="0.3s">
@@ -181,10 +197,12 @@ export default function Home(){
                                         alt="" />
                                 </a>
                                 <div class="category-name">
+
                                     <h6>Ready to eat Meals</h6>
                                 </div>
                             </div>
                         </div>
+
 
                         <div className="oneCat">
                             <div class="shop-category-box border-0 wow fadeIn" data-wow-delay="0.35s">
@@ -193,10 +211,12 @@ export default function Home(){
                                         alt="" />
                                 </a>
                                 <div class="category-name">
+
                                     <h6>Instant Mixes</h6>
                                 </div>
                             </div>
                         </div>
+
 
                         <div className="oneCat">
                             <div class="shop-category-box border-0 wow fadeIn" data-wow-delay="0.4s">
@@ -205,6 +225,7 @@ export default function Home(){
                                         alt="" />
                                 </a>
                                 <div class="category-name">
+
                                     <h6>Rice, Flour & Grains</h6>
                                 </div>
                             </div>
@@ -214,6 +235,7 @@ export default function Home(){
             </div>
         </div>
     </section>
+
 
     <section class="newsletter-section section-b-space">
         <div class="container-fluid-lg">
@@ -234,6 +256,7 @@ export default function Home(){
                                             <i class="fa-solid fa-arrow-right icon"></i>
                                         </button>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
@@ -242,6 +265,7 @@ export default function Home(){
             </div>
         </div>
     </section>
+
    
     
 

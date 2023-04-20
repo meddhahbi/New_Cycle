@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+// import TimeAgo from 'react-timeago'
+
+
 
 
 
 
 function BlogList() {
   const [articles, setArticles] = useState([]);
+
 
   useEffect(() => {
     
@@ -14,12 +18,14 @@ function BlogList() {
       .then(data => setArticles(data.articles))
       .catch(error => console.log(error));
   }, []);
-  
+
+
+
 
   return (
     <div>
 
-      
+
 
 
     <section class="breadscrumb-section pt-0">
@@ -44,6 +50,7 @@ function BlogList() {
             </div>
         </div>
     </section>
+
 
         <section>
         <div class="accordion left-accordion-box" id="accordionPanelsStayOpenExample">
@@ -75,14 +82,7 @@ function BlogList() {
 
                                            
 
-                                        
-                                            
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            </div>
-        </section>
+     
     
 
     <section class="blog-section section-b-space">
@@ -101,7 +101,9 @@ function BlogList() {
 
                                 {article.photo && <img  width="400" height="200" src={`http://localhost:3001/${(article.photo)}`}  />}
 
+
                                 {article.photo && <img src={`data:image/jpeg;base64,${(article.photo).toString('base64')}`}  />}
+
 
                                 </a>
 
@@ -120,8 +122,10 @@ function BlogList() {
                                         Read More <i className="fa-solid fa-right-long"></i>
                                         </Link>
 
+
                                     <button onclick="location.href = 'blog-detail.html';" class="blog-button">Read
                                         More <i class="fa-solid fa-right-long"></i></button>
+
 
                                 </div>
                             </div>

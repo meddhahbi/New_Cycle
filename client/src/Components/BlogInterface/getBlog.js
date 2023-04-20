@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Navbar from '../UserInterface/Navbar';
 import Footer from '../UserInterface/Footer';
 import axios from 'axios';
+// import TimeAgo from 'react-timeago'
 
 
 
@@ -13,28 +14,27 @@ function GetBlog() {
     const [comment, setComment] = useState('');
     const [comments, setComments] = useState([]);
 
-    useEffect(() => {
-        fetch(`http://localhost:3001/comment`) 
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Failed to retrieve comments from server");
-            }
-            return response.json();
-          })
-          .then((data) => {
-            setComments(data.cmt);
-          })
-          
-      }, [comments]);
 
-   
 
     useEffect(() => {
-      fetch(`http://localhost:3001/article/${id}`)
+    fetch(`http://localhost:3001/article/${id}`)
         .then(res => res.json())
-        .then(data => setArticle(data.article))
+        .then(data => {setArticle(data.article)  
+           // setComments(data.article.commentList)  
+        })
         .catch(error => console.log(error));
     }, [id]);
+
+    useEffect(() => {
+        axios.get('http://localhost:3001/comment/commentByArticle/'+id)
+            //.then(res => res.json())
+            .then(data => {
+               // console.log(data.data) 
+                setComments(data.data)
+            })
+
+            .catch(error => console.log(error));
+        }, [id,comments]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -42,19 +42,23 @@ function GetBlog() {
     
 
         try {
-          const { data } = await axios.post(`http://localhost:3001/comment`, {
+
+            const { data } = await axios.post(`http://localhost:3001/comment`, {
             comment,
-          });
-          setComment('');
+            articleId: id ,
+            }, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}` 
+            }
+            });
+           
+            setComment('');
 
-            
         } catch (error) {
-     
-
         }
-      };
+    };
 
-  return (
+return (
     <div>
         <div><Navbar /></div>
         <section class="breadscrumb-section pt-0">
@@ -79,10 +83,7 @@ function GetBlog() {
             </div>
         </section>
         <section class="blog-section section-b-space">
-            
             <div class="container-fluid-lg">
-                
-            
                 <div class="row g-4">
                     <div class="col-xxl-9 col-xl-8 col-lg-7 order-lg-2">
                         <div class="row g-4">  
@@ -113,11 +114,9 @@ function GetBlog() {
                         </Link>                        
                 </div>
     </div>
-    </div>  
-        
+    </div>            
             </div>
-           
-            <div class="comment-box overflow-hidden">
+            <div class="comment-box overflow-hidden container">
                         <div class="leave-title">
                             <h3>Comments</h3>
                         </div>
@@ -126,13 +125,14 @@ function GetBlog() {
                             <ul>
                                 <li>
                                     <div class="user-box border-color">
-                                      
+                                    
                                         <div class="user-iamge">
-                                            <img src="./profile.jpg"
+                                            <img src={`http://localhost:3001/${(comment.user.image)}`}
                                                 class="img-fluid blur-up lazyload" alt=""/>
                                             <div class="user-name">
-                                                <h6>{comment.createdAt}</h6>
-                                                <h5 class="text-content">Glenn Greer</h5>
+                                            
+                                                {/* <TimeAgo date={comment.createdAt} /> */}
+                                                <h5 class="text-content">{comment.user.username}</h5>
                                             </div>
                                         </div>
 
@@ -142,32 +142,28 @@ function GetBlog() {
                                         </div>
                                     </div>
                                 </li>
-
-                            
                             </ul>
                         </div>
-                         ))}
-             </div>
-               
-             
-             
-               
+                        ))} 
+            </div>
+            
+            
         </section>
-        <form onSubmit={handleSubmit}>
+        <form class="container" onSubmit={handleSubmit}>
         <div class="inputDiv ">
-      <label class="inputLabel" for="password">Comment</label>
-      <input type="text" id="comment" name="comment" value={comment} onChange={(e) => setComment(e.target.value)} required />
+    <label class="inputLabel container" for="password">Comment</label>
+    <input type="text" id="comment" name="comment" value={comment} onChange={(e) => setComment(e.target.value)} required />
     </div>
         
         
         <button type="submit" className="btn btn-animation ">
-          Add comment
+        Add comment
         </button>
-      </form>
-      
+    </form>
+    
         <div><Footer /></div>
     </div>
-  );
+);
 }
 
 export default GetBlog;

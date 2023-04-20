@@ -6,7 +6,9 @@ import axios from 'axios';
     const [content, setContent] = useState("");
 
     const [author, setAuthor] = useState("");
+
     const [photo, setPhoto] = useState("");
+   
  
   
     const handleSubmit = (event) => {
@@ -15,18 +17,17 @@ import axios from 'axios';
       const formData = new FormData();
       formData.append('title', title);
       formData.append('content', content);
-      formData.append('author', author);
       formData.append('photo', photo);
     
       axios.post('http://localhost:3001/article', formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${localStorage.getItem("token")}`
         }
       }).then(response => {
         console.log(response.data);
         setTitle('');
         setContent('');
-        setAuthor('');
         setPhoto(null);
 
         window.location = "/blog"
@@ -66,19 +67,6 @@ import axios from 'axios';
             value={content}
             onChange={(e) => setContent(e.target.value)}
           ></textarea>
-        </div>
-        <div className="mb-3">
-          <label htmlFor="author" className="form-label">
-            Author
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="author"
-            placeholder="Enter author name"
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
-          />
         </div>
         <div className="mb-3">
           <label htmlFor="photo" className="form-label">

@@ -77,6 +77,7 @@ route.get('/getStatus/:email',(req,res,next)=>{
 .catch((err)=>{res.status(400).json({error:err});console.log(err)});
   })
 
+
   route.post('/addPost',(req,res,next)=>{
     // const image = req.file.path;
      console.log(req.association);
@@ -102,6 +103,7 @@ route.get('/getStatus/:email',(req,res,next)=>{
     .then((doc)=>res.status(200).json(doc))
     .catch((err)=>res.status(400).json(err))
   });
+
 
 
 
