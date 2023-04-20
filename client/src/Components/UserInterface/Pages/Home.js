@@ -3,6 +3,9 @@ import LoadingPage from "../../Loading";
 import { useState } from "react";
 import React, {useEffect} from 'react';
 
+import './style/home.css';
+
+
 
 
 
@@ -14,6 +17,10 @@ export default function Home(){
       useEffect(()=>{
         setTimeout(()=>setIsLoading(false), 1500);
     })
+
+    const whiteText = {
+        color: 'white'
+      }
 
 
     return  <div> {isLoading ? <LoadingPage/> : <div className="theme-color-2 bg-effect">
@@ -90,117 +97,135 @@ export default function Home(){
         </div>
     </section>
 
-    <section className="category-section-2">
-        <div className="container-fluid-lg">
-            <div className="title">
+
+   
+    <section class="category-section-2">
+        <div class="container-fluid-lg">
+            <div class="title">
                 <h2>Shop By Categories</h2>
             </div>
-            <div className="row">
-                <div className="col-12">
-                    <div className="category-slider arrow-slider">
-                        <div>
-                            <div className="shop-category-box border-0 wow fadeIn">
-                                <a href="shop-left-sidebar.html" className="circle-1">
-                                    <img src="../../../../assets/User/images/veg-3/category/1.png" className="img-fluid blur-up lazyload"
+            <div class="row">
+                <div class="col-12">
+                    <div class="category-slider arrow-slider">
+                        <div className="oneCat">
+                            <div class="shop-category-box border-0 wow fadeIn">
+                                <a href="shop-left-sidebar.html" class="circle-1">
+                                    <img src="../../../../assets/User/images/veg-3/category/1.png" class="img-fluid blur-up lazyload"
                                         alt="" />
                                 </a>
-                                <div className="category-name">
+                                <div class="category-name">
+
                                     <h6>Oils, Rofined & Ghee</h6>
                                 </div>
                             </div>
                         </div>
 
-                        <div>
-                            <div className="shop-category-box border-0 wow fadeIn" data-wow-delay="0.05s">
-                                <a href="shop-left-sidebar.html" className="circle-2">
-                                    <img src="../../../../assets/User/images/veg-3/category/2.png" className="img-fluid blur-up lazyload"
+
+                        <div className="oneCat">
+                            <div class="shop-category-box border-0 wow fadeIn" data-wow-delay="0.05s">
+                                <a href="shop-left-sidebar.html" class="circle-2">
+                                    <img src="../../../../assets/User/images/veg-3/category/2.png" class="img-fluid blur-up lazyload"
                                         alt="" />
                                 </a>
-                                <div className="category-name">
+                                <div class="category-name">
+
                                     <h6>Rice, Flour & Grains</h6>
                                 </div>
                             </div>
                         </div>
 
-                        <div>
-                            <div className="shop-category-box border-0 wow fadeIn" data-wow-delay="0.1s">
-                                <a href="shop-left-sidebar.html" className="circle-3">
-                                    <img src="../../../../assets/User/images/veg-3/category/3.png" className="img-fluid blur-up lazyload"
+
+                        <div className="oneCat">
+                            <div class="shop-category-box border-0 wow fadeIn" data-wow-delay="0.1s">
+                                <a href="shop-left-sidebar.html" class="circle-3">
+                                    <img src="../../../../assets/User/images/veg-3/category/3.png" class="img-fluid blur-up lazyload"
                                         alt="" />
                                 </a>
-                                <div className="category-name">
+                                <div class="category-name">
+
                                     <h6>Food Cupboard</h6>
                                 </div>
                             </div>
                         </div>
 
-                        <div>
-                            <div className="shop-category-box border-0 wow fadeIn" data-wow-delay="0.15s">
-                                <a href="shop-left-sidebar.html" className="circle-4">
-                                    <img src="../../../../assets/User/images/veg-3/category/4.png" className="img-fluid blur-up lazyload"
+
+                        <div className="oneCat">
+                            <div class="shop-category-box border-0 wow fadeIn" data-wow-delay="0.15s">
+                                <a href="shop-left-sidebar.html" class="circle-4">
+                                    <img src="../../../../assets/User/images/veg-3/category/4.png" class="img-fluid blur-up lazyload"
                                         alt="" />
                                 </a>
-                                <div className="category-name">
+                                <div class="category-name">
+
                                     <h6>Dals & Pulses</h6>
                                 </div>
                             </div>
                         </div>
 
-                        <div>
-                            <div className="shop-category-box border-0 wow fadeIn" data-wow-delay="0.2s">
-                                <a href="shop-left-sidebar.html" className="circle-4">
-                                    <img src="../../../../assets/User/images/veg-3/category/5.png" className="img-fluid blur-up lazyload"
+                        <div className="oneCat">
+                            <div class="shop-category-box border-0 wow fadeIn" data-wow-delay="0.2s">
+                                <a href="shop-left-sidebar.html" class="circle-4">
+                                    <img src="../../../../assets/User/images/veg-3/category/5.png" class="img-fluid blur-up lazyload"
                                         alt="" />
                                 </a>
-                                <div className="category-name">
+                                <div class="category-name">
+
                                     <h6>Drinks & Beverages</h6>
                                 </div>
                             </div>
                         </div>
 
-                        <div>
-                            <div className="shop-category-box border-0 wow fadeIn" data-wow-delay="0.25s">
-                                <a href="shop-left-sidebar.html" className="circle-1">
-                                    <img src="../../../../assets/User/images/veg-3/category/6.png" className="img-fluid blur-up lazyload"
+
+                        <div className="oneCat">
+                            <div class="shop-category-box border-0 wow fadeIn" data-wow-delay="0.25s">
+                                <a href="shop-left-sidebar.html" class="circle-1">
+                                    <img src="../../../../assets/User/images/veg-3/category/6.png" class="img-fluid blur-up lazyload"
                                         alt="" />
                                 </a>
-                                <div className="category-name">
+                                <div class="category-name">
+
                                     <h6>Fresh Fruits & Vegetables</h6>
                                 </div>
                             </div>
                         </div>
 
-                        <div>
-                            <div className="shop-category-box border-0 wow fadeIn" data-wow-delay="0.3s">
-                                <a href="shop-left-sidebar.html" className="circle-2">
-                                    <img src="../../../../assets/User/images/veg-3/category/7.png" className="img-fluid blur-up lazyload"
+
+                        <div className="oneCat">
+                            <div class="shop-category-box border-0 wow fadeIn" data-wow-delay="0.3s">
+                                <a href="shop-left-sidebar.html" class="circle-2">
+                                    <img src="../../../../assets/User/images/veg-3/category/7.png" class="img-fluid blur-up lazyload"
                                         alt="" />
                                 </a>
-                                <div className="category-name">
+                                <div class="category-name">
+
                                     <h6>Ready to eat Meals</h6>
                                 </div>
                             </div>
                         </div>
 
-                        <div>
-                            <div className="shop-category-box border-0 wow fadeIn" data-wow-delay="0.35s">
-                                <a href="shop-left-sidebar.html" className="circle-3">
-                                    <img src="../../../../assets/User/images/veg-3/category/8.png" className="img-fluid blur-up lazyload"
+
+                        <div className="oneCat">
+                            <div class="shop-category-box border-0 wow fadeIn" data-wow-delay="0.35s">
+                                <a href="shop-left-sidebar.html" class="circle-3">
+                                    <img src="../../../../assets/User/images/veg-3/category/8.png" class="img-fluid blur-up lazyload"
                                         alt="" />
                                 </a>
-                                <div className="category-name">
+                                <div class="category-name">
+
                                     <h6>Instant Mixes</h6>
                                 </div>
                             </div>
                         </div>
 
-                        <div>
-                            <div className="shop-category-box border-0 wow fadeIn" data-wow-delay="0.4s">
-                                <a href="shop-left-sidebar.html" className="circle-4">
-                                    <img src="../../../../assets/User/images/veg-3/category/2.png" className="img-fluid blur-up lazyload"
+
+                        <div className="oneCat">
+                            <div class="shop-category-box border-0 wow fadeIn" data-wow-delay="0.4s">
+                                <a href="shop-left-sidebar.html" class="circle-4">
+                                    <img src="../../../../assets/User/images/veg-3/category/2.png" class="img-fluid blur-up lazyload"
                                         alt="" />
                                 </a>
-                                <div className="category-name">
+                                <div class="category-name">
+
                                     <h6>Rice, Flour & Grains</h6>
                                 </div>
                             </div>
@@ -212,71 +237,26 @@ export default function Home(){
     </section>
 
 
-    <section>
+    <section class="newsletter-section section-b-space">
         <div class="container-fluid-lg">
-            <div class="title">
-                <h2>Best Value</h2>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="three-slider arrow-slider ratio_65">
-                        <div>
-                            <div class="offer-banner hover-effect">
-                                <img src="../../../../assets/User/images/veg-3/value/1.png" class="img-fluid bg-img blur-up lazyload"
-                                    alt="" />
-                                <div class="banner-detail">
-                                    <h5 class="theme-color">Buy more, Save more</h5>
-                                    <h6>Fresh Vegetable</h6>
-                                </div>
-                                <div class="offer-box">
-                                    <button onclick="location.href = 'shop-left-sidebar.html';"
-                                        class="btn-category btn theme-bg-color text-white">View Offer</button>
-                                </div>
-                            </div>
-                        </div>
+            <div class="newsletter-box newsletter-box-2">
+                <div class="newsletter-contain py-5">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-xxl-4 col-lg-5 col-md-7 col-sm-9 offset-xxl-2 offset-md-1">
+                                <div class="newsletter-detail">
+                                    <h2>Join our newsletter and get...</h2>
+                                    <h5>$20 discount for your first order</h5>
+                                    <div class="input-box">
+                                        <input type="email" class="form-control" id="exampleFormControlInput1"
+                                            placeholder="Enter Your Email" />
+                                        <i class="fa-solid fa-envelope arrow"></i>
+                                        <button class="sub-btn  btn-animation">
+                                        <Link to="/subscribe"> <span class="d-sm-block d-none" style={whiteText}>Subscribe</span></Link>
+                                            <i class="fa-solid fa-arrow-right icon"></i>
+                                        </button>
+                                    </div>
 
-                        <div>
-                            <div class="offer-banner hover-effect">
-                                <img src="../../../../assets/User/images/veg-3/value/2.png" class="img-fluid bg-img blur-up lazyload"
-                                    alt="" />
-                                <div class="banner-detail">
-                                    <h5 class="theme-color">Save More!</h5>
-                                    <h6>Organic Vegetable</h6>
-                                </div>
-                                <div class="offer-box">
-                                    <button onclick="location.href = 'shop-left-sidebar.html';"
-                                        class="btn-category btn theme-bg-color text-white">View Offer</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="offer-banner hover-effect">
-                                <img src="../../../../assets/User/images/veg-3/value/3.png" class="img-fluid bg-img blur-up lazyload"
-                                    alt="" />
-                                <div class="banner-detail">
-                                    <h5 class="theme-color">Hot Deals!</h5>
-                                    <h6>Fruita & Vagerables</h6>
-                                </div>
-                                <div class="offer-box">
-                                    <button onclick="location.href = 'shop-left-sidebar.html';"
-                                        class="btn-category btn theme-bg-color text-white">View Offer</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="offer-banner hover-effect">
-                                <img src="../../../../assets/User/images/veg-3/value/1.png" class="img-fluid bg-img blur-up lazyload"
-                                    alt="" />
-                                <div class="banner-detail">
-                                    <h5 class="theme-color">Buy more, Save more</h5>
-                                    <h6>Fruita & Vagerables</h6>
-                                </div>
-                                <div class="offer-box">
-                                    <button onclick="location.href = 'shop-left-sidebar.html';"
-                                        class="btn-category btn theme-bg-color text-white">View
-                                        Offer</button>
                                 </div>
                             </div>
                         </div>
@@ -285,8 +265,6 @@ export default function Home(){
             </div>
         </div>
     </section>
-
-
 
    
     

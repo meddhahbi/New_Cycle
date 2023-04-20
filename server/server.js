@@ -17,6 +17,7 @@ app.use(cors()); // Use this after the variable declaration
 const session = require("express-session");
 const articleRoutes = require('./Routers/ArticleRoute');
 const commentRoutes = require('./Routers/commentRouter');
+const produitRoutes = require('./Routers/ProduitRoute');
  
 //const app = express();
 
@@ -64,6 +65,7 @@ require("./auth/facebook-auth")(passport);
 
 app.use('/article', articleRoutes);
 app.use('/comment', commentRoutes);
+app.use('/produit', produitRoutes);
 
 app.use('/chat', chatRoute);
 
@@ -73,7 +75,7 @@ app.use('/message', messageRoute);
 
 //*test pour la connection de la base de données
 //app.get('/',userRoute);
-
-
-
 app.listen(3001, ()=>console.log('server run in port 3001'));
+
+
+//app.listen(3001, ()=>console.log('server run in port 3001'));

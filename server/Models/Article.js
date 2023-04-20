@@ -22,7 +22,9 @@ commentList: [{
 }]
 }
 
+
 );
+
 
 var Article = mongoose.model('Article', articleSchema);
 var url = process.env.URL;
@@ -31,6 +33,7 @@ var url = process.env.URL;
 
 
 const createArticle = (title, content, photo,userId) => {
+
 
   return new Promise((resolve, reject) => {
     mongoose.connect(url, {
@@ -61,6 +64,7 @@ const createArticle = (title, content, photo,userId) => {
 
 
   const deleteArticle = (id) => {
+
 
 
     return new Promise((resolve, reject) => {

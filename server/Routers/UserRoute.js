@@ -289,6 +289,4 @@ route.get('/latest', (req, res, next) => {
 
 
 
-
-
 module.exports = route;
