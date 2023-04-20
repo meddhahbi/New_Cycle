@@ -7,6 +7,9 @@ import Login from './Components/UserInterface/Pages/Login';
 import Register from './Components/UserInterface/Pages/Register';
 import Forgot from './Components/UserInterface/Pages/Forgot';
 import ActivationPage from './Components/UserInterface/Pages/ActivationPage';
+import Produit from './Components/Produit/Pages/Produit';
+import AllProduit from './Components/Produit/Pages/AllProduit';
+import UpdateProduct from './Components/Produit/Pages/UpdateProduct';
 import ResetPassword from './Components/UserInterface/Pages/resetPassword';
 import LoginAssociation from './Components/UserInterface/Pages/LoginAssociation';
 import UserProfile from "./Components/UserInterface/Pages/UserProfile";
@@ -43,7 +46,9 @@ function App() {
       <Routes>
 
       <Route path="/" exact element={<User />}>
+    <Route  path='/produit' element={<Produit />} />
 
+          <Route  path='/AllProduit' element={<AllProduit />} />
 
         <Route exact index element={<Home />} />
         {/*<Route  path='/login' element={<Login />} />*/}
@@ -78,7 +83,7 @@ function App() {
 
      
   
-
+  <Route  path='/UpdateProduct/:id' element={<UpdateProduct />} />
       <Route path='/confirm/:activationCode' exact element={<ActivationPage />} />
   
       <Route path='/reset/:id' exact element={<ResetPassword />}/>
