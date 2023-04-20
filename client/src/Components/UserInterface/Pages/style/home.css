@@ -1,0 +1,10 @@
+.category-slider {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .oneCat{
+    margin: auto;
+  }
