@@ -95,14 +95,14 @@ route.post('/', (req, res, next) => {
       });
   });
 
-  route.put('/:id',upload.single('photo'),(req,res,next)=>{
-    const image = req.file.path;
-    articles.updateArticle(req.params.id, req.body.title, req.body.content,image)
-    .then((article)=>res.status(200).json({
+route.put('/:id',upload.single('photo'),(req,res,next)=>{
+  const image = req.file.path;
+  articles.updateArticle(req.params.id, req.body.title, req.body.content,image)
+      .then((article)=>res.status(200).json({
         article:article,
         msg:'article updated successfully'
-    }))
-    .catch((err)=>res.status(400).json({error:err}));
+      }))
+      .catch((err)=>res.status(400).json({error:err}));
 })
 route.get('/', (req, res, next) => {
     articles.getAllArticles()

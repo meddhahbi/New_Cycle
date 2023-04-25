@@ -48,6 +48,14 @@ html, body{
     background-color: white;
     padding: 5px;
 }
+.sticky-logos{
+    margin-top: 50px;
+    right:0;
+    position: fixed;
+
+    background-color: white;
+    height:100px;
+}
 .messageContainer{
     /*transform: scaleY(-1);*/
 }

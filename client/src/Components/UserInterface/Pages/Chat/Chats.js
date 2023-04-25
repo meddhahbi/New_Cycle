@@ -12,6 +12,7 @@ const Chats = (props) => {
     const [isLoading, setIsLoading] = useState(true);
     const [messages, setMessages] = useState([]);
     const [chats, setChats] = useState([]);
+    const [product, setProduct] = useState();
     const [newMessage, setnewMessage] = useState();
     const [selectedReason, setSelectedReason] = useState();
     const messagesEndRef = useRef(null);
@@ -74,9 +75,19 @@ const Chats = (props) => {
         // console.log(url)
         const {data:msgs}=await axios.get(url, config)
         // console.log(msgs)
-        setMessages(msgs.messages)
+        setMessages(msgs)
         // setMessages(messages);
         return messages
+    }
+
+    const getChat = async ()=>{
+        let url = `http://localhost:3001/chat/get_chat/${chatId}`
+        const {data:chat}=await axios.get(url, config)
+        console.log("chat")
+        console.log(chat)
+        setProduct(chat.product)
+        // setMessages(messages);
+        return chat
     }
 
     const getDeal = async ()=>{
@@ -175,11 +186,25 @@ const Chats = (props) => {
         getOther().then(()=>{})
         getChats().then()
 
+        getChat().then()
         if(isLoading){
 
 
             window.scrollTo(0, document.body.scrollHeight)
+            const IPGEOLOCATION_API_KEY = '71491428bd354957b539d936a7bf3af9';
 
+            async function getLocation() {
+                try {
+                    const response = await axios.get(`https://api.ipgeolocation.io/ipgeo?apiKey=${IPGEOLOCATION_API_KEY}`);
+                    const { city, country_name } = response.data;
+                    console.log(response.data)
+                    console.log(`You are located in ${city}, ${country_name}.`);
+                } catch (error) {
+                    console.error('Error getting location:', error.message);
+                }
+            }
+
+            getLocation();
 
             scrollToBottom()
             if (!userInfo) {
@@ -284,6 +309,7 @@ const Chats = (props) => {
                 className="chats row container-fluid"
 
             >
+
                 <ToastContainer/>
                 <div className="offcanvas offcanvas-collapse order-xl-2 col-5" id="primaryMenu">
                     <div className="offcanvas-header navbar-shadow">
@@ -342,7 +368,7 @@ const Chats = (props) => {
                 </div>
                 <div className="row">
                     <div className="col-5 messages-content">
-                        <div className="d-flex flex-column align-items-stretch flex-shrink-0 bg-body-tertiary sidebar sticky-header sidebar-sticky col-4"
+                        <div className="d-flex flex-column align-items-stretch flex-shrink-0 bg-body-tertiary sidebar sticky-header sidebar-sticky"
                              >
                             <div className="list-group list-group-flush border-bottom scrollarea">
                                 {chats?.map((chat) => (
@@ -376,20 +402,41 @@ const Chats = (props) => {
 
 
 
-                    <div className="col-7 list-messages" id="list-messages">
-                        <div className="right" style={{height: "25px"}}>
+                    <div className="col-7 list-messages " id="list-messages">
+                        <div className="right sticky-logos" style={{height: "25px"}}>
                             {!dealt ?
-                                <div className=""
-                                     style={{cursor:"pointer", backgroundColor:"tomato", color:"white", borderRadius:"10px", width:"25px"}}
-                                     data-bs-toggle="modal"
-                                     data-bs-target="#dealUser"
-                                ><i className="fa fa-times" style={{fontSize:"large", marginTop:"5px"}}/>
-                                </div>
+                                <>
+                                    <div className=""
+                                         style={{cursor:"pointer", backgroundColor:"tomato", color:"white", borderRadius:"10px", width:"25px"}}
+                                         data-bs-toggle="modal"
+                                         data-bs-target="#dealUser"
+                                         title={"deal for"}
+                                    >
+                                        <i className="fa fa-times" title={"deal for "+product.name} style={{fontSize:"large", marginTop:"5px"}}/>
+
+                                    </div>
+                                    <div className=""
+                                         style={{cursor:"pointer", backgroundColor:"#10d685", color:"white", borderRadius:"10px", width:"25px", padding:"3px", marginLeft:"10px"}}
+                                         data-bs-toggle="modal"
+                                         data-bs-target="#prod"
+                                    >
+                                        <i className="fa fa-hand-dots " title="show product" style={{fontSize:"large"}} />
+                                    </div>
+                                </>
                                 :
-                                <div className=""
-                                     style={{backgroundColor:"green", color:"white", borderRadius:"10px", width:"25px"}}
-                                ><i className="fa fa-check" style={{fontSize:"large", marginTop:"5px"}}/>
-                                </div>
+                                <>
+                                    <div className=""
+                                         style={{backgroundColor:"green", color:"white", borderRadius:"10px", width:"25px"}}
+                                    ><i className="fa fa-check" style={{fontSize:"large", marginTop:"5px"}}/>
+                                    </div>
+                                    <div className="" title={"you already dealt to exchange" +product.name}
+                                         style={{cursor:"pointer", backgroundColor:"#10d685", color:"white", borderRadius:"10px", width:"25px", padding:"3px", marginLeft:"10px"}}
+                                         data-bs-toggle="modal"
+                                         data-bs-target="#prod"
+                                    >
+                                        <i className="fa fa-hand-dots " title="show product" style={{fontSize:"large"}} />
+                                    </div>
+                                </>
 
                             }
 
@@ -484,6 +531,51 @@ const Chats = (props) => {
                             <button type="button" data-bs-dismiss="modal"
                                     className="btn theme-bg-color btn-md fw-bold text-light" onClick={handleDeal}>Confirm
                             </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="modal fade theme-modal" id="prod" tabIndex="-1"
+                 aria-labelledby="exampleModalLabel2"
+                 aria-hidden="true">
+                <div className="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="exampleModalLabel2">Requested Product</h5>
+                            <div style={{display:"flex", justifyContent:"center", width:"100%"}}>
+                                <div className="card" style={{ display: 'inline-block', width: '400px', margin: '10px' }}>
+
+                                    {product && product.images && (
+                                        <img
+                                            className="card-img-top"
+                                            src={`http://localhost:3001/${product.images}`}
+                                            alt={product && product.name}
+                                            width="300"
+                                            height="300"
+                                        />
+                                    )}
+                                    <div className="card-body">
+                                        <h5 className="card-title">{product && product.name}</h5>
+                                        <p className="card-text">{product && product.description}</p>
+                                        <h6 className="card-subtitle mb-2 text-muted">
+                                            {product && product.price}DT
+                                        </h6>
+                                        <p className="card-text">{product && product.category}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                <i className="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-animation btn-md fw-bold"
+                                    data-bs-dismiss="modal">Close
+                            </button>
+                            {/*<button type="button" data-bs-dismiss="modal"*/}
+                            {/*        className="btn theme-bg-color btn-md fw-bold text-light" onClick={handleDeal}>Confirm*/}
+                            {/*</button>*/}
                         </div>
                     </div>
                 </div>

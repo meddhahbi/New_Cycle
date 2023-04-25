@@ -110,7 +110,7 @@ login=(email,password)=>{
                             
                             console.log("same password");
                             
-                            resolve([token,"token", association.role]);
+                            resolve([token,"token", association.role, association]);
                             jwt.decode();
                             //console.log(token);
                             //console.log(jwt.decode());
@@ -194,13 +194,16 @@ verifDoc = (email) => {
                         association.isActive = true;
                          association.save();
                          console.log('verified')
+                        resolve(association)
+
                     }else{
                         console.log('Not verified')
+                        reject('Not verified')
                     }
 
                 })
                 // const nom =  association.docVerif.name;
-                resolve(pdffile);
+                // resolve(pdffile);
 
             }
         }).catch((err) => {
@@ -211,7 +214,7 @@ verifDoc = (email) => {
 }
 
 
-getStatus=(email)=>{
+getStatus=async (email)=>{
     return new Promise((resolve,reject)=>{
         mongoose.connect(url,{
             useNewUrlParser: true,
@@ -219,7 +222,7 @@ getStatus=(email)=>{
         }).then(()=>{
             return Association.findOne({email: email});
         }).then((association)=>{
-          resolve(association.isActive);
+          resolve(association);
         }).catch((err)=>{
             reject(err);
         })

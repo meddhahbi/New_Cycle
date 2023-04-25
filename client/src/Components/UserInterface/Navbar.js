@@ -44,9 +44,11 @@ export default function Navbar(){
         }
         getData().then(async ()=>{
             // if(profile){
+
                 const all_chat_url = "http://localhost:3001/chat"
                 if(loaded){
             console.log("chatss")
+
                     const {data:chatss} = await axios.get(all_chat_url, config);
                     setChats(chatss);
             console.log(chatss)
@@ -85,6 +87,38 @@ export default function Navbar(){
 //         })
 //     })
 //   }
+    const check_report = async ()=>{
+        const reportUserUrl = "http://localhost:3001/reportUser/check_reported"
+        try{
+            const{data:rep} = await axios.put(reportUserUrl,{}, config).then(async rep => {
+                console.log(rep.data)
+                if(rep.data === true){
+
+                    setTimeout(()=>{
+                        localStorage.clear()
+                        navigate("/login")
+                    }, 3000)
+                }
+
+            })
+        }
+
+        catch (e) {
+                console.log(e)
+            }
+    }
+    useEffect( ()=>{
+
+        setTimeout(()=>{
+            check_report().then()
+        }, 10000)
+        // const intervalId = setInterval(() => {
+        //     check_report().then()
+        // }, 5000);
+        // return () => {
+        //     clearInterval(intervalId);
+        // };
+    }, [])
 
 
 
@@ -899,21 +933,19 @@ export default function Navbar(){
                                                     </li>
 
                                                     <li className="nav-item dropdown">
-                                                        <a className="nav-link dropdown-toggle" href="#"
-                                                           data-bs-toggle="dropdown">Shop</a>
+                                                        {/*<a className="nav-link dropdown-toggle" href="#"*/}
+                                                        {/*   data-bs-toggle="dropdown">Shop</a>*/}
+                                                        <Link className="nav-link dropdown-toggle" to="/blog">Trade</Link>
                                                     </li>
 
                                                     <li className="nav-item dropdown">
-                                                        <a className="nav-link dropdown-toggle" href="#"
-                                                           data-bs-toggle="dropdown">Product</a>
+                                                        {/*<a className="nav-link dropdown-toggle" href="#"*/}
+                                                        {/*   data-bs-toggle="dropdown">Product</a>*/}
+                                                        <Link className="nav-link dropdown-toggle" to="/AllProduit">Product</Link>
 
                                                     </li>
 
-                                                    <li className="nav-item dropdown dropdown-mega">
-                                                        <a className="nav-link dropdown-toggle ps-xl-2 ps-0"
-                                                           href="#" data-bs-toggle="dropdown">Mega Menu</a>
 
-                                                    </li>
 
                                                     <li className="nav-item dropdown">
                                                         <a className="nav-link dropdown-toggle" href="#"

@@ -10,6 +10,7 @@ export default function Plan(){
 	const [isLoading, setIsLoading] = useState(true);
     useEffect(()=>{
         setTimeout(()=>setIsLoading(false), 1500);
+
     })
 
   const createSub=(e)=>{
@@ -26,7 +27,7 @@ export default function Plan(){
 		'_blank' // <- This is what makes it open in a new window.
 	  );
    
-		
+
 
 
   }
@@ -118,7 +119,12 @@ export default function Plan(){
         </ul>
         <form onSubmit={createSub}>
           <center>
-            <button className="btn btn-lg btn-block btn-success">
+            <button className="btn btn-lg btn-block btn-success" onClick={()=>{
+                setTimeout(()=> {
+                    window.location = "/"
+                }, 10000);
+            }
+            }>
               Get started
             </button>
           </center>

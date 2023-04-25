@@ -40,7 +40,7 @@ function Chat(props) {
                 localStorage.getItem("chats") === chat._id?"list-group-item list-group-item-action py-3 lh-sm active chat-container row":"list-group-item list-group-item-action py-3 lh-sm chat-container row"
             }>
                 <div className="chatbox-message-dropdown right">
-                    <i className="bx bx-dots-vertical-rounded chatbox-message-dropdown-toggle"
+                    <i className="fas fa-ellipsis-v bx-dots-vertical-rounded chatbox-message-dropdown-toggle"
                        onClick={toggleChecked}/>
                     <ul className={checked?"chatbox-message-dropdown-menu show":"chatbox-message-dropdown-menu "}>
                         <li>
@@ -60,7 +60,7 @@ function Chat(props) {
                     <div className="col-9 chat-cont">
 
                         <a href="#" className={
-                            localStorage.getItem("chats") === chat._id?"list-group-item list-group-item-action active col-9":"list-group-item list-group-item-action col-9"
+                            localStorage.getItem("chats") === chat._id?"list-group-item list-group-item-action active":"list-group-item list-group-item-action"
                         }
                            aria-current="true" onClick={()=>{
                             // console.log(chat.latestMessage)

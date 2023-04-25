@@ -59,6 +59,7 @@ route.put("/setOffline",protect ,async(req, res, next)=>{
 
     route.post('/register',upload.single('image'),(req,res,next)=>{
   const image = req.file.path;
+  // let img = image.split("uploads\\")[1]
     userModel.register(req.body.username,req.body.email,req.body.password,req.body.phone,req.body.postal,image,req.body.role)
     .then((user)=>res.status(200).json({
         user:user,

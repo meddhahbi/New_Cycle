@@ -37,6 +37,7 @@ import { useState, useEffect } from 'react';
 import UpdateBlog from './Components/BlogInterface/updateBlog';
 import Scraped from './Components/BlogInterface/scraped';
 import DashboardAssociation from './Components/UserInterface/Pages/DashboardAssociation';
+import ChatGeoLoc from "./Components/UserInterface/Pages/Chat/ChatGeoLoc";
 
 
 
@@ -70,6 +71,7 @@ function App() {
 
 
           <Route path='/me' element={<UserProfile />}/>
+          <Route path='/geo_loc' element={<ChatGeoLoc />}/>
           <Route path='/edit_me' element={<ProfileForm />}/>
           <Route path='/subscribe' element={<Plan />} />
           <Route path='/client_messages' element={<Chats />} />

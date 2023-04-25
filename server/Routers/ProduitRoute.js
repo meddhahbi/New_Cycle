@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const products = require('../Models/Produit.js');
+const products = require('../models/Produit');
 const multer = require('multer');
+const Sentiment = require('sentiment');
 var mlKnn = require('ml-knn');
 const path = require('path');
 const {protect} = require('../middleware/authmiddleware');
@@ -30,24 +31,21 @@ const upload = multer({
   fileFilter: fileFilter
 });
 
-
-//const { KNN } = require('ml-knn');
-
 const trainModel = (products, category) => {
   const categoryProducts = products.filter((product) => product.category === category);
-  const X = categoryProducts.map((product) => [product.description.length]);
+  const sentiment = new Sentiment();
+  const X = categoryProducts.map((product) => {
+    const { score } = sentiment.analyze(product.description);
+    return [score];
+  });
   const Y = categoryProducts.map((product) => product.price);
   const knn = new mlKnn(X, Y, {k: 5});
   return knn;
 };
 
-
-
-
 router.route('/').post(protect, upload.single('images'), async (req, res) => {
- console.log(req.user)
+  console.log(req.user)
   const { name, description, price, category } = req.body;
-  //const images = req.files.map(file => `public/upload/${file.filename}`);
   const images = req.file.path;
   try {
     let product;
@@ -56,7 +54,9 @@ router.route('/').post(protect, upload.single('images'), async (req, res) => {
     } else {
       const allProducts = await Product.AllProducts();
       const knn = trainModel(allProducts, category);
-      const estimatedPrice = knn.predict([[description.length]]);
+      const sentiment = new Sentiment();
+      const { score } = sentiment.analyze(description);
+      const estimatedPrice = knn.predict([[score]]);
       product = await Product.createProduct(name, description, estimatedPrice[0], category, images,req.user._id);
     }
 
@@ -70,40 +70,14 @@ router.route('/').post(protect, upload.single('images'), async (req, res) => {
   }
 });
 
-
-
-/*
-router.post('/', upload.single('images'), async (req, res) => {
-  const { name, description, price, category } = req.body;
-  //const images = req.files.map(file => `public/upload/${file.filename}`);
-  const images = req.file.path;
-  try {
-    let product;
-    if (price) {
-      product = await products.createProduct(name, description, price, category, images);
-    } else {
-      const allProducts = await Product.AllProducts();
-      const knn = trainModel(allProducts, category);
-      const estimatedPrice = knn.predict([[description.length]]);
-      product = await Product.createProduct(name, description, estimatedPrice[0], category, images);
-    }
-
-    res.status(200).json({
-      product: product,
-      message: 'Product created successfully'
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(400).json({ message: 'Failed to create product' });
-  }
-});
-*/
 router.get('/estimate', async (req, res) => {
   try {
     const { description, category } = req.query;
     const allProducts = await products.AllProducts();
     const knn = trainModel(allProducts, category);
-    const estimatedPrice = knn.predict([[description.length]]);
+    const sentiment = new Sentiment();
+    const { score } = sentiment.analyze(description);
+    const estimatedPrice = knn.predict([[score]]);
     res.status(200).json({ estimatedPrice: estimatedPrice[0] });
   } catch (err) {
     console.error(err);
@@ -111,7 +85,7 @@ router.get('/estimate', async (req, res) => {
   }
 });
 
-// module.exports = router;
+module.exports = router;
 
 
 
@@ -121,37 +95,38 @@ router.delete('/:id', (req, res) => {
   const productId = req.params.id;
 
   products.deleteProduct(productId)
-    .then(() => {
-      res.status(200).json({
-        success: true,
-        message: 'Product deleted successfully'
+      .then(() => {
+        res.status(200).json({
+          success: true,
+          message: 'Product deleted successfully'
+        });
+      })
+      .catch((err) => {
+        res.status(500).json({
+          success: false,
+          message: 'Failed to delete product',
+          error: err.message
+        });
       });
-    })
-    .catch((err) => {
-      res.status(500).json({
-        success: false,
-        message: 'Failed to delete product',
-        error: err.message
-      });
-    });
 });
 
 // Update a product
 
 router.put('/:id', upload.single('images'), (req, res, next) => {
   //const images = req.file.path;
+  console.log("upd")
   products.updateProduit(req.params.id, req.body.name, req.body.description, req.body.price, req.body.category,{new:true})
-    .then((product) => res.status(200).json({
-      product: product,
-      msg: 'Product updated successfully'
-    }))
-    .catch((err) => res.status(400).json({ error: err }));
+      .then((product) => res.status(200).json({
+        product: product,
+        msg: 'Product updated successfully'
+      }))
+      .catch((err) => res.status(400).json({ error: err }));
 });
 
 router.get('/', (req, res, next) => {
   products.AllProducts()
-    .then((products) => res.status(200).json({ products: products }))
-    .catch((err) => res.status(400).json({ error: err }));
+      .then((products) => res.status(200).json({ products: products }))
+      .catch((err) => res.status(400).json({ error: err }));
 });
 
 
@@ -159,17 +134,17 @@ router.get('/', (req, res, next) => {
 // Get all products
 router.get('/all', (req, res, next) => {
   products.AllProducts()
-    .then((products) => res.status(200).json({ products: products }))
-    .catch((err) => res.status(400).json({ error: err }));
+      .then((products) => res.status(200).json({ products: products }))
+      .catch((err) => res.status(400).json({ error: err }));
 });
 
 // Get a product by ID
 router.get('/:id', (req, res, next) => {
   const productId = req.params.id;
-  
+
   products.getProductById(productId)
-    .then((product) => res.status(200).json({ product: product }))
-    .catch((err) => res.status(400).json({ error: err }));
+      .then((product) => res.status(200).json({ product: product }))
+      .catch((err) => res.status(400).json({ error: err }));
 });
 
 module.exports = router;

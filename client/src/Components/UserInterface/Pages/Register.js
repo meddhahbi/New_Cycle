@@ -16,7 +16,7 @@ export default function Register(){
     const [password, setPassword] = useState('');
     const [phone, setPhone] = useState('');
     const [postal, setPostal] = useState('');
-    const [image, setImage] = useState(null);
+    const [image, setImage] = useState("");
 
 
     const [isLoading, setIsLoading] = useState(true);
@@ -98,7 +98,7 @@ export default function Register(){
         //? Form valid
         if(formValidation()){
 
-
+            // let img = image.split("uploads\\")[1]
 
             const formData = new FormData();
             formData.append('username', username);
@@ -106,7 +106,7 @@ export default function Register(){
             formData.append('password', password);
             formData.append('phone', phone);
             formData.append('postal', postal);
-            formData.append('image', image.split("uploads\\")[1]);
+            formData.append('image', image);
 
 
             // const data = { 
@@ -121,12 +121,12 @@ export default function Register(){
             .then(response => {
                         console.log(response.data); // Handle response data
                         toast.success("User created successfuly...");
-                        setUsername('');
-                        setEmail('');
-                        setPassword('');
-                        setPhone('');
-                        setPostal('');
-                        setImage(null);
+                        // setUsername('');
+                        // setEmail('');
+                        // setPassword('');
+                        // setPhone('');
+                        // setPostal('');
+                        // setImage(null);
                     })
                     .catch(error => {
                         console.log("test");

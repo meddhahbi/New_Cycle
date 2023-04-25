@@ -86,7 +86,7 @@ const createArticle = (title, content, photo,userId) => {
     });
   };
 
-  const updateArticle = (id, title, content, author,photo) => {
+  const updateArticle = (id, title, content,photo) => {
     return new Promise((resolve, reject) => {
       mongoose.connect(url, {
         useNewUrlParser: true,
@@ -94,7 +94,6 @@ const createArticle = (title, content, photo,userId) => {
       }).then(() => {
         Article.findByIdAndUpdate(id, {
           title: title,
-          content: content,
           photo: photo.split("uploads")[1]
         }, {new: true})
           .then((article) => {
