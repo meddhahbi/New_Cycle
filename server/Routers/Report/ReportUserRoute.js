@@ -81,4 +81,35 @@ router.route("/").post(protect, async (req, res) => {
         }
     }
 })
+router.route("/check_reported").put(protect, async(req, res, next)=>{
+    console.log(req.user._id)
+    const report = await ReportUser.findOne({reported:req.user._id})
+        .populate("reports")
+        .then(async (report)=>{
+
+            if(report && report.reports){
+                const n = 2
+                const i = report.reports.length
+                if(i>=n){
+                    await User.findByIdAndUpdate(req.user._id,{isReported:true, isOnline:false})
+                    console.log("gonna be reported")
+                    res.send(true)
+                }
+                else {
+                    console.log("still "+ (n-i) +" to be reported!")
+                    res.send(false)
+                }
+            }
+            else {
+                console.log("user has never been reported!")
+                res.send(false)
+            }
+
+
+        })
+
+
+
+    // console.log(report)
+})
 module.exports = router;

@@ -28,6 +28,7 @@ router.route("/").post(protect, async (req, res)=> {
         reporter: req.user._id,
         reason: reason,
     }
+    // console.log("reported")
 
     if (!reportId) {
         console.log("reportId body not sent with request");
@@ -39,11 +40,12 @@ router.route("/").post(protect, async (req, res)=> {
         return res.sendStatus(400);
     }
     try {
-        console.log(report)
+        console.log("report")
         let createdReportDetail = Report_User_Detail.create(report)
             // .populate("report")
             // .populate("reporter", "-password -subscription -isBlocked -isActive -activationCode")
             .then(async (createdReportDetail)=>{
+                console.log("reported");
                 let reportDetail = await Report_User_Detail.findOne({_id:createdReportDetail._id})
                     .populate("reporter", "username email")
                     .populate("report")

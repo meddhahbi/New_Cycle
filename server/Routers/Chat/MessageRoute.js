@@ -4,6 +4,17 @@ const {Message} = require("../../Models/Message")
 const {User} = require("../../Models/User")
 const { protect } = require("../../middleware/authmiddleware");
 const router = express.Router();
+const Filter = require('bad-words')
+const filter = new Filter({ placeHolder: 'x'});
+
+const os = require('os');
+
+
+
+
+
+
+
 
 router.route("/").post(protect, async (req, res)=> {
     // console.log(req.user)
@@ -44,16 +55,41 @@ router.route("/:chatId").get(protect,async (req, res) => {
     // const { page, limit } = req.query;
     // console.log("page")
     // console.log(page)
+    const interfaces = os.networkInterfaces();
+    const addresses = [];
     try {
+        let laptopIp;
+
+        // for (const n in interfaces) {
+        //     for (const iface of interfaces[n]) {
+        //         if (iface.family === 'IPv4' && !iface.internal) {
+        //             // found an external IPv4 address, which should be the laptop's IP
+        //             laptopIp = iface.address;
+        //             break;
+        //         }
+        //     }
+        //     if (laptopIp) break;
+        // }
+        //
+        // console.log('Laptop IP:', laptopIp);
+        // const count = await Message.find({ chat: req.params.chatId }).countDocuments();
         // console.log(req.params.chatId);
         let messages = await Message.find({ chat: req.params.chatId })
             // .skip((page - 1) * limit)
             // .limit(15)
-            .sort({ createdAt: 'desc' })
+            // .sort({ createdAt: 1 })
             .populate("sender", "username email image")
             .populate("chat")
-        const count = await Message.find({ chat: req.params.chatId }).countDocuments();
-        res.json({ messages, count });
+            .then((messages)=>{
+                // console.log("your ip: "+req.ip)
+                for (message of messages){
+                    message.content = filter.clean(message.content)
+                    // console.log(message)
+                }
+                res.send(messages)
+            })
+
+        // res.json({ messages, count });
     } catch (error) {
         res.status(400);
         throw new Error(error.message);

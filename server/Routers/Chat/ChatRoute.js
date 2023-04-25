@@ -1,5 +1,8 @@
+
+
 const express = require("express");
 const {Chat} = require("../../Models/Chat")
+const {Message} = require("../../Models/Message")
 const {User} = require("../../Models/User")
 const { protect } = require("../../middleware/authmiddleware");
 const router = express.Router();
@@ -50,8 +53,8 @@ router.route("/deal").put(protect, async (req, res)=>{
             .then(async (results) => {
                 const users = results.users;
                 pos = users.indexOf(req.user._id);
-                console.log(pos);
-                console.log(results);
+                // console.log(pos);
+                // console.log(results);
                 results.dealt[pos] = true;
                 results.save()
                 res.status(200).send(results);
@@ -120,11 +123,23 @@ router.route("/get_readMessages/:chatId").get(protect, async (req, res)=>{
         throw new Error(error.message);
     }
 });
+router.route("/get_chat/:chat").get(protect, async (req, res)=>{
+    try{
+        await Chat.findOne({_id: req.params.chat}).populate("product").then((c)=>{
+            // console.log(c)
+            res.send(c)
+        })
+    }
+    catch (error) {
+        res.status(400);
+        throw new Error(error.message);
+    }
+})
 
 router.route("/").post(protect, async (req, res) => {
-    const {userId, productId} = req.body;
-    console.log("productId")
-    console.log(productId)
+    const {userId, productId, productName} = req.body;
+    // console.log("productId")
+    // console.log(productId)
     if (!userId) {
         console.log("UserId param not sent with request");
         return res.sendStatus(400);
@@ -160,8 +175,9 @@ router.route("/").post(protect, async (req, res) => {
         select: "username email",
     });
     if (isChat.length > 0) {
-        if(isChat.dealt[0]===false || isChat.dealt[1]===false)
-        console.log(isChat[0])
+
+        // if(isChat.dealt[0]===false || isChat.dealt[1]===false)
+        // console.log(isChat[0])
         res.send(isChat[0]);
     } else {
         var chatData = {
@@ -170,11 +186,36 @@ router.route("/").post(protect, async (req, res) => {
             product:productId
         };
         try {
-            const createdChat = await Chat.create(chatData);
+            const createdChat = await Chat.create(chatData).then(async (chat)=>{
+                let newMessage = {
+                    sender: req.user._id,
+                    content: "hello! I am requesting to exchange the product "+ productName,
+                    chat: chat._id,
+                };
+                try {
+                    var message = await Message.create(newMessage);
+
+                    message = await message.populate("sender", "username");
+                    message = await message.populate("chat");
+                    message = await User.populate(message, {
+                        path: "chat.users",
+                        select: "username email",
+                    })
+                    chat.latestMessage = message
+                    chat.save();
+                    // await Chat.findByIdAndUpdate(req.body.chatId, {latestMessage: message});
+
+                    // res.json(chat);
+                } catch (error) {
+                    res.status(400);
+                    throw new Error(error.message);
+                }
+            });
             const FullChat = await Chat.findOne({ _id: createdChat._id }).populate(
                 "users",
                 "-password -subscription -isBlocked -isActive -activationCode"
             );
+            // console.log(FullChat)
             res.status(200).json(FullChat);
         } catch (error) {
             res.status(400);

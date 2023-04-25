@@ -2,6 +2,7 @@
 const route = require('express').Router();
 const associationModel = require('../Models/Association');
 const path = require('path');
+const {Association} = require('../Models/Association');
 const multer = require('multer');
 const associationArticle = require('../Models/AssociationArticle')
 
@@ -57,8 +58,8 @@ route.post('/login',(req,res,next)=>{
 
 route.put('/verifDoc/:email',(req,res,next)=>{
   associationModel.verifDoc(req.params.email)
-  .then(()=>{res.status(200).json({
-    msg:'docverif'
+  .then((association)=>{res.status(200).json({
+    association:association
   })
   })
   .catch((err)=>{res.status(400).json({error:err});console.log(err)});
@@ -69,11 +70,15 @@ route.put('/verifDoc/:email',(req,res,next)=>{
 
 
 
-route.get('/getStatus/:email',(req,res,next)=>{
-  associationModel.getStatus(req.params.email)
-  .then((isActive) => {
-    res.status(200).json({  isActive });
-  })
+route.get('/getStatus/:email',async (req,res,next)=>{
+  // associationModel.getStatus(req.params.email)
+  // .then((isActive) => {
+  //   res.status(200).json({  isActive });
+  // })
+    await Association.findOne({email:req.params.email})
+        .then((assoc)=>{
+            res.send(assoc)
+        })
 .catch((err)=>{res.status(400).json({error:err});console.log(err)});
   })
 

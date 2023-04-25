@@ -97,9 +97,10 @@ exports.AllProducts = () => {
     return new Promise((resolve, reject) => {
       mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         .then(() => {
-          Product.find({})
+          Product.find({}).populate("productOwner", "username image")
             .then((products) => {
              // mongoose.disconnect();
+              console.log(products)
               resolve(products);
             })
             .catch((err) => {
@@ -143,6 +144,7 @@ exports.AllProducts = () => {
         useNewUrlParser: true,
         useUnifiedTopology: true
       }).then(() => {
+        console.log("prod")
         Product.findByIdAndUpdate(id, {
           name: name,
           description: description,
@@ -186,4 +188,3 @@ exports.AllProducts = () => {
         });
     });
   };
-  
