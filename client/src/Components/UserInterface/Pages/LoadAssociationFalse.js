@@ -13,7 +13,7 @@ export const LoadAssociationFalse = () => {
 
     useEffect(() => {
         const timeout = setTimeout(() => {
-          window.location.href = 'https://www.google.com/intl/fr/gmail/about/'; 
+          // window.location.href = 'https://www.google.com/intl/fr/gmail/about/';
         }, 9000); 
         return () => clearTimeout(timeout);
       }, []);
@@ -47,9 +47,9 @@ export const LoadAssociationFalse = () => {
           <br/><br/><br/><br/>
           {/* <h2>Please wait Verification for the document</h2> */}
           {showFirstMessage ? (
-              <h2>Please wait Verification for the document</h2>
+              <h2>Please wait Verification for the document false</h2>
             ) : (
-              <h2>You should to contact Admin with this email : userjok9@gmail.com<br></br>
+              <h2>You should contact Admin with this email : userjok9@gmail.com<br></br>
                     Please wait for redirection to gmail
               </h2>
             )}

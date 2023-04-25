@@ -2,14 +2,27 @@
 import { Link } from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import navbar from "./Pages/style/navbar.css"
+import {useLocation, useNavigate} from "react-router";
+import axios from "axios";
 
 export default function Navbar(){
 
-    const logout = (e)=>{
+    const navigate = useNavigate();
+    const location = useLocation().pathname
+    const config = {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+    };
+    const urlOffline="http://localhost:3001/setOffline";
+    const logout = async (e)=>{
         e.preventDefault();
-        console.log("logout");
+        let {data}=await axios.put(urlOffline, {
+            userId :profile._id
+        }, config)
+        // console.log("logout");
         localStorage.clear();
-        window.location = "/login"
+        navigate("/login")
     }
     const [profile, setProfile] = useState(null);
     useEffect(()=>{
@@ -94,8 +107,9 @@ export default function Navbar(){
                                         <i data-feather="phone-call"></i>
                                     </div>
                                     <div className="delivery-detail">
-                                        <h6>24/7 Delivery</h6>
-                                        <h5>+91 888 104 2340</h5>
+                                        {/*<h6>24/7 Delivery</h6>*/}
+                                        {/*<h5>+91 888 104 2340</h5>*/}
+                                        <button className="btn btn-danger" onClick={logout}>logout</button>
                                     </div>
                                 </a>
                             </li>

@@ -41,6 +41,7 @@ export default function AssociationLogin(){
                 // localStorage.setItem("token", res.token[0]);
                // localStorage.setItem("mail", res.token[3]);
                 localStorage.setItem("role", res.token[2]);
+                localStorage.setItem("userInfo", JSON.stringify(res.token[3]));
                 if(res.token[2]==="association"){
                     window.location = "/";
                 }

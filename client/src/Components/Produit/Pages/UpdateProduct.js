@@ -14,14 +14,16 @@ const UpdateProduct = () => {
 
     const handleSubmit = (event) => {
       event.preventDefault();
-    
+
       const formData = new FormData();
       formData.append('name', name);
       formData.append('price', price);
       formData.append('category', category);
       formData.append('description', description);
-      formData.append('images', images);
-    
+      if(images){
+        formData.append('images', images);
+      }
+      // console.log(formData)
       axios.put(`http://localhost:3001/produit/${id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
@@ -76,7 +78,7 @@ const UpdateProduct = () => {
             placeholder="Enter content"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-          ></textarea>
+          />
         </div>
         <div className="mb-3">
           <label htmlFor="category" className="form-label">
@@ -117,7 +119,7 @@ const UpdateProduct = () => {
           />
         </div>
         <button type="submit" className="btn btn-animation">
-          Add product
+          Update product
         </button>
       </form>
     </div>
