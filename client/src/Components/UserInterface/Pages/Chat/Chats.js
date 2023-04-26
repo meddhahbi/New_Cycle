@@ -83,8 +83,8 @@ const Chats = (props) => {
     const getChat = async ()=>{
         let url = `http://localhost:3001/chat/get_chat/${chatId}`
         const {data:chat}=await axios.get(url, config)
-        console.log("chat")
-        console.log(chat)
+        // console.log("chat")
+        // console.log(chat)
         setProduct(chat.product)
         // setMessages(messages);
         return chat

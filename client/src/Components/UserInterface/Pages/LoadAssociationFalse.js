@@ -1,6 +1,6 @@
 
 
-// import { BoltLoader } from "react-awesome-loaders";
+import { BoltLoader } from "react-awesome-loaders";
 import './style/loader.css';
 import React, { useEffect, useState } from 'react';
 
@@ -13,7 +13,7 @@ export const LoadAssociationFalse = () => {
 
     useEffect(() => {
         const timeout = setTimeout(() => {
-          // window.location.href = 'https://www.google.com/intl/fr/gmail/about/';
+          window.location.href = 'https://www.google.com/intl/fr/gmail/about/'; 
         }, 9000); 
         return () => clearTimeout(timeout);
       }, []);
@@ -38,18 +38,16 @@ export const LoadAssociationFalse = () => {
     
       return (
         <div className="loader">
-       <center>
-          {/* <BoltLoader*/}
-          {/*  className={"loaderbolt"}*/}
-          {/*  boltColor={"#3CB371"}*/}
-          {/*  backgroundBlurColor={"#3CB371"}*/}
-          {/*/>*/}
-          <br/><br/><br/><br/>
+       <center>     <BoltLoader
+            className={"loaderbolt"}
+            boltColor={"#3CB371"}
+            backgroundBlurColor={"#3CB371"}
+          /><br/><br/><br/><br/>
           {/* <h2>Please wait Verification for the document</h2> */}
           {showFirstMessage ? (
-              <h2>Please wait Verification for the document false</h2>
+              <h2>Please wait Verification for the document</h2>
             ) : (
-              <h2>You should contact Admin with this email : userjok9@gmail.com<br></br>
+              <h2>You should to contact Admin with this email : userjok9@gmail.com<br></br>
                     Please wait for redirection to gmail
               </h2>
             )}
@@ -57,7 +55,6 @@ export const LoadAssociationFalse = () => {
         </div>
       );
     };
-
 
 
 
