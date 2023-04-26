@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const products = require('../models/Produit');
+const products = require('../Models/Produit.js')
 const multer = require('multer');
 const Sentiment = require('sentiment');
 var mlKnn = require('ml-knn');
@@ -44,7 +44,7 @@ const trainModel = (products, category) => {
 };
 
 router.route('/').post(protect, upload.single('images'), async (req, res) => {
-  console.log(req.user)
+  console.log("req.user")
   const { name, description, price, category } = req.body;
   const images = req.file.path;
   try {
