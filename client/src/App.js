@@ -102,13 +102,13 @@ function App() {
           <Route path='/donate' exact element={<Donation />} />
 
           <Route exact path='/scraped' element={<Scraped />} />
-        
-          <Route exact path='/association' element={<DashboardAssociation />} />
 
       </Route>
 
-     
 
+
+
+          <Route exact path='/association' element={<DashboardAssociation />} />
   <Route  path='/UpdateProduct/:id' element={<UpdateProduct />} />
 
       <Route path='/confirm/:activationCode' exact element={<ActivationPage />} />

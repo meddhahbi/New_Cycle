@@ -1,18 +1,20 @@
 export const isLoggedIn = ()=>{
     let data = localStorage.getItem("token");
-    if(data != null ) return true;
-    else return false;
+    return data != null;
 }
 
 
 export const isAdmin = ()=>{
     let role = localStorage.getItem("role");
-    if(role == "admin") return true
-    else return false;
+    return role === "admin";
 }
 
 export const isAssociation= ()=>{
     let role = localStorage.getItem("role");
-    if(role == "association") return true
-    else return false
+    return role === "association";
+}
+
+export const isClient= ()=>{
+    let role = localStorage.getItem("role");
+    return role === "client";
 }

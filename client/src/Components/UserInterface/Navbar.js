@@ -6,6 +6,7 @@ import {useLocation, useNavigate} from "react-router";
 import axios from "axios";
 
 export default function Navbar(){
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     const navigate = useNavigate();
     const location = useLocation().pathname
     const config = {
@@ -16,9 +17,12 @@ export default function Navbar(){
     const urlOffline="http://localhost:3001/setOffline";
     const logout = async (e)=>{
         e.preventDefault();
-        let {data}=await axios.put(urlOffline, {
-            userId :profile._id
-        }, config)
+        if(userInfo && userInfo.role === "client"){
+            let {data}=await axios.put(urlOffline, {
+                userId :profile._id
+            }, config)
+        }
+
         // console.log("logout");
         localStorage.clear();
         navigate("/login")
@@ -42,25 +46,28 @@ export default function Navbar(){
 
 
         }
-        getData().then(async ()=>{
-            // if(profile){
+        if(userInfo && userInfo.role === "client"){
+            getData().then(async ()=>{
+                // if(profile){
 
                 const all_chat_url = "http://localhost:3001/chat"
                 if(loaded){
-            console.log("chatss")
+                    console.log("chatss")
 
                     const {data:chatss} = await axios.get(all_chat_url, config);
                     setChats(chatss);
-            console.log(chatss)
+                    console.log(chatss)
                     setLoaded(false)
                 }
-            // }
-        })
+                // }
+            })
 
-        fetch(url)
-            .then(response => response.json())
-            .then(data => setIsSubscribed(data.isSubscribed))
-            .catch(error => console.error(error));
+            fetch(url)
+                .then(response => response.json())
+                .then(data => setIsSubscribed(data.isSubscribed))
+                .catch(error => console.error(error));
+        }
+
 
     },[]);
   //  const [isSubscribed, setIsSubscribed] = useState(false);
@@ -90,17 +97,19 @@ export default function Navbar(){
     const check_report = async ()=>{
         const reportUserUrl = "http://localhost:3001/reportUser/check_reported"
         try{
-            const{data:rep} = await axios.put(reportUserUrl,{}, config).then(async rep => {
-                console.log(rep.data)
-                if(rep.data === true){
+            if(userInfo && userInfo.role === "client"){
+                const{data:rep} = await axios.put(reportUserUrl,{}, config).then(async rep => {
+                    console.log(rep.data)
+                    if(rep.data === true){
 
-                    setTimeout(()=>{
-                        localStorage.clear()
-                        navigate("/login")
-                    }, 3000)
-                }
+                        setTimeout(()=>{
+                            localStorage.clear()
+                            navigate("/login")
+                        }, 3000)
+                    }
 
-            })
+                })
+            }
         }
 
         catch (e) {
@@ -227,7 +236,7 @@ export default function Navbar(){
                         <div className="col-12">
                             <div className="navbar-top">
 
-                                {location!=="/client_messages"?
+                                {location!=="/client_messages" && userInfo && userInfo.role === "client"?
                                     <button className="navbar-toggler d-xl-none d-inline navbar-menu-button" type="button"
                                             data-bs-toggle="offcanvas" data-bs-target="#primaryMenu">
                                         <span className="navbar-toggler-icon">

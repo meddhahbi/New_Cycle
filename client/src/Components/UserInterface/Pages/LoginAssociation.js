@@ -43,7 +43,7 @@ export default function AssociationLogin(){
                 localStorage.setItem("role", res.token[2]);
                 localStorage.setItem("userInfo", JSON.stringify(res.token[3]));
                 if(res.token[2]==="association"){
-                    window.location = "/";
+                    window.location = "/association";
                 }
             }
          
