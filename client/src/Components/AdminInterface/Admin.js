@@ -2,7 +2,7 @@ import { Navigate, Outlet } from "react-router"
 import Navbar from "./Navbar";
 
 import Sidebar from "./Sidebar";
-import { isAdmin, isLoggedIn } from "../../AuthGuard";
+import {isAdmin, isClient, isLoggedIn} from "../../AuthGuard";
 
 
 
@@ -21,8 +21,10 @@ export default function Admin(){
               <Outlet />
             </div>
           </div>
-        ) : (
+        ) :isClient()? (
           <Navigate to={"/"} />
+        ):(
+            <Navigate to={"/association"} />
         )
       ) : (
         <Navigate to={"/login"} />
