@@ -19,7 +19,9 @@ commentList: [{
   type: mongoose.Schema.Types.ObjectId,
   ref: "Comment",
   
-}]
+}],
+isArchive:{type:Boolean,default:false},
+
 }
 
 
@@ -178,8 +180,49 @@ const createArticle = (title, content, photo,userId) => {
     }
   };
 
+  archive = async (_id) =>{
+    try {
+      await mongoose.connect(url, {
+          useNewUrlParser: true,
+          useUnifiedTopology: true
+      });
 
-  
+      const article = await Article.findById(_id);
+
+      if (!article) {
+          throw new Error('Article not found');
+      }
+
+      console.log(_id);
+      article.isArchive = true;
+      const updatedArticle = await article.save();
+
+     // mongoose.disconnect();
+
+      return updatedArticle;
+  } catch (err) {
+      console.log(err);
+      //mongoose.disconnect();
+      throw new Error('Failed to archive article');
+  }
+  }
+
+  getArticleArchived=()=>{
+    return new Promise((resolve,reject)=>{
+        mongoose.connect(url,{
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        }).then(()=>{
+
+            return User.find({ isArchive : true });
+
+        }).then((doc)=>{
+            resolve(doc);
+        }).catch((err)=>{
+            reject(err);
+        })
+    })
+}
   
   module.exports = {
  Article,
@@ -188,7 +231,9 @@ const createArticle = (title, content, photo,userId) => {
  deleteArticle,
  getAllArticles,
  getArticleById,
- getLastThreeArticles
+ getLastThreeArticles,
+ archive,
+ getArticleArchived,
 
    
 };

@@ -119,9 +119,23 @@ route.get('/', (req, res, next) => {
 
 
 
+  route.put('/archive/:_id',(req,res,next)=>{
+    console.log(req.body);
+    articles.archive(req.params._id)
+    .then(()=>res.status(200).json({
+        msg:'article archived successfully'
+    }))
+  
+    .catch((err)=>res.status(400).json({msg:"Article not found"}));
+  
+  });
   
 
-
+  route.get('/archived',(req,res,next)=>{
+    articles.getArticleArchived()
+    .then((doc)=>res.status(200).json(doc))
+    .catch((err)=>res.status(400).json(err))
+  });
 
 
 
