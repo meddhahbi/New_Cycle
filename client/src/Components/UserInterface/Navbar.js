@@ -443,7 +443,7 @@ export default function Navbar(){
                                                                         {chat.users?.map((userr) => (
                                                                             <span className="username">
                                                                             {userr._id !== profile._id?
-                                                                                <span>{userr.username}</span>
+                                                                                <span>{chat.product.name} (<span>{userr.username}</span>)</span>
                                                                             :""
                                                                             }
                                                                             </span>

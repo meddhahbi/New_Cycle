@@ -4,10 +4,22 @@ const chatSchema = new mongoose.Schema({
             type: String,
             // required: true
         },
+        sender_city: {
+            type: String,
+            // required: true
+        },
+        sender_region: {
+            type: String,
+            // required: true
+        },
         users: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
         product:{
             type: mongoose.Schema.Types.ObjectId,
             ref: "Product",
+        },
+        post:{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "ArticleAssociation",
         },
         latestMessage: {
             type: mongoose.Schema.Types.ObjectId,

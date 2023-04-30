@@ -1,8 +1,8 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
-import NavbarAssociation from "./Assosiation/NavbarAssociation";
-import Footer from "../Footer";
+import NavbarAssociation from "./NavbarAssociation";
+import Footer from "../../Footer";
 
 
 export default function DashboardAssociation(){
@@ -106,29 +106,55 @@ export default function DashboardAssociation(){
 
 
     // }
-    const [association, setAssociation] = useState('');
+    // const [association, setAssociation] = useState('');
     const [title, setTitle] = useState('');
+    const [recentPosts, setRecentPosts] = useState([]);
+    const [allPosts, setAllPosts] = useState([]);
     const [description, setDescription] = useState('');
     const [quantity, setQuantity] = useState(0);
+    const config = {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+    };
 
-    const handleSubmit = (e) => {
+    const handlePostSubmit = (e) => {
         e.preventDefault();
       
         const data = {
-        association,
-        title,
-          description,
-          quantity
+            // association,
+            title,
+            description,
+            quantity
         };
       
-        axios.post('http://localhost:3001/association/addPost', data)
+        axios.post('http://localhost:3001/association_post',data, config)
           .then((res) => {
-            console.log(res.data);
+                console.log(res);
+                window.location = "/association"
           })
           .catch((err) => {
             console.log(err);
           });
       };
+    const getRecentPosts = async()=>{
+        await axios.get('http://localhost:3001/association_post/my-recent-posts', config).then((posts)=>{
+            setRecentPosts(posts.data)
+            return posts
+        })
+    }
+    const getAllPosts = async()=>{
+        await axios.get('http://localhost:3001/association_post/my-all-posts', config).then((posts)=>{
+            setAllPosts(posts.data)
+            return posts
+        })
+    }
+    useEffect( () => {
+        getRecentPosts().then((p)=>{
+            console.log(p)
+        })
+        getAllPosts().then()
+    }, [getRecentPosts])
 
 
 return <div>
@@ -278,86 +304,37 @@ return <div>
                                         <div className="col-xxl-6">
                                             <div className="table-responsive dashboard-bg-box">
                                                 <div className="dashboard-title mb-4">
-                                                    <h3>Recent Products</h3>
+                                                    <h3>Recent Posts</h3>
                                                 </div>
 
                                                 <table className="table product-table">
                                                     <thead>
                                                     <tr>
                                                         <th scope="col">Images</th>
-                                                        <th scope="col">Product Name</th>
+                                                        <th scope="col">title</th>
                                                         <th scope="col">Price</th>
                                                         <th scope="col">Sales</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    <tr>
-                                                        <td className="product-image">
-                                                            <img
-                                                                src="./../../../assets/User/images/vegetable/product/1.png"
-                                                                className="img-fluid" alt=""/>
-                                                        </td>
-                                                        <td>
-                                                            <h6>Fantasy Crunchy Choco Chip Cookies</h6>
-                                                        </td>
-                                                        <td>
-                                                            <h6>$25.69</h6>
-                                                        </td>
-                                                        <td>
-                                                            <h6>152</h6>
-                                                        </td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td className="product-image">
-                                                            <img
-                                                                src="./../../../assets/User/images/vegetable/product/2.png"
-                                                                className="img-fluid" alt=""/>
-                                                        </td>
-                                                        <td>
-                                                            <h6>Peanut Butter Bite Premium Butter Cookies 600 g</h6>
-                                                        </td>
-                                                        <td>
-                                                            <h6>$35.36</h6>
-                                                        </td>
-                                                        <td>
-                                                            <h6>34</h6>
-                                                        </td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td className="product-image">
-                                                            <img
-                                                                src="./../../../assets/User/images/vegetable/product/3.png"
-                                                                className="img-fluid" alt=""/>
-                                                        </td>
-                                                        <td>
-                                                            <h6>Yumitos Chilli Sprinkled Potato Chips 100 g</h6>
-                                                        </td>
-                                                        <td>
-                                                            <h6>$78.55</h6>
-                                                        </td>
-                                                        <td>
-                                                            <h6>78</h6>
-                                                        </td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td className="product-image">
-                                                            <img
-                                                                src="./../../../assets/User/images/vegetable/product/4.png"
-                                                                className="img-fluid" alt=""/>
-                                                        </td>
-                                                        <td>
-                                                            <h6>healthy Long Life Toned Milk 1 L</h6>
-                                                        </td>
-                                                        <td>
-                                                            <h6>$32.98</h6>
-                                                        </td>
-                                                        <td>
-                                                            <h6>135</h6>
-                                                        </td>
-                                                    </tr>
+                                                    {recentPosts.map((post)=>(
+                                                        <tr>
+                                                            <td className="product-image">
+                                                                <img
+                                                                    src="./../../../assets/User/images/vegetable/product/1.png"
+                                                                    className="img-fluid" alt=""/>
+                                                            </td>
+                                                            <td>
+                                                                <h6>{post.title}</h6>
+                                                            </td>
+                                                            <td>
+                                                                <h6>$25.69</h6>
+                                                            </td>
+                                                            <td>
+                                                                <h6>152</h6>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -477,170 +454,39 @@ return <div>
                                             <thead>
                                             <tr>
                                                 <th scope="col">Images</th>
-                                                <th scope="col">Product Name</th>
-                                                <th scope="col">Price</th>
-                                                <th scope="col">Stock</th>
+                                                <th scope="col">title</th>
+                                                <th scope="col">description</th>
+                                                <th scope="col">total quantity</th>
                                                 <th scope="col">Sales</th>
                                                 <th scope="col">Edit / Delete</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr>
-                                                <td className="product-image">
-                                                    <img src="./../../../assets/User/images/vegetable/product/1.png"
-                                                         className="img-fluid" alt=""/>
-                                                </td>
-                                                <td>
-                                                    <h6>Fantasy Crunchy Choco Chip Cookies</h6>
-                                                </td>
-                                                <td>
-                                                    <h6 className="theme-color fw-bold">$25.69</h6>
-                                                </td>
-                                                <td>
-                                                    <h6>63</h6>
-                                                </td>
-                                                <td>
-                                                    <h6>152</h6>
-                                                </td>
-                                                <td className="efit-delete">
-                                                    <i data-feather="edit" className="edit"></i>
-                                                    <i data-feather="trash-2" className="delete"></i>
-                                                </td>
-                                            </tr>
+                                            {allPosts.map(post=>(
+                                                <tr>
+                                                    <td className="product-image">
+                                                        <img src="./../../../assets/User/images/vegetable/product/1.png"
+                                                             className="img-fluid" alt=""/>
+                                                    </td>
+                                                    <td>
+                                                        <h6>{post.title}</h6>
+                                                    </td>
+                                                    <td>
+                                                        <h6 className="theme-color fw-bold">{post.description}</h6>
+                                                    </td>
+                                                    <td>
+                                                        <h6>{post.quantity}</h6>
+                                                    </td>
+                                                    <td>
+                                                        <h6>152</h6>
+                                                    </td>
+                                                    <td className="efit-delete">
+                                                        <i data-feather="edit" className="edit"></i>
+                                                        <i data-feather="trash-2" className="delete"></i>
+                                                    </td>
+                                                </tr>
+                                            ))}
 
-                                            <tr>
-                                                <td className="product-image">
-                                                    <img src="./../../../assets/User/images/vegetable/product/2.png"
-                                                         className="img-fluid" alt=""/>
-                                                </td>
-                                                <td>
-                                                    <h6>Peanut Butter Bite Premium Butter Cookies 600 g</h6>
-                                                </td>
-                                                <td>
-                                                    <h6 className="theme-color fw-bold">$35.36</h6>
-                                                </td>
-                                                <td>
-                                                    <h6>14</h6>
-                                                </td>
-                                                <td>
-                                                    <h6>34</h6>
-                                                </td>
-                                                <td className="efit-delete">
-                                                    <i data-feather="edit" className="edit"></i>
-                                                    <i data-feather="trash-2" className="delete"></i>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td className="product-image">
-                                                    <img src="./../../../assets/User/images/vegetable/product/3.png"
-                                                         className="img-fluid" alt=""/>
-                                                </td>
-                                                <td>
-                                                    <h6>Yumitos Chilli Sprinkled Potato Chips 100 g</h6>
-                                                </td>
-                                                <td>
-                                                    <h6 className="theme-color fw-bold">$78.55</h6>
-                                                </td>
-                                                <td>
-                                                    <h6>55</h6>
-                                                </td>
-                                                <td>
-                                                    <h6>78</h6>
-                                                </td>
-                                                <td className="efit-delete">
-                                                    <i data-feather="edit" className="edit"></i>
-                                                    <i data-feather="trash-2" className="delete"></i>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td className="product-image">
-                                                    <img src="./../../../assets/User/images/vegetable/product/4.png"
-                                                         className="img-fluid" alt=""/>
-                                                </td>
-                                                <td>
-                                                    <h6>healthy Long Life Toned Milk 1 L</h6>
-                                                </td>
-                                                <td>
-                                                    <h6 className="theme-color fw-bold">$32.98</h6>
-                                                </td>
-                                                <td>
-                                                    <h6>69</h6>
-                                                </td>
-                                                <td>
-                                                    <h6>135</h6>
-                                                </td>
-                                                <td className="efit-delete">
-                                                    <i data-feather="edit" className="edit"></i>
-                                                    <i data-feather="trash-2" className="delete"></i>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td className="product-image">
-                                                    <img src="./../../../assets/User/images/vegetable/product/5.png"
-                                                         className="img-fluid" alt=""/>
-                                                </td>
-                                                <td>
-                                                    <h6>Raw Mutton Leg, Packaging 5 Kg</h6>
-                                                </td>
-                                                <td>
-                                                    <h6 className="theme-color fw-bold">$36.98</h6>
-                                                </td>
-                                                <td>
-                                                    <h6>35</h6>
-                                                </td>
-                                                <td>
-                                                    <h6>154</h6>
-                                                </td>
-                                                <td className="efit-delete">
-                                                    <i data-feather="edit" className="edit"></i>
-                                                    <i data-feather="trash-2" className="delete"></i>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td className="product-image">
-                                                    <img src="./../../../assets/User/images/vegetable/product/6.png"
-                                                         className="img-fluid" alt=""/>
-                                                </td>
-                                                <td>
-                                                    <h6>Cold Brew Coffee Instant Coffee 50 g</h6>
-                                                </td>
-                                                <td>
-                                                    <h6 className="theme-color fw-bold">$36.58</h6>
-                                                </td>
-                                                <td>
-                                                    <h6>69</h6>
-                                                </td>
-                                                <td>
-                                                    <h6>168</h6>
-                                                </td>
-                                                <td className="efit-delete">
-                                                    <i data-feather="edit" className="edit"></i>
-                                                    <i data-feather="trash-2" className="delete"></i>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td className="product-image">
-                                                    <img src="./../../../assets/User/images/vegetable/product/7.png"
-                                                         className="img-fluid" alt=""/>
-                                                </td>
-                                                <td>
-                                                    <h6>SnackAmor Combo Pack of Jowar Stick and Jowar Chips</h6>
-                                                </td>
-                                                <td>
-                                                    <h6 className="theme-color fw-bold">$25.69</h6>
-                                                </td>
-                                                <td>
-                                                    <h6>63</h6>
-                                                </td>
-                                                <td>
-                                                    <h6>152</h6>
-                                                </td>
-                                                <td className="efit-delete">
-                                                    <i data-feather="edit" className="edit"></i>
-                                                    <i data-feather="trash-2" className="delete"></i>
-                                                </td>
-                                            </tr>
                                             </tbody>
                                         </table>
 
@@ -732,18 +578,18 @@ return <div>
         <div className="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
             <div className="modal-content">
                 <div className="modal-header">
-                    <h5 className="modal-title" id="exampleModalLabel3">Edit Your Profile</h5>
+                    <h5 className="modal-title" id="exampleModalLabel3">Add A Post</h5>
                     <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         <i className="fa-solid fa-xmark"></i>
                     </button>
                 </div>
                 <div className="modal-body">
-                    <form onSubmit={handleSubmit}>
-                        <div className="mb-3">
-                            <label htmlFor="association" className="form-label">Association</label>
-                            <input type="text" className="form-control" id="association" value={association}
-                                   onChange={(e) => setAssociation(e.target.value)}/>
-                        </div>
+                    <form>
+                        {/*<div className="mb-3">*/}
+                        {/*    <label htmlFor="association" className="form-label">Association</label>*/}
+                        {/*    <input type="text" className="form-control" id="association" value={association}*/}
+                        {/*           onChange={(e) => setAssociation(e.target.value)}/>*/}
+                        {/*</div>*/}
                         <div className="mb-3">
                             <label htmlFor="title" className="form-label">Title</label>
                             <input type="text" className="form-control" id="title" value={title}
@@ -762,9 +608,9 @@ return <div>
                         {/* <button type="submit" className="btn btn-primary">Submit</button> */}
                         <div className="modal-footer">
                             <button type="button" className="btn btn-animation btn-md fw-bold"
-                                    data-bs-dismiss="modal">Cancle
+                                    data-bs-dismiss="modal">Cancel
                             </button>
-                            <button type="submit" className="btn theme-bg-color btn-md fw-bold text-light"
+                            <button type="submit" className="btn theme-bg-color btn-md fw-bold text-light" onClick={handlePostSubmit}
                             >Save
                             </button>
                         </div>

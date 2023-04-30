@@ -8,11 +8,16 @@ import Message from "./Message";
 import Chat from "./Chat";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Map, {Marker, NavigationControl} from "react-map-gl";
+import maplibregl from "maplibre-gl";
+import {MapContainer} from "react-leaflet";
+import MapContainerr from "./MapContainer";
 const Chats = (props) => {
     const [isLoading, setIsLoading] = useState(true);
     const [messages, setMessages] = useState([]);
     const [chats, setChats] = useState([]);
     const [product, setProduct] = useState();
+    const [chatt, setChatt] = useState();
     const [newMessage, setnewMessage] = useState();
     const [selectedReason, setSelectedReason] = useState();
     const messagesEndRef = useRef(null);
@@ -86,6 +91,7 @@ const Chats = (props) => {
         // console.log("chat")
         // console.log(chat)
         setProduct(chat.product)
+        setChatt(chat)
         // setMessages(messages);
         return chat
     }
@@ -232,6 +238,9 @@ const Chats = (props) => {
             // console.log("message" + count)
             getFinalDeal().then()
             getMessages().then()
+            console.log("compare users")
+            console.log(chatt.users[0])
+            console.log(userInfo._id)
         }, 3000);
         return () => {
             clearInterval(intervalId);
@@ -368,7 +377,7 @@ const Chats = (props) => {
                 </div>
                 <div className="row">
                     <div className="col-5 messages-content">
-                        <div className="d-flex flex-column align-items-stretch flex-shrink-0 bg-body-tertiary sidebar sticky-header sidebar-sticky"
+                        <div className="d-flex flex-column align-items-stretch flex-shrink-0 bg-body-tertiary sidebar sticky-header"
                              >
                             <div className="list-group list-group-flush border-bottom scrollarea">
                                 {chats?.map((chat) => (
@@ -441,6 +450,42 @@ const Chats = (props) => {
                             }
 
                         </div>
+                        <div>
+
+                            {finalDeal?
+                                <div style={{display:"flex", justifyContent:"center"}}>
+                                    {chatt.users[0]===userInfo._id?
+                                        <div>
+                                            <div style={{backgroundColor:"#b3d4bf", padding:"10px"}}>
+                                                <h2>you have already dealt!</h2>
+                                                <div className="row">
+                                                    <h3 className="col-9">product's location </h3>
+                                                    <div className="col-1">
+                                                        <div
+                                                            style={{cursor:"pointer", backgroundColor:"#2f9fff", color:"white", borderRadius:"10px", width:"25px", padding:"5px"}}
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#map"
+                                                            title={"view location"}
+                                                        >
+                                                            <i className="fa fa-map-marker" title={"deal for "+product.name} style={{fontSize:"large", marginTop:"5px"}}/>
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <strong>city: </strong><span>{product.city}</span><br/>
+                                                <strong>region: </strong><span>{product.region}</span>
+
+                                            </div>
+                                            <hr/>
+                                            <br/>
+                                        </div> :""
+                                    }
+                                </div>:""
+
+                            }
+                            </div>
+
                         {messages?.sort((a,b)=>b.createdAt - a.createdAt).map((message) => (
                             <Message message={message}/>
                         ))}
@@ -565,6 +610,31 @@ const Chats = (props) => {
                                     </div>
                                 </div>
                             </div>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                <i className="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-animation btn-md fw-bold"
+                                    data-bs-dismiss="modal">Close
+                            </button>
+                            {/*<button type="button" data-bs-dismiss="modal"*/}
+                            {/*        className="btn theme-bg-color btn-md fw-bold text-light" onClick={handleDeal}>Confirm*/}
+                            {/*</button>*/}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div className="modal fade theme-modal" id="map" tabIndex="-1"
+                 aria-labelledby="exampleModalLabel2"
+                 aria-hidden="true">
+                <div className="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            {/*<h5 className="modal-title" id="exampleModalLabel2">Requested Product</h5>*/}
+                            <MapContainerr/>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                 <i className="fa-solid fa-xmark"></i>
                             </button>
