@@ -233,7 +233,39 @@ getStatus=async (email)=>{
 
 
 
+getAllAssociations=()=>{
+    return new Promise((resolve,reject)=>{
+        mongoose.connect(url,{
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        }).then(()=>{
 
+            return Association.find();
+
+        }).then((doc)=>{
+            resolve(doc);
+        }).catch((err)=>{
+            reject(err);
+        })
+    })
+}
+
+
+
+getAllAssociationCount = () => {
+    return new Promise((resolve, reject) => {
+      mongoose.connect(url, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+      }).then(() => {
+        return Association.countDocuments();
+      }).then((count) => {
+        resolve(count);
+      }).catch((err) => {
+        reject(err);
+      })
+    })
+  }
 
 
 
@@ -242,7 +274,8 @@ module.exports = {
    login,
    register,
    verifDoc,
-
+   getAllAssociations,
    getStatus,
+   getAllAssociationCount,
 
 };
