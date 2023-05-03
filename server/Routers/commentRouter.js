@@ -6,14 +6,20 @@ const {protect} = require('../middleware/authmiddleware');
 
 
 
-route.post('/',protect,(req,res,next)=>{
-      comment.createComment(req.body.comment,req.body.articleId,req.user._id)
-      .then((cmt)=>res.status(200).json({
-          cmt:cmt,
-          msg:'Comment created successfully'
-      }))
-      .catch((err)=>res.status(400).json({error:err}));
-  })
+route.post('/', protect, async (req, res) => {
+    try {   
+      const { text } = req.body;
+      let sanitizedText = text;
+      const createdComment = await comment.createComment(sanitizedText, req.body.articleId, req.user._id);
+      res.status(200).json({
+        cmt: createdComment,
+        msg: 'Comment created successfully',
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(400).json({ error: 'Failed to create comment' });
+    }
+  });
 
 
 

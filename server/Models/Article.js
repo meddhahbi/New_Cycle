@@ -20,6 +20,9 @@ commentList: [{
   ref: "Comment",
   
 }],
+
+likes:[{type:mongoose.Schema.Types.ObjectId,ref:"User"}],
+
 isArchive:{type:Boolean,default:false},
 
 }
@@ -96,6 +99,7 @@ const createArticle = (title, content, photo,userId) => {
       }).then(() => {
         Article.findByIdAndUpdate(id, {
           title: title,
+          content:content,
           photo: photo.split("uploads")[1]
         }, {new: true})
           .then((article) => {

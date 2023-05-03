@@ -21,6 +21,7 @@ import BlogList from './Components/BlogInterface/BlogList';
 import AddBlog from './Components/BlogInterface/addBlog'
 
 
+
 import GetBlog from './Components/BlogInterface/getBlog'
 
 
@@ -40,6 +41,8 @@ import DashboardAssociation from './Components/UserInterface/Pages/Assosiation/D
 import ChatGeoLoc from "./Components/UserInterface/Pages/Chat/ChatGeoLoc";
 import MapContainerr from "./Components/UserInterface/Pages/Chat/MapContainer";
 import Mapp from "./Components/UserInterface/Pages/Chat/Osm-providers";
+import AllPosts from './Components/BlogInterface/AllPosts';
+import AllAssoPosts from './Components/BlogInterface/AssoPosts';
 
 
 
@@ -105,6 +108,8 @@ function App() {
           <Route path='/donate' exact element={<Donation />} />
 
           <Route exact path='/scraped' element={<Scraped />} />
+          
+          
 
       </Route>
 
@@ -112,8 +117,10 @@ function App() {
 
 
           <Route exact path='/association' element={<DashboardAssociation />} />
+          <Route exact path='/allPosts' element={<AllPosts />} />
+          <Route exact path='/allPostsAsso' element={<AllAssoPosts />} />
           <Route exact path='/map' element={<Mapp />} />
-  <Route  path='/UpdateProduct/:id' element={<UpdateProduct />} />
+          <Route  path='/UpdateProduct/:id' element={<UpdateProduct />} />
 
       <Route path='/confirm/:activationCode' exact element={<ActivationPage />} />
   
@@ -126,6 +133,7 @@ function App() {
 
 
       <Route exact path='/reset/:id' element={<ResetPassword />}/>
+      
 
      
      
@@ -138,6 +146,7 @@ function App() {
      
             
         <Route path="admin" exact element={<Admin />}>
+        
         <Route path='' exact element={<Dashboard />} />
 
         

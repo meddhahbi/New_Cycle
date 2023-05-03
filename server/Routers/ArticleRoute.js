@@ -6,6 +6,7 @@ const path = require('path');
 const cheerio = require('cheerio');
 const axios = require('axios');
 const {protect} = require('../middleware/authmiddleware');
+const {Article} = require ('../Models/Article');
 
 
 
@@ -94,6 +95,37 @@ route.post('/', (req, res, next) => {
         });
       });
   });
+ route.put('/like', protect, async (req, res) => {
+    try {
+      const result = await Article.findByIdAndUpdate(
+        req.body.articleId,
+        { $push: { likes: req.user._id } }
+        
+        
+      ).exec();
+  
+      res.json(result);
+     
+    } catch (error) {
+     // res.status(422).json({ error: error.message });
+    }
+  });
+
+  route.put('/unlike', protect, async (req, res) => {
+    try {
+      const result = await Article.findByIdAndUpdate(
+        req.body.articleId,
+        { $pull: { likes: req.user._id } },
+        
+      ).exec();
+  
+  
+      res.json(result);
+      //console.log("prrrrrrrr");
+    } catch (error) {
+     // res.status(422).json({ error: error.message });
+    }
+  });
 
 route.put('/:id',upload.single('photo'),(req,res,next)=>{
   const image = req.file.path;
@@ -103,7 +135,8 @@ route.put('/:id',upload.single('photo'),(req,res,next)=>{
         msg:'article updated successfully'
       }))
       .catch((err)=>res.status(400).json({error:err}));
-})
+});
+
 route.get('/', (req, res, next) => {
     articles.getAllArticles()
       .then((articles) => res.status(200).json({ articles: articles }))
@@ -138,6 +171,6 @@ route.get('/', (req, res, next) => {
   });
 
 
-
+ 
 
 module.exports = route;
