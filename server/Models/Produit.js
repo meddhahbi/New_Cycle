@@ -19,6 +19,12 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  city: {
+    type: String
+  },
+  region: {
+    type: String
+  },
   images: {type:String, required: true},
   productOwner: {
     type: mongoose.Schema.Types.ObjectId,
@@ -54,15 +60,17 @@ exports.estimatePrice = async (description, category) => {
 };
 
 // create a product with estimated price or provided price
-exports.createProduct = async (name, description, price, category, images,idUser) => {
+exports.createProduct = async (name, description, price, category, images,city, region, idUser) => {
   try {
-    console.log(idUser)
+    console.log(city)
     await mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
     let product = new Product({
       name: name,
       description: description,
       category: category,
       images: images.split("uploads")[1],
+      city: city,
+      region: region,
       productOwner: idUser,
       
     });
@@ -77,7 +85,8 @@ exports.createProduct = async (name, description, price, category, images,idUser
       product.price = estimatedPrice[0];
 
 
-      await product.save();
+      let prod = await product.save();
+      console.log(prod)
     }
 
     //mongoose.disconnect();

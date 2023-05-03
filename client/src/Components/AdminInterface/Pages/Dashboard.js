@@ -29,12 +29,12 @@ export default function Dashboard(){
 
 
 
-return <div>
-<div className="div1">
+return <div style={{width:"80%"}} className="div1">
+{/*<div className="div1">*/}
 <section className="user-dashboard-section section-b-space">
-        <div className="container-fluid-lg">
-            <div className="row">
-                <div className="col-xxl-9 col-lg-8">
+        <div className="container-fluid">
+            <div className="row" style={{width:"100%"}}>
+                <div className="col-xxl-12 col-lg-12">
                     <button className="btn left-dashboard-show btn-animation btn-md fw-bold d-block mb-4 d-lg-none">Show
                         Menu</button>
                     <div className="dashboard-right-sidebar">
@@ -828,7 +828,7 @@ return <div>
             </div>
         </div>
     </section>
-</div>
+{/*</div>*/}
 
 </div>
 

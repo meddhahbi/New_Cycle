@@ -9,15 +9,33 @@ const CreateProduct = () => {
   const [images, setImages] = useState("");
   const [manualPrice, setManualPrice] = useState(null);
   const [created, setCreated] = useState(false);
+  const [city, setCity] = useState("");
+  const getLocation = async () => {
+    const location = await axios.get("https://ipapi.co/json");
+    console.log(location.data)
+    if(location.data){
 
+      setCity(location.data.city) ;
+    }
+    else{
+      setCity("tunis") ;
+    }
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const location = await axios.get("https://ipapi.co/json");
+    console.log(location)
+    let city = location ? location.data.city : "tunis"
+    let region = location ? location.data.region : "el ghazala"
     const formData = new FormData();
     formData.append("name", name);
     formData.append("description", description);
     formData.append("price", manualPrice !== null ? manualPrice : price || 0); // add a default value of 0 for price
     formData.append("category", category);
-    
+    formData.append("city", city);
+    formData.append("region", region);
+
       formData.append("images", images);
     
     try {

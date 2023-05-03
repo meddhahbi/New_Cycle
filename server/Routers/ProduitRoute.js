@@ -50,12 +50,12 @@ const trainModel = (products, category) => {
 
 router.route('/').post(protect, upload.single('images'), async (req, res) => {
   console.log("req.user")
-  const { name, description, price, category } = req.body;
+  const { name, description, price, category, city, region } = req.body;
   const images = req.file.path;
   try {
     let product;
     if (price) {
-      product = await products.createProduct(name, description, price, category, images,req.user._id);
+      product = await products.createProduct(name, description, price, category, images, city, region, req.user._id);
     } else {
       const allProducts = await Product.AllProducts();
       const knn = trainModel(allProducts, category);

@@ -36,8 +36,10 @@ import { useState, useEffect } from 'react';
 
 import UpdateBlog from './Components/BlogInterface/updateBlog';
 import Scraped from './Components/BlogInterface/scraped';
-import DashboardAssociation from './Components/UserInterface/Pages/DashboardAssociation';
+import DashboardAssociation from './Components/UserInterface/Pages/Assosiation/DashboardAssociation';
 import ChatGeoLoc from "./Components/UserInterface/Pages/Chat/ChatGeoLoc";
+import MapContainerr from "./Components/UserInterface/Pages/Chat/MapContainer";
+import Mapp from "./Components/UserInterface/Pages/Chat/Osm-providers";
 
 
 
@@ -75,6 +77,7 @@ function App() {
           <Route path='/edit_me' element={<ProfileForm />}/>
           <Route path='/subscribe' element={<Plan />} />
           <Route path='/client_messages' element={<Chats />} />
+          <Route path='/client_message_blog' element={<Chats />} />
 
 
 
@@ -109,6 +112,7 @@ function App() {
 
 
           <Route exact path='/association' element={<DashboardAssociation />} />
+          <Route exact path='/map' element={<Mapp />} />
   <Route  path='/UpdateProduct/:id' element={<UpdateProduct />} />
 
       <Route path='/confirm/:activationCode' exact element={<ActivationPage />} />

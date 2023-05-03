@@ -87,13 +87,13 @@ login=(email,password)=>{
         }).then((association)=>{
             if(!association){
                // mongoose.disconnect();
-                msg = "this email does not exist";
+                const msg = "this email does not exist";
                 resolve([msg,"err"])
                 // reject(msg);
             }else if(association && bcrypt.compare(password, association.password) &&!association.isActive){
 
                // mongoose.disconnect();
-                msg = "Please check your email for activation";
+                const msg = "Please check your email for activation";
                 // resolve(message);
                 resolve([msg,"err"])
             }else{
@@ -101,17 +101,19 @@ login=(email,password)=>{
                         if(same){
                             //?send token
                             let token = jwt.sign({
-                                id:association._id,
-                                username:association.name
-                            },privateKey,{
-                                expiresIn:'1h',
+                                id:association._id
+                            }, privateKey,{
+                                expiresIn:'30d',
                             })
                            // mongoose.disconnect();
+
+                            console.log(token)
                             
                             console.log("same password");
+                            jwt.decode();
+
                             
                             resolve([token,"token", association.role, association]);
-                            jwt.decode();
                             //console.log(token);
                             //console.log(jwt.decode());
                             //console.log(jwt.decode().id);
@@ -120,10 +122,10 @@ login=(email,password)=>{
 
                         }else{
                            // mongoose.disconnect();
-                            msg= 'invalid password'
+                           let msg= 'invalid password'
                             console.log(msg)
                             resolve([msg,"err"])
-                            reject(ùsg)
+                            reject(msg)
                         }
                 }).catch((err)=>{
                    // mongoose.disconnect();

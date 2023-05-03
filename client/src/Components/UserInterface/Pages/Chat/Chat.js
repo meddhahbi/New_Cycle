@@ -81,11 +81,11 @@ function Chat(props) {
                                 <strong className="mb-1">
                                 <span>
                                     {/*{chat.latestMessage?.sender.username}*/}
-                                    {chat.users[0]._id===userInfo._id?
+                                    {chat.product.name} ({chat.users[0]._id===userInfo._id?
                                         chat.users[1].username
                                         :
                                         chat.users[0].username
-                                    }
+                                    })
                                 </span>
 
                                 </strong>
