@@ -159,8 +159,8 @@ function Mapp() {
 
 
                 <div id="your-div-id" style={{
-                    width: '500px',
-                    height: '400px',
+                    width: '600px',
+                    height: '500px',
                     borderRadius:"15px",
                     border:"2px solid red"
                 }}>

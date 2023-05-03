@@ -6,6 +6,11 @@ const Sentiment = require('sentiment');
 var mlKnn = require('ml-knn');
 const path = require('path');
 const {protect} = require('../middleware/authmiddleware');
+const FormData = require('form-data');
+const axios = require('axios');
+
+
+
 
 
 const storage = multer.diskStorage({
@@ -85,7 +90,7 @@ router.get('/estimate', async (req, res) => {
   }
 });
 
-module.exports = router;
+// module.exports = router;
 
 
 
@@ -146,5 +151,27 @@ router.get('/:id', (req, res, next) => {
       .then((product) => res.status(200).json({ product: product }))
       .catch((err) => res.status(400).json({ error: err }));
 });
+
+// var apiKey = process.env.OPENAI_SECRET_KEY;
+
+
+// router.post('/generate-image', async (req, res) => {
+//   const { description } = req.body;
+//   const form = new FormData();
+//   form.append('model', 'image-alpha-001');
+//   form.append('prompt', description);
+//   const response = await axios.post('https://api.openai.com/v1/images/generations', form, {
+//     headers: {
+//       'Content-Type': `multipart/form-data; boundary=${form._boundary}`,
+//       Authorization: `Bearer ${apiKey}`,
+//     },
+//   });
+//   res.send(response.data.data[0].url);
+// });
+
+
+
+
+
 
 module.exports = router;

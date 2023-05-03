@@ -77,6 +77,7 @@ function App() {
           <Route path='/edit_me' element={<ProfileForm />}/>
           <Route path='/subscribe' element={<Plan />} />
           <Route path='/client_messages' element={<Chats />} />
+          <Route path='/client_message_blog' element={<Chats />} />
 
 
 

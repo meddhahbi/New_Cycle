@@ -21,6 +21,7 @@ const session = require("express-session");
 const articleRoutes = require('./Routers/ArticleRoute');
 const commentRoutes = require('./Routers/commentRouter');
 const produitRoutes = require('./Routers/ProduitRoute');
+const AuditLog = require('./Models/AuditLogging');
  
 //const app = express();
 
@@ -79,6 +80,21 @@ app.use('/reportUser', reportUserRoute);
 app.use('/reportUserDetail', reportUserDetailRoute);
 
 app.use('/association_post', associationPostRoute);
+
+
+// app.use((req, res, next) => {
+//   const auditLog = new AuditLog({
+//     userId: req.user._id,
+//     action: `${req.method} ${req.originalUrl}`,
+//     details: JSON.stringify(req.headers)
+//   });
+  
+//   req.user.lastActive = Date.now();
+//   req.user.save();
+  
+//   auditLog.save();
+//   next();
+// });
 
 
 

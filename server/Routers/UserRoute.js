@@ -9,7 +9,11 @@ const multer = require('multer');
 const bcrypt = require('bcrypt');
 const axios = require('axios');
 const cheerio = require('cheerio');
-const articles = require('../Models/Article')
+const articles = require('../Models/Article');
+// const logModel = require('../Models/AuditLogging');
+
+// const { createCanvas } = require('canvas');
+
 
 
 
@@ -257,6 +261,17 @@ route.put('/block/:_id',(req,res,next)=>{
 });
 
 
+route.put('/unblock/:_id',(req,res,next)=>{
+  console.log(req.body);
+  userModel.unblock(req.params._id)
+  .then(()=>res.status(200).json({
+      msg:'User unblocked successfully'
+  }))
+
+  .catch((err)=>res.status(400).json({msg:"User not found"}));
+
+});
+
 route.get('/verifySubs/:email',(req,res,next)=>{
   userModel.verifySubscription(req.params.email)
   .then((status)=>{
@@ -284,12 +299,20 @@ route.get('/users',(req,res,next)=>{
   .catch((err)=>res.status(400).json(err))
 });
 
+route.get('/bloked',(req,res,next)=>{
+  userModel.getAllUsersBlocked()
+  .then((doc)=>res.status(200).json(doc))
+  .catch((err)=>res.status(400).json(err))
+});
 
 route.get('/users/count',(req,res,next)=>{
   userModel.getAllUsersCount()
   .then((doc)=>res.status(200).json(doc))
   .catch((err)=>res.status(400).json(err))
 })
+
+
+
 
 // const storage = multer.diskStorage({
 //   destination:(req,file,cb)=>{
@@ -345,6 +368,54 @@ route.get('/latest', (req, res, next) => {
 });
 
 
+
+
+
+// route.post('/generateImage', (req, res) => {
+//   const { text } = req.body;
+
+//   // Create a canvas with a size of 200x200 pixels
+//   const canvas = createCanvas(200, 200);
+//   const context = canvas.getContext('2d');
+
+//   // Draw the text on the canvas
+//   context.font = '20px Arial';
+//   context.fillText(text, 50, 100);
+
+//   // Convert the canvas to a PNG image and send it to the client
+//   const buffer = canvas.toBuffer('image/png');
+//   res.writeHead(200, {
+//     'Content-Type': 'image/png',
+//     'Content-Length': buffer.length
+//   });
+//   res.end(buffer);
+// });
+
+
+// route.get('/logs',(req,res,next)=>{
+//   logModel.getLogs()
+//   .then(()=>res.status(200))
+//   .catch((err)=>res.status(400).json(err))
+// });
+
+route.delete('/delete/:id', (req, res) => {
+  const userId = req.params.id;
+
+  userModel.deleteUser(userId)
+      .then(() => {
+        res.status(200).json({
+          success: true,
+          message: 'User deleted successfully'
+        });
+      })
+      .catch((err) => {
+        res.status(500).json({
+          success: false,
+          message: 'Failed to delete user',
+          error: err.message
+        });
+      });
+});
 
 
 module.exports = route;

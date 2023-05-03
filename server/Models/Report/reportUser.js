@@ -14,4 +14,30 @@ const reportUserSchema = new mongoose.Schema({
         },
     })
 const ReportUser = mongoose.model("ReportUser", reportUserSchema);
-module.exports = {ReportUser};
+
+
+
+getReports=()=>{
+    return new Promise((resolve,reject)=>{
+        mongoose.connect(url,{
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        }).then(()=>{
+
+            return ReportUser.find();
+
+        }).then((doc)=>{
+            resolve(doc);
+        }).catch((err)=>{
+            reject(err);
+        })
+    })
+}
+
+
+
+module.exports = {
+    ReportUser,
+    getReports,
+
+};

@@ -12,13 +12,39 @@ router.route("/").get(protect, async (req, res)=>{
         Chat.find({users: {$elemMatch: {$eq: req.user._id}}})
             .populate("users", "-password -subscription")
             .populate("latestMessage")
-            // .populate("product")
+            .populate("product")
             .sort({updatedAt:-1})
             .then(async (results) => {
-                for(result of results){
+                for(let result of results){
                     if(result.product){
                         result.populate("product")
                     }
+                    else if(result.post){
+                        result.populate("post")
+                    }
+                }
+            results = await User.populate(results, {
+                path: "latestMessage.sender",
+                select: "username email",
+            });
+            res.status(200).send(results);
+        });
+    } catch (error) {
+        res.status(400);
+        throw new Error(error.message);
+    }
+});
+
+router.route("/post").get(protect, async (req, res)=>{
+    try {
+        Chat.find({users: {$elemMatch: {$eq: req.user._id}}, post: { $ne: null }})
+            .populate("users", "-password -subscription")
+            .populate("latestMessage")
+            .populate("post")
+            .sort({updatedAt:-1})
+            .then(async (results) => {
+                for(let result of results){
+                        result.populate("post")
                 }
             results = await User.populate(results, {
                 path: "latestMessage.sender",
@@ -131,7 +157,18 @@ router.route("/get_readMessages/:chatId").get(protect, async (req, res)=>{
 });
 router.route("/get_chat/:chat").get(protect, async (req, res)=>{
     try{
-        await Chat.findOne({_id: req.params.chat}).populate("product").then((c)=>{
+        await Chat.findOne({_id: req.params.chat})
+            .populate("product")
+            .populate("post")
+            .then((c)=>{
+                // if (c.product!==undefined){
+                //     console.log("pr")
+                //
+                //     console.log(c)
+                // }
+                // else if (c.post!==undefined){
+                //     c.populate("post")
+                // }
             // console.log(c)
             res.send(c)
         })

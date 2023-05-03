@@ -27,7 +27,9 @@ let schemaUser = mongoose.Schema({
         nextPayment: {type:Date,default:null}, 
     },
     image:{type:String, default:"default.jpg"},
+    lastActive: { type: Date, default: Date.now },
     role: { type: String, enum: ['client', 'admin'], default: 'client' }
+
 });
 
 // const User = mongoose.model('User', schemaUser);
@@ -286,9 +288,9 @@ exports.updatePassword = async (_id, password) => {
 };
 
 
-exports.verifDocAndChangeStatus=(_id)=>{
+// exports.verifDocAndChangeStatus=(_id)=>{
     
-}
+// }
 
 
 createSubs=(email)=>{
@@ -370,7 +372,25 @@ getAllUsers=()=>{
             useUnifiedTopology: true
         }).then(()=>{
 
-            return User.find({ role: 'client' });
+            return User.find({ role: 'client', isBlocked:false });
+
+        }).then((doc)=>{
+            resolve(doc);
+        }).catch((err)=>{
+            reject(err);
+        })
+    })
+}
+
+
+getAllUsersBlocked=()=>{
+    return new Promise((resolve,reject)=>{
+        mongoose.connect(url,{
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        }).then(()=>{
+
+            return User.find({ role: 'client', isBlocked:true });
 
         }).then((doc)=>{
             resolve(doc);
@@ -455,6 +475,57 @@ const block = async (_id) => {
 
 
 
+const unblock = async (_id) => {
+    try {
+        await mongoose.connect(url, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        });
+
+        const user = await User.findById(_id);
+
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        console.log(_id);
+        user.isBlocked = false;
+        const updatedUser = await user.save();
+
+       // mongoose.disconnect();
+
+        return updatedUser;
+    } catch (err) {
+        console.log(err);
+        //mongoose.disconnect();
+        throw new Error('Failed to unblock user');
+    }
+};
+
+
+
+deleteUser = (id) =>{
+    return new Promise((resolve, reject) => {
+        mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+        .then(() => {
+            User.findByIdAndDelete(id)
+            .then(() => {
+           //     mongoose.disconnect();
+                resolve();
+            })
+            .catch((err) => {
+         //       mongoose.disconnect();
+                reject({ message: "Failed to delete user from database", error: err });
+            });
+        })
+        .catch((err) => {
+        //    mongoose.disconnect();
+            reject({ message: "Failed to connect to database", error: err });
+        });
+    });
+}
+
+
 
 module.exports = {
     User,
@@ -468,6 +539,9 @@ module.exports = {
     verifySubscription,
     getAllUsers,
     getAllUsersCount,
+    deleteUser,
+    getAllUsersBlocked,
+    unblock,
 
 };
 

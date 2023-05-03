@@ -7,7 +7,7 @@ export default function Dashboard(){
 
 
     const [users, setUsers] = useState([]);
-    const [userCount, setUserCount] = useState(0);
+    //const [userCount, setUserCount] = useState(0);
 
     useEffect(() => {
         axios.get('http://localhost:3001/users')
@@ -15,7 +15,17 @@ export default function Dashboard(){
           .catch(error => console.log(error));
       }, []);
 
+    
+      const handleBlockUser=(id)=>{
+        axios.put(`/block/${id}`)
+        .then(response => {
+         console.log(response);
+        })
+        .catch(error => {
+          console.log(error);
+        });
 
+      }
 
 
 
@@ -203,7 +213,7 @@ return <div style={{width:"80%"}} className="div1">
                                                                 <th scope="col">Phone</th>
                                                                 <th scope="col">Active</th>
                                                                 <th scope="col">Blocked</th>
-                                                                <th scope="col">Subscribed</th>
+                                                                <th scope="col">Action</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -229,7 +239,8 @@ return <div style={{width:"80%"}} className="div1">
                                                                     <td>{user.isBlocked ?  <label className="bg-danger text-white">Yes</label> : 
                                                                     <label className="bg-success text-white">No</label>
                                                                        }</td>
-                                                                    <td>{user.subscribed ? 'Yes' : 'No'}</td>
+                                                                    <td><button onClick={() => handleBlockUser(user._id)} className="bg-danger text-white" style={{backgroundColor: "red", color: "white", border: "none"}}>Block</button></td>
+
                                                                     </tr>
                                                                 ))}
                                                             {/* <tr>
