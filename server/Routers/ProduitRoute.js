@@ -170,8 +170,36 @@ router.get('/:id', (req, res, next) => {
 // });
 
 
+router.put('/accept/:_id',(req,res,next)=>{
+  console.log(req.body);
+  products.accepteProduit(req.params._id)
+  .then(()=>res.status(200).json({
+      msg:'Produit accepted successfully'
+  }))
+
+  .catch((err)=>res.status(400).json({msg:"Produit not found"}));
+
+});
 
 
+
+router.get('/notAccepted',(req,res,next)=>{
+  products.AllProductsNotAccepted()
+  .then((doc)=>res.status(200).json(doc))
+  .catch((err)=>res.status(400).json(err))
+});
+
+router.get('/accepted',(req,res,next)=>{
+  products.AllProducts()
+  .then((doc)=>res.status(200).json(doc))
+  .catch((err)=>res.status(400).json(err))
+});
+
+router.get('/latest',(req,res,next)=>{
+  products.getLatest()
+  .then((doc)=>res.status(200).json(doc))
+  .catch((err)=>res.status(400).json(err))
+});
 
 
 module.exports = router;

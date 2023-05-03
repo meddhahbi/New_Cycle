@@ -30,6 +30,13 @@ const productSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
 },
+
+
+isAccepted : { 
+    type:Boolean,
+    default: false,
+}
+
 });
 
 const Product = mongoose.model('Product', productSchema);
@@ -45,22 +52,25 @@ const trainModel = (products, category) => {
 };
 
 // get a trained model and estimate the price of a product
-exports.estimatePrice = async (description, category) => {
+estimatePrice = async (description, category) => {
   try {
     await mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
     const allProducts = await products.AllProducts();
     const knn = trainModel(allProducts, category);
     const estimatedPrice = knn.predict([[description.length]]);
-    mongoose.disconnect();
+    //mongoose.disconnect();
     return { estimatedPrice: estimatedPrice[0] };
   } catch (error) {
-    mongoose.disconnect();
+   // mongoose.disconnect();
     throw error;
   }
 };
 
 // create a product with estimated price or provided price
-exports.createProduct = async (name, description, price, category, images,city, region, idUser) => {
+
+createProduct = async (name, description, price, category, images,idUser) => {
+
+
   try {
     console.log(city)
     await mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -102,11 +112,11 @@ exports.createProduct = async (name, description, price, category, images,city, 
 
 
 
-exports.AllProducts = () => {
+AllProducts = () => {
     return new Promise((resolve, reject) => {
       mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         .then(() => {
-          Product.find({}).populate("productOwner", "username image")
+          Product.find({isAccepted : true}).populate("productOwner", "username image")
             .then((products) => {
              // mongoose.disconnect();
               console.log(products)
@@ -124,8 +134,32 @@ exports.AllProducts = () => {
     });
   };
 
+
+
+AllProductsNotAccepted = () => {
+  return new Promise((resolve, reject) => {
+    mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+      .then(() => {
+        Product.find({isAccepted : false}).populate("productOwner", "username image")
+          .then((products) => {
+           // mongoose.disconnect();
+            console.log(products)
+            resolve(products);
+          })
+          .catch((err) => {
+           // mongoose.disconnect();
+            reject({ message: "Failed to retrieve products from database", error: err });
+          });
+      })
+      .catch((err) => {
+      //  mongoose.disconnect();
+        reject({ message: "Failed to connect to database", error: err });
+      });
+  });
+};
+
   
-  exports.getProductById = (id) => {
+  getProductById = (id) => {
     return new Promise((resolve, reject) => {
       mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         .then(() => {
@@ -147,7 +181,7 @@ exports.AllProducts = () => {
   };
   
 
-  exports.updateProduit = (name, description, price, category, images) => {
+  updateProduit = (name, description, price, category, images) => {
     return new Promise((resolve, reject) => {
       mongoose.connect(url, {
         useNewUrlParser: true,
@@ -177,7 +211,7 @@ exports.AllProducts = () => {
   };
   
 
-  exports.deleteProduct = (id) => {
+  deleteProduct = (id) => {
     return new Promise((resolve, reject) => {
       mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         .then(() => {
@@ -197,3 +231,66 @@ exports.AllProducts = () => {
         });
     });
   };
+
+
+
+  const accepteProduit = async (_id) => {
+    try {
+        await mongoose.connect(url, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        });
+
+        const produit = await Product.findById(_id);
+
+        if (!produit) {
+            throw new Error('produit not found');
+        }
+
+        console.log(_id);
+        produit.isAccepted = true;
+        const updatedProduit = await produit.save();
+
+       // mongoose.disconnect();
+        return updatedProduit;
+    } catch (err) {
+        console.log(err);
+        //mongoose.disconnect();
+        throw new Error('Failed to accept produit');
+    }
+};
+
+getLatest = () => {
+  return new Promise((resolve, reject) => {
+    mongoose.connect(url, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }).then(() => {
+      return Product.find().populate("productOwner").sort({ createdAt: -1 }).limit(4);
+    }).then((doc) => {
+      resolve(doc);
+    }).catch((err) => {
+      if (err instanceof mongoose.CastError) {
+        reject(new Error("Invalid product ID"));
+      } else {
+        reject(new Error("Failed to retrieve product from database"));
+      }
+    });
+  });
+};
+
+
+
+  module.exports = {
+    Product,
+    accepteProduit,
+    deleteProduct,
+    updateProduit,
+    getProductById,
+    AllProducts,
+    createProduct,
+    estimatePrice,
+    AllProductsNotAccepted,
+    getLatest,
+
+  }

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { sendConfirmationEmail, sendResetPassword } = require('../Config/nodemailer');
+const { sendConfirmationEmail, sendResetPassword, sendBlockAvertissement } = require('../Config/nodemailer');
 const moment = require('moment');
 const { resolve } = require('path');
 //const stripe = require('../Config/stripe.js')
@@ -417,6 +417,22 @@ getAllUsersCount = () => {
   }
 
 
+  getAllUsersNotActiveCount = () => {
+    return new Promise((resolve, reject) => {
+      mongoose.connect(url, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+      }).then(() => {
+        return User.countDocuments({ role: 'client', isActive:false });
+      }).then((count) => {
+        resolve(count);
+      }).catch((err) => {
+        reject(err);
+      })
+    })
+  }
+
+
 
 
 
@@ -464,7 +480,7 @@ const block = async (_id) => {
         const updatedUser = await user.save();
 
        // mongoose.disconnect();
-
+       sendBlockAvertissement(user.email);
         return updatedUser;
     } catch (err) {
         console.log(err);
@@ -542,6 +558,7 @@ module.exports = {
     deleteUser,
     getAllUsersBlocked,
     unblock,
+    getAllUsersNotActiveCount,
 
 };
 

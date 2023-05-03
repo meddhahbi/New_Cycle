@@ -1,113 +1,61 @@
-
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import './style/dashboard.css'
-import Swal from 'sweetalert2';
+import { useState } from "react";
+import { Association } from "../../../../../server/Models/Association";
 
 
-export default function Dashboard(){
 
 
-    const [users, setUsers] = useState([]);
-    const [blockedUsers, setBlockedUsers] = useState([]);
-    const [userCount, setUserCount] = useState(0);
-    const [associationCount, setAssociationCount] = useState(0);
-    const [pendingUsersCount, setPendingUsersCount] = useState(0);
+
+export default function Associations(){
+
+    const [associations, setAssociations] = useState([]);
+    const [notActiveAssociations,setNotActiveAssociations] = useState([]);
+
+
+
+    const handleActiveAssociation=(id)=>{
+        Swal.fire({
+           title: 'Do you want to activate this association?',
+           showCancelButton: true,
+           confirmButtonText: 'Yes',
+         }).then((result) => {
+           /* Read more about isConfirmed, isDenied below */
+           if (result.isConfirmed) {
+               axios.put(`/activate/${id}`)
+       
+             window.location.reload();
+           }
+         })
+       
+       .catch(error => {
+         console.log(error);
+       });
+
+     }
+
 
 
 
     useEffect(() => {
-        axios.get('http://localhost:3001/users')
-          .then(response => setUsers(response.data))
+        axios.get('http://localhost:3001/associations')
+          .then(response => setAssociations(response.data))
           .catch(error => console.log(error));
       }, []);
-
-      
-
-      useEffect(() => {
-        axios.get('http://localhost:3001/count')
-          .then(response => setUserCount(response.data))
-          .catch(error => console.log(error));
-      }, []);
-
 
 
       useEffect(() => {
-        axios.get('http://localhost:3001/count/notActive')
-          .then(response => setPendingUsersCount(response.data))
+        axios.get('http://localhost:3001/associations/notActive')
+          .then(response => setNotActiveAssociations(response.data))
           .catch(error => console.log(error));
       }, []);
 
 
 
-
-
-      useEffect(() => {
-        axios.get('http://localhost:3001/bloked')
-          .then(response => setBlockedUsers(response.data))
-          .catch(error => console.log(error));
-      }, []);
-
-      
-
-    
-      const handleBlockUser=(id)=>{
-
-       
-        
-         Swal.fire({
-            title: 'Do you want to block this user?',
-            showCancelButton: true,
-            confirmButtonText: 'Yes',
-          }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
-            if (result.isConfirmed) {
-                axios.put(`/block/${id}`)
-              window.location.reload();
-            }
-          })
-        .catch(error => {
-          console.log(error);
-        });
-
-      }
-
-
-      const handleUnblockUser=(id)=>{
-         Swal.fire({
-            title: 'Do you want to unblock this user?',
-            showCancelButton: true,
-            confirmButtonText: 'Yes',
-          }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
-            if (result.isConfirmed) {
-                axios.put(`/unblock/${id}`)
-        
-              window.location.reload();
-            }
-          })
-        
-        .catch(error => {
-          console.log(error);
-        });
-
-      }
-
-
-      useEffect(()=>{
-        axios.get('http://localhost:3001/association/count')
-        .then(response => (setAssociationCount(response.data)))
-        .catch(error => console.log(error));
-      },[])
-
-      //localhost:3001/association
-
-return <div style={{width:"80%"}} className="div1">
-{/*<div className="div1">*/}
+    return <div>
+<div className="div1">
 <section className="user-dashboard-section section-b-space">
-        <div className="container-fluid">
-            <div className="row" style={{width:"100%"}}>
-                <div className="col-xxl-12 col-lg-12">
+        <div className="container-fluid-lg">
+            <div className="row">
+                <div className="col-xxl-9 col-lg-8">
                     <button className="btn left-dashboard-show btn-animation btn-md fw-bold d-block mb-4 d-lg-none">Show
                         Menu</button>
                     <div className="dashboard-right-sidebar">
@@ -123,87 +71,31 @@ return <div style={{width:"80%"}} className="div1">
                                             </svg>
                                         </span>
                                     </div>
-                                    <div className="total-box">
-                                        <div className="row g-sm-4 g-3">
-                                            <div className="col-xxl-4 col-lg-6 col-md-4 col-sm-6">
-                                                <div className="totle-contain">
-                                                    <img src="../../assets/User/images/icon/list.png"
-                                                        className="img-1 blur-up lazyload" alt="" />
-                                                    <img src="../../assets/User/images/icon/listD.png" className="blur-up lazyload"
-                                                        alt="" />
-                                                    <div className="totle-detail">
-                                                        <h5>Total Users</h5>
-                                                        <h3>{userCount}</h3>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className="col-xxl-4 col-lg-6 col-md-4 col-sm-6">
-                                                <div className="totle-contain">
-                                                    <img src="../../assets/User/images/icon/user.png"
-                                                        className="img-1 blur-up lazyload" alt="" />
-                                                    <img src="../../assets/User/images/icon/userD.png" className="blur-up lazyload"
-                                                        alt="" />
-                                                    <div className="totle-detail">
-                                                        <h5>Total Users Pending</h5>
-                                                        <h3>{pendingUsersCount} </h3>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className="col-xxl-4 col-lg-6 col-md-4 col-sm-6">
-                                                <div className="totle-contain">
-                                                    <img src="../../assets/User/images/icon/team.png"
-                                                        className="img-1 blur-up lazyload" alt="" />
-                                                    <img src="../../assets/User/images/icon/teamD.png" className="blur-up lazyload"
-                                                        alt="" />
-                                                    <div className="totle-detail">
-                                                        <h5>Total Associations</h5>
-                                                        <h3>{associationCount}</h3>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className="col-xxl-4 col-lg-6 col-md-4 col-sm-6">
-                                                <div className="totle-contain">
-                                                    <img src="../../assets/User/images/icon/blog.png"
-                                                        className="img-1 blur-up lazyload" alt="" />
-                                                    <img src="../../assets/User/images/icon/blogD.png"
-                                                        className="blur-up lazyload" alt="" />
-                                                    <div className="totle-detail">
-                                                        <h5>Total Posts</h5>
-                                                        <h3>36</h3>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
                                     <div className="row g-4">
                                        
 
                                         <div className="col-xxl-6">
                                             <div className="table-responsive dashboard-bg-box">
                                                 <div className="dashboard-title mb-4">
-                                                    <h3>Blocked Users</h3>
+                                                    <h3>Not Acitive Associations</h3>
                                                 </div>
 
                                                 <table className="table product-table">
                                                     <thead>
                                                         <tr>
-                                                            <th scope="col">Username</th>
+                                                            <th scope="col">Name</th>
                                                             <th scope="col">Email</th>
                                                             <th scope="col">Phone</th>
                                                             <th scope="col">Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                    {blockedUsers.map(Blockeduser => (
-                                                                    <tr key={Blockeduser.id}>
-                                                                    <td>{Blockeduser.username}</td>
-                                                                    <td>{Blockeduser.email}</td>
-                                                                    <td>{Blockeduser.phone}</td>
-                                                                    <td><button onClick={() => handleUnblockUser(Blockeduser._id)} className="bg-success text-white" style={{backgroundColor: "green", color: "white", border: "none"}}>Unblock</button></td>
+                                                    {notActiveAssociations.map(notActiveAssociations => (
+                                                                    <tr key={notActiveAssociations.id}>
+                                                                    <td>{notActiveAssociations.name}</td>
+                                                                    <td>{notActiveAssociations.email}</td>
+                                                                    <td>{notActiveAssociations.phone}</td>
+                                                                    <td><button onClick={() => handleActiveAssociation(notActiveAssociations._id)} className="bg-success text-white" style={{backgroundColor: "green", color: "white", border: "none"}}>Unblock</button></td>
 
                                                                     </tr>
                                                                 ))}
@@ -220,19 +112,17 @@ return <div style={{width:"80%"}} className="div1">
                                         <div className="col-xxl-6">
                                             <div className="order-tab dashboard-bg-box">
                                                 <div className="dashboard-title mb-4">
-                                                    <h3>List of users</h3>
+                                                    <h3>List Of Associations</h3>
                                                 </div>
 
                                                 <div className="table-responsive">
                                                     <table className="table order-table">
                                                         <thead>
                                                             <tr>
-                                                                <th scope="col">Username</th>
+                                                                <th scope="col">Name</th>
                                                                 <th scope="col">Email</th>
                                                                 <th scope="col">Phone</th>
-                                                                <th scope="col">Active</th>
-                                                                <th scope="col">Blocked</th>
-                                                                <th scope="col">Action</th>
+                                                    
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -247,19 +137,12 @@ return <div style={{width:"80%"}} className="div1">
                                                                     </td>
                                                                 </tr>
                                                                 ))} */}
-                                                                  {users.map(user => (
-                                                                    <tr key={user.id}>
-                                                                    <td>{user.username}</td>
-                                                                    <td>{user.email}</td>
-                                                                    <td>{user.phone}</td>
-                                                                    <td>{user.isActive ? 
-                                                                        <label className="success">Active</label> : 
-                                                                        <label className="bg-secondary text-white">Pending</label>}</td>
-                                                                    <td>{user.isBlocked ?  <label className="bg-danger text-white">Yes</label> : 
-                                                                    <label className="bg-success text-white">No</label>
-                                                                       }</td>
-                                                                    <td><button onClick={() => handleBlockUser(user._id)} className="bg-danger text-white" style={{backgroundColor: "red", color: "white", border: "none"}}>Block</button></td>
-
+                                                                  {associations.map(association => (
+                                                                    <tr key={association.id}>
+                                                                    <td>{association.name}</td>
+                                                                    <td>{association.email}</td>
+                                                                    <td>{association.phone}</td>
+                                                    
                                                                     </tr>
                                                                 ))}
                                                             {/* <tr>
@@ -847,9 +730,11 @@ return <div style={{width:"80%"}} className="div1">
             </div>
         </div>
     </section>
-{/*</div>*/}
+</div>
 
 </div>
+
+
 
 
 }
