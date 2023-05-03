@@ -3,6 +3,8 @@ import axios from "axios";
 
 function Prod(props) {
     const {product, products, setProducts} = props;
+
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"))
     function deleteProduct(id) {
         if (window.confirm("Êtes-vous sûr de vouloir supprimer ce produit ?")) {
             axios
@@ -73,7 +75,12 @@ function Prod(props) {
                 >
                     Voir détails
                 </button>
-                <i className="fa fa-comment-dots" style={{marginLeft: "20px", color:"#00835a", fontSize:"xx-large", cursor:"pointer"}} onClick={sendMessage}/>
+                {product.productOwner._id !== userInfo._id?
+
+                    <i className="fa fa-comment-dots" style={{marginLeft: "20px", color:"#00835a", fontSize:"xx-large", cursor:"pointer"}} onClick={sendMessage}/>
+                    :
+                    ""
+                }
             </div>
 
             <div

@@ -1,18 +1,27 @@
 import React, {useEffect, useRef, useState} from 'react';
 import axios from "axios";
 import LoadingPage from "../../../Loading";
-import {useNavigate} from "react-router";
+import {useLocation, useNavigate} from "react-router";
 import style from "./style.css"
 import {Link} from "react-router-dom";
 import Message from "./Message";
 import Chat from "./Chat";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Map, {Marker, NavigationControl} from "react-map-gl";
+import maplibregl from "maplibre-gl";
+import {MapContainer} from "react-leaflet";
+import MapContainerr from "./MapContainer";
+import Mapp from "./Osm-providers";
+import ChatProduct from "./Item/ChatProduct";
 const Chats = (props) => {
+    const location = useLocation().pathname
     const [isLoading, setIsLoading] = useState(true);
     const [messages, setMessages] = useState([]);
     const [chats, setChats] = useState([]);
     const [product, setProduct] = useState();
+    const [post, setPost] = useState();
+    const [chatt, setChatt] = useState();
     const [newMessage, setnewMessage] = useState();
     const [selectedReason, setSelectedReason] = useState();
     const messagesEndRef = useRef(null);
@@ -83,9 +92,11 @@ const Chats = (props) => {
     const getChat = async ()=>{
         let url = `http://localhost:3001/chat/get_chat/${chatId}`
         const {data:chat}=await axios.get(url, config)
-        // console.log("chat")
-        // console.log(chat)
+        // console.log("prod")
+        // console.log(chat.product)
         setProduct(chat.product)
+        setPost(chat.post)
+        setChatt(chat)
         // setMessages(messages);
         return chat
     }
@@ -121,6 +132,11 @@ const Chats = (props) => {
     }
     const getChats = async ()=>{
         const { data:chats } = await axios.get("http://localhost:3001/chat", config);
+        setChats(chats);
+        return chats
+    }
+    const getChatsBlogged = async ()=>{
+        const { data:chats } = await axios.get("http://localhost:3001/chat/post", config);
         setChats(chats);
         return chats
     }
@@ -161,7 +177,9 @@ const Chats = (props) => {
             },
                 config);
             getMessages().then()
-            getChats().then()
+            location==="/client_message_post"?
+            getChatsBlogged().then():
+                getChats().then();
             // console.log(url)
             // console.log(newMessage)
         } catch (e) {
@@ -232,6 +250,9 @@ const Chats = (props) => {
             // console.log("message" + count)
             getFinalDeal().then()
             getMessages().then()
+            // console.log("compare users")
+            // console.log(chatt.users[0])
+            // console.log(userInfo._id)
         }, 3000);
         return () => {
             clearInterval(intervalId);
@@ -317,58 +338,58 @@ const Chats = (props) => {
                         <button className="btn-close lead" type="button" data-bs-dismiss="offcanvas"
                                 aria-label="Close"/>
                     </div>
-                    <div className="offcanvas-body sidebar-nav">
-                        <div className="d-flex flex-column align-items-stretch flex-shrink-0 bg-body-tertiary sidebar"
-                             >
-                            <div className="list-group list-group-flush border-bottom scrollarea">
-                                {chats?.map((chat) => (
-                                    <div>
-                                        {chat.latestMessage?
-                                            <a href="#" className={
-                                                localStorage.getItem("chats") === chat._id?"list-group-item list-group-item-action py-3 lh-sm active":"list-group-item list-group-item-action py-3 lh-sm"
-                                            }
-                                               aria-current="true" onClick={()=>{
-                                                // console.log(chat.latestMessage)
+                    {/*<div className="offcanvas-body sidebar-nav">*/}
+                    {/*    <div className="d-flex flex-column align-items-stretch flex-shrink-0 bg-body-tertiary sidebar"*/}
+                    {/*         >*/}
+                    {/*        <div className="list-group list-group-flush border-bottom scrollarea">*/}
+                    {/*            {chats?.map((chat) => (*/}
+                    {/*                <div>*/}
+                    {/*                    {chat.latestMessage?*/}
+                    {/*                        <a href="#" className={*/}
+                    {/*                            localStorage.getItem("chats") === chat._id?"list-group-item list-group-item-action py-3 lh-sm active":"list-group-item list-group-item-action py-3 lh-sm"*/}
+                    {/*                        }*/}
+                    {/*                           aria-current="true" onClick={()=>{*/}
+                    {/*                            // console.log(chat.latestMessage)*/}
 
-                                            }}
+                    {/*                        }}*/}
 
-                                               key={chat._id}
-                                            >
-                                                <div className="d-flex w-100 align-items-center justify-content-between">
-                                                    <strong className="mb-1">
-                                                        <span>
-                                                            {other&&other.username}
-                                                        </span>
-                                                    </strong>
-                                                    <small> </small>
-                                                    {/*<small>{chat.latestMessage?.updatedAt} </small>*/}
-                                                </div>
-                                                <div className="col-10 mb-1 small">
-                                                    <span className="username">
-                                                        {chat.latestMessage?.sender._id === userInfo._id?
-                                                            <div className="latest-message">
-                                                                <strong>You: <strong className="latest-message2">{chat.latestMessage.content}</strong></strong>
-                                                            </div>
-                                                            :
-                                                            <span className="latest-message">{chat.latestMessage.content}</span>
-                                                        }
-                                                    </span>
-                                                </div>
-                                            </a>
-                                            :
-                                            ""
-                                        }
-                                    </div>
+                    {/*                           key={chat._id}*/}
+                    {/*                        >*/}
+                    {/*                            <div className="d-flex w-100 align-items-center justify-content-between">*/}
+                    {/*                                <strong className="mb-1">*/}
+                    {/*                                    <span>*/}
+                    {/*                                        {other&&other.username}*/}
+                    {/*                                    </span>*/}
+                    {/*                                </strong>*/}
+                    {/*                                <small> </small>*/}
+                    {/*                                /!*<small>{chat.latestMessage?.updatedAt} </small>*!/*/}
+                    {/*                            </div>*/}
+                    {/*                            <div className="col-10 mb-1 small">*/}
+                    {/*                                <span className="username">*/}
+                    {/*                                    {chat.latestMessage?.sender._id === userInfo._id?*/}
+                    {/*                                        <div className="latest-message">*/}
+                    {/*                                            <strong>You: <strong className="latest-message2">{chat.latestMessage.content}</strong></strong>*/}
+                    {/*                                        </div>*/}
+                    {/*                                        :*/}
+                    {/*                                        <span className="latest-message">{chat.latestMessage.content}</span>*/}
+                    {/*                                    }*/}
+                    {/*                                </span>*/}
+                    {/*                            </div>*/}
+                    {/*                        </a>*/}
+                    {/*                        :*/}
+                    {/*                        ""*/}
+                    {/*                    }*/}
+                    {/*                </div>*/}
 
-                                ))
-                                }
-                            </div>
-                        </div>
-                    </div>
+                    {/*            ))*/}
+                    {/*            }*/}
+                    {/*        </div>*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
                 </div>
                 <div className="row">
                     <div className="col-5 messages-content">
-                        <div className="d-flex flex-column align-items-stretch flex-shrink-0 bg-body-tertiary sidebar sticky-header sidebar-sticky"
+                        <div className="d-flex flex-column align-items-stretch flex-shrink-0 bg-body-tertiary sidebar sticky-header"
                              >
                             <div className="list-group list-group-flush border-bottom scrollarea">
                                 {chats?.map((chat) => (
@@ -441,6 +462,42 @@ const Chats = (props) => {
                             }
 
                         </div>
+                        <div>
+
+                            {finalDeal?
+                                <div style={{display:"flex", justifyContent:"center"}}>
+                                    {chatt.users[0]===userInfo._id?
+                                        <div>
+                                            <div style={{backgroundColor:"#b3d4bf", padding:"10px"}}>
+                                                <h2>you have already dealt!</h2>
+                                                <div className="row">
+                                                    <h3 className="col-9">product's location </h3>
+                                                    <div className="col-1">
+                                                        <div
+                                                            style={{cursor:"pointer", backgroundColor:"#2f9fff", color:"white", borderRadius:"10px", width:"25px", padding:"5px"}}
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#map"
+                                                            title={"view location"}
+                                                        >
+                                                            <i className="fa fa-map-marker" title={"deal for "+product.name} style={{fontSize:"large", marginTop:"5px"}}/>
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <strong>city: </strong><span>{product.city}</span><br/>
+                                                <strong>region: </strong><span>{product.region}</span>
+
+                                            </div>
+                                            <hr/>
+                                            <br/>
+                                        </div> :""
+                                    }
+                                </div>:""
+
+                            }
+                            </div>
+
                         {messages?.sort((a,b)=>b.createdAt - a.createdAt).map((message) => (
                             <Message message={message}/>
                         ))}
@@ -541,30 +598,54 @@ const Chats = (props) => {
                  aria-hidden="true">
                 <div className="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
                     <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title" id="exampleModalLabel2">Requested Product</h5>
-                            <div style={{display:"flex", justifyContent:"center", width:"100%"}}>
-                                <div className="card" style={{ display: 'inline-block', width: '400px', margin: '10px' }}>
+                                {
+                                    product?
+                                        <div className="modal-header">
+                                            <h5 className="modal-title" id="exampleModalLabel2">Requested Product</h5>
+                                            <div style={{display:"flex", justifyContent:"center", width:"100%"}}>
+                                                <ChatProduct prod={product}/>
+                                            </div>
+                                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                <i className="fa-solid fa-xmark"></i>
+                                            </button>
+                                        </div>
+                                        :
+                                        post?
 
-                                    {product && product.images && (
-                                        <img
-                                            className="card-img-top"
-                                            src={`http://localhost:3001/${product.images}`}
-                                            alt={product && product.name}
-                                            width="300"
-                                            height="300"
-                                        />
-                                    )}
-                                    <div className="card-body">
-                                        <h5 className="card-title">{product && product.name}</h5>
-                                        <p className="card-text">{product && product.description}</p>
-                                        <h6 className="card-subtitle mb-2 text-muted">
-                                            {product && product.price}DT
-                                        </h6>
-                                        <p className="card-text">{product && product.category}</p>
-                                    </div>
-                                </div>
-                            </div>
+                                            <div className="modal-header">
+                                                <h5 className="modal-title" id="exampleModalLabel2">Requested Product to trade</h5>
+                                                <div style={{display:"flex", justifyContent:"center", width:"100%"}}>
+                                                    {/*<ChatProduct product={product}/>*/}
+                                                    post
+                                                </div>
+                                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                    <i className="fa-solid fa-xmark"></i>
+                                                </button>
+                                            </div>
+                                            :
+                                        ""
+                                }
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-animation btn-md fw-bold"
+                                    data-bs-dismiss="modal">Close
+                            </button>
+                            {/*<button type="button" data-bs-dismiss="modal"*/}
+                            {/*        className="btn theme-bg-color btn-md fw-bold text-light" onClick={handleDeal}>Confirm*/}
+                            {/*</button>*/}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div className="modal fade theme-modal" id="map" tabIndex="-1"
+                 aria-labelledby="exampleModalLabel2"
+                 aria-hidden="true">
+                <div className="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            {/*<h5 className="modal-title" id="exampleModalLabel2">Requested Product</h5>*/}
+                            <Mapp/>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                 <i className="fa-solid fa-xmark"></i>
                             </button>

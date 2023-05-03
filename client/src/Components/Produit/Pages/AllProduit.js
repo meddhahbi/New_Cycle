@@ -8,7 +8,7 @@ function AllProducts() {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [pageNumber, setPageNumber] = useState(0);
-  const productsPerPage = 3;
+  const productsPerPage = 6;
   const pagesVisited = pageNumber * productsPerPage;
   const location = useLocation().pathname
 

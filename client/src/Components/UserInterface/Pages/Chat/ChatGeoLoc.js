@@ -85,7 +85,7 @@ const ChatGeoLoc = (props) => {
         navigator.geolocation.getCurrentPosition(async (position) => {
             // console.log(position);
             const { latitude, longitude } = position.coords;
-            console.log(latitude)
+            console.log(position.coords)
             setPos(position.coords)
             setCurrLocationJs({ latitude, longitude });
             await getCityFromLatLng(latitude,longitude).then((city)=>{

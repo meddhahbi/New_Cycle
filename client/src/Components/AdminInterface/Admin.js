@@ -14,11 +14,14 @@ export default function Admin(){
         isAdmin() ? (
           <div>
             <Navbar />
-            <div className="col-md-3">
-              <Sidebar />
-            </div>
-            <div className="col-md-9">
-              <Outlet />
+            <div>
+
+                <div>
+                    <Sidebar />
+                </div>
+                <div >
+                    <Outlet />
+                </div>
             </div>
           </div>
         ) :isClient()? (

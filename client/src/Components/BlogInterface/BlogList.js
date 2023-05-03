@@ -111,6 +111,10 @@ function BlogList() {
                                                 <Link to={`/updateBlog/${article._id}`} >
                                                     <button  hidden={article.user != userId}>Update Blog </button>
                                                 </Link>
+
+                                                <Link to={`/client_message_blog`} >
+                                                    <button className="btn btn-outline-behance"  hidden={article.user === userId}><i className="fa fa-comment" style={{fontSize:"xx-large"}} /></button>
+                                                </Link>
                                             </div>
                                         </div>
                                     </div>

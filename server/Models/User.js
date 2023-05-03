@@ -70,7 +70,7 @@ register=(username,email,password,phone,postal,image,role)=>{
                             phone:phone,
                             postal:postal,
                             activationCode:activationCode,
-                            image:image,
+                            image:image.split("uploads\\")[1],
                             role:role
                         })
                         user.save().then((user)=>{
@@ -185,7 +185,7 @@ login=(email,password)=>{
                 })
             }else{
                 // mongoose.disconnect();
-                msg = "this email does not exist";
+                const msg = "this email does not exist";
                 resolve([msg,"err"])
             }
         })
