@@ -240,7 +240,25 @@ getAllAssociations=()=>{
             useUnifiedTopology: true
         }).then(()=>{
 
-            return Association.find();
+            return Association.find({  isActive:true });
+
+        }).then((doc)=>{
+            resolve(doc);
+        }).catch((err)=>{
+            reject(err);
+        })
+    })
+}
+
+
+getAssociationsNotActive=()=>{
+    return new Promise((resolve,reject)=>{
+        mongoose.connect(url,{
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        }).then(()=>{
+
+            return Association.find({  isActive:false });
 
         }).then((doc)=>{
             resolve(doc);
@@ -269,6 +287,36 @@ getAllAssociationCount = () => {
 
 
 
+  const activate = async (_id) => {
+    try {
+        await mongoose.connect(url, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        });
+
+        const association = await Association.findById(_id);
+
+        if (!association) {
+            throw new Error('association not found');
+        }
+
+        console.log(_id);
+        association.isActive = true;
+        const updatedAssociation = await association.save();
+
+       // mongoose.disconnect();
+
+        return updatedAssociation;
+    } catch (err) {
+        console.log(err);
+        //mongoose.disconnect();
+        throw new Error('Failed to unblock user');
+    }
+};
+
+
+
+
 module.exports = {
     Association,
    login,
@@ -277,5 +325,6 @@ module.exports = {
    getAllAssociations,
    getStatus,
    getAllAssociationCount,
-
+   getAssociationsNotActive,
+   activate,
 };

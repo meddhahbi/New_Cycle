@@ -304,8 +304,15 @@ route.get('/bloked',(req,res,next)=>{
   .catch((err)=>res.status(400).json(err))
 });
 
-route.get('/users/count',(req,res,next)=>{
+route.get('/count',(req,res,next)=>{
   userModel.getAllUsersCount()
+  .then((doc)=>res.status(200).json(doc))
+  .catch((err)=>res.status(400).json(err))
+})
+
+
+route.get('/count/notActive',(req,res,next)=>{
+  userModel.getAllUsersNotActiveCount()
   .then((doc)=>res.status(200).json(doc))
   .catch((err)=>res.status(400).json(err))
 })

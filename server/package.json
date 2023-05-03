@@ -45,6 +45,7 @@
     "react-timeago": "^7.1.0",
     "sentiment": "^5.0.2",
     "stripe": "^11.16.0",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "winston": "^3.8.2"
   }
 }
