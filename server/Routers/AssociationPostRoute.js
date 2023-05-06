@@ -55,5 +55,24 @@ router.get('/my-all-posts', protectAssociation, (req, res) => {
         })
 });
 
+router.delete('/:id', (req, res) => {
+    const articleId = req.params.id;
+  
+    ArticleAssociation.deleteArticle(articleId)
+      .then(() => {
+        res.status(200).json({
+          success: true,
+          message: 'Article deleted successfully'
+        });
+      })
+      .catch((err) => {
+        res.status(500).json({
+          success: false,
+          message: 'Failed to delete article',
+          error: err.message
+        });
+      });
+  });
+
 
 module.exports = router;

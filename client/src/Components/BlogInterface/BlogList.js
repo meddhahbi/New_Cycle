@@ -28,17 +28,20 @@ function BlogList() {
 
 
     const handleDelete = (id) => {
-        setIsDeleting(true);
-        axios.delete(`http://localhost:3001/article/${id}`)
+        const confirmDelete = window.confirm("Are you sure you want to delete this post?");
+        if (confirmDelete) {
+          setIsDeleting(true);
+          axios.delete(`http://localhost:3001/article/${id}`)
             .then(res => {
-                setArticles(articles.filter(article => article._id !== id));
-                setIsDeleting(false);
+              setArticles(articles.filter(article => article._id !== id));
+              setIsDeleting(false);
             })
             .catch(err => {
-                console.log(err);
-                setIsDeleting(false);
+              console.log(err);
+              setIsDeleting(false);
             });
-    };
+        }
+      };
 
 
     return (
@@ -99,13 +102,13 @@ function BlogList() {
 
                                                 </a>
                                                 <p>{article.content}</p>
-
+                                               
                                                 <Link to={{ pathname: `/getBlog/${article._id}` }} className="blog-button">
                                                     Read More <i className="fa-solid fa-right-long"></i>
                                                 </Link>
 
                                                 <br/>
-                                                <button onClick={() => handleDelete(article._id)} hidden={article.user != userId}>  delete</button>
+                                                <button class="btn btn-outline-danger" onClick={() => handleDelete(article._id)} hidden={article.user != userId}><i class="bi bi-trash"></i></button>
 
 
                                                 <Link to={`/updateBlog/${article._id}`} >

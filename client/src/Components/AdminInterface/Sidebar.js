@@ -32,7 +32,7 @@ export default function Sidebar(){
                                 <div className="category-list">
                                     <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/meats.svg" className="blur-up lazyload" alt="" />
                                     <h5>
-                                        <a href="shop-left-sidebar.html">Meats & Seafood</a>
+                                    <Link to="/allPosts">All posts</Link>
                                     </h5>
                                 </div>
                             </li>
@@ -40,7 +40,7 @@ export default function Sidebar(){
                                 <div className="category-list">
                                     <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/breakfast.svg" className="blur-up lazyload" alt="" />
                                     <h5>
-                                        <a href="shop-left-sidebar.html">Breakfast & Dairy</a>
+                                    <Link to="/allPostsAsso">All association posts</Link>
                                     </h5>
                                 </div>
                             </li>
