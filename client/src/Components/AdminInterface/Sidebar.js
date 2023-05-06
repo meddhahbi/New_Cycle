@@ -22,9 +22,9 @@ export default function Sidebar(){
                             </li>
                             <li>
                                 <div className="category-list">
-                                    <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/cup.svg" className="blur-up lazyload" alt="" />
+                                    <img src="../../assets/User/images/logo/associations.png" className="blur-up lazyload" alt="" />
                                     <h5>
-                                        <a href="shop-left-sidebar.html">Beverages</a>
+                                       <Link to="/admin/associations">Associations</Link>
                                     </h5>
                                 </div>
                             </li>

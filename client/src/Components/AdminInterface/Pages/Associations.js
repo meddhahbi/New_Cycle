@@ -1,6 +1,8 @@
-import { useState } from "react";
-import { Association } from "../../../../../server/Models/Association";
-
+// import { Association } from "../../../../../server/Models/Association";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import './style/dashboard.css'
+import Swal from 'sweetalert2';
 
 
 
@@ -36,7 +38,7 @@ export default function Associations(){
 
 
     useEffect(() => {
-        axios.get('http://localhost:3001/associations')
+        axios.get('http://localhost:3001/association')
           .then(response => setAssociations(response.data))
           .catch(error => console.log(error));
       }, []);
@@ -50,8 +52,8 @@ export default function Associations(){
 
 
 
-    return <div>
-<div className="div1">
+    return <div style={{width:"80%"}} className="div1">
+
 <section className="user-dashboard-section section-b-space">
         <div className="container-fluid-lg">
             <div className="row">
@@ -142,29 +144,10 @@ export default function Associations(){
                                                                     <td>{association.name}</td>
                                                                     <td>{association.email}</td>
                                                                     <td>{association.phone}</td>
-                                                    
+                                                                    
                                                                     </tr>
                                                                 ))}
-                                                            {/* <tr>
-                                                                <td className="product-image">#254834</td>
-                                                                <td>
-                                                                    <h.6>Choco Chip Cookies</h.6>
-                                                                </td>
-                                                                <td>
-                                                                    <label className="success">Shipped</label>
-                                                                </td>
-                                                            </tr>
-
-                                                            <tr>
-                                                                <td className="product-image">#355678</td>
-                                                                <td>
-                                                                    <h6>Premium Butter Cookies</h6>
-                                                                </td>
-                                                                <td>
-                                                                    <label className="danger">Pending</label>
-                                                                </td>
-                                                            </tr> */}
-
+                                                         
                                                           
 
                                                          
@@ -732,7 +715,7 @@ export default function Associations(){
     </section>
 </div>
 
-</div>
+
 
 
 
