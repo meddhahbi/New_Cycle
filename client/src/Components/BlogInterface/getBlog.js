@@ -89,6 +89,7 @@ function GetBlog() {
             console.log(error);
         }
     };
+    
     const likePost = async (id) => {
         try {
             const response = await axios.put(`http://localhost:3001/article/like`, {
@@ -145,6 +146,34 @@ function GetBlog() {
             console.log(err);
         }
     };
+    const badWords=async(msg)=>{
+        let response;
+        const encodedParams = new URLSearchParams();
+        encodedParams.append("content", msg);
+        encodedParams.append("censor-character", "*");
+    
+        const url = 'https://neutrinoapi-bad-word-filter.p.rapidapi.com/bad-word-filter';
+    
+        const options = {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/x-www-form-urlencoded',
+                'X-RapidAPI-Key': 'fe35a5a121msh34466f5ccd34a87p197183jsn8202a7d1a226',
+                'X-RapidAPI-Host': 'neutrinoapi-bad-word-filter.p.rapidapi.com'
+            },
+            body: encodedParams
+        };
+    
+        fetch(url, options)
+            .then(res => res.json())
+            .then(json => {
+                console.log(json["censored-content"]);
+                return json["censored-content"]
+                response = json;
+            })
+            .catch(err => console.error('error:' + err));
+        return response["censored-content"];
+    }
 
 
 

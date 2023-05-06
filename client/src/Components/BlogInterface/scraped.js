@@ -78,6 +78,7 @@ function Scraped() {
                                             <div class="blog-contain blog-contain-2">
 
                                                 <a href="blog-detail.html">
+                                                    
                                                     <h3>Title :{article.title}</h3>
 
                                                 </a>
