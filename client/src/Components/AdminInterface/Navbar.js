@@ -182,34 +182,7 @@ export default function Navbar(){
                                     </div>
                                 </div>
                             </li>
-                            <li className="right-side onhover-dropdown">
-                                <div className="delivery-login-box">
-                                    <div className="delivery-icon">
-                                        <i data-feather="user"></i>
-                                    </div>
-                                    <div className="delivery-detail">
-                                        <h6>Hello,</h6>
-                                        <h5>My Account</h5>
-                                    </div>
-                                </div>
-
-                                <div className="onhover-div onhover-div-login">
-                                    <ul className="user-box-name">
-                                        <li className="product-box-contain">
-                                            <i></i>
-                                            <a href="login.html">Log In</a>
-                                        </li>
-
-                                        <li className="product-box-contain">
-                                            <a href="sign-up.html">Register</a>
-                                        </li>
-
-                                        <li className="product-box-contain">
-                                            <a href="forgot.html">Forgot Password</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
+                          
                         </ul>
                     </div>
                 </div>
