@@ -29,6 +29,8 @@ import Plan from './Components/UserInterface/Pages/Plan';
 import authMiddleware from "./middleware/middleware";
 import Chats from "./Components/UserInterface/Pages/Chat/Chats";
 import Dashboard from './Components/AdminInterface/Pages/Dashboard';
+import Associations from './Components/AdminInterface/Pages/Associations';
+
 import Donation from './Components/UserInterface/Pages/Donation';
 
 import { useState, useEffect } from 'react';
@@ -148,6 +150,7 @@ function App() {
         <Route path="admin" exact element={<Admin />}>
         
         <Route path='' exact element={<Dashboard />} />
+        <Route path='associations' exact element={<Associations />}/>
 
         
        

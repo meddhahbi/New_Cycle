@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import LoadingPage from "../../Loading";
 import { useState } from "react";
 import React, {useEffect} from 'react';
+import {isSubscribed} from "../../../AuthGuard";
+
 
 import './style/home.css';
 
@@ -236,7 +238,7 @@ export default function Home(){
         </div>
     </section>
 
-
+    {/* {!isSubscribed ? null : ( */}
     <section class="newsletter-section section-b-space">
         <div class="container-fluid-lg">
             <div class="newsletter-box newsletter-box-2">
@@ -251,10 +253,12 @@ export default function Home(){
                                         <input type="email" class="form-control" id="exampleFormControlInput1"
                                             placeholder="Enter Your Email" />
                                         <i class="fa-solid fa-envelope arrow"></i>
+                                       
                                         <button class="sub-btn  btn-animation">
                                         <Link to="/subscribe"> <span class="d-sm-block d-none" style={whiteText}>Subscribe</span></Link>
                                             <i class="fa-solid fa-arrow-right icon"></i>
                                         </button>
+                                       
                                     </div>
 
                                 </div>
@@ -266,7 +270,7 @@ export default function Home(){
         </div>
     </section>
 
-   
+{/* )} */}
     
 
 
