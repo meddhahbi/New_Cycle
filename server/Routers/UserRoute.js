@@ -97,7 +97,10 @@ route.put("/setOffline",protect ,async(req, res, next)=>{
 route.get("/me/:mail", async (req, res, next)=>{
      userModel.currentUser(req.params.mail)
          .then((user)=>res.status(200).json({
+        // user:user,
+        // msg:'User'
         user:user,
+        userId: user._id,
         msg:'User'
     }))
     
