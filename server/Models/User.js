@@ -28,6 +28,10 @@ let schemaUser = mongoose.Schema({
     },
     image:{type:String, default:"default.jpg"},
     lastActive: { type: Date, default: Date.now },
+    wishlist: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Wishlist',
+      }],
     role: { type: String, enum: ['client', 'admin'], default: 'client' }
 
 });
@@ -542,6 +546,27 @@ deleteUser = (id) =>{
 }
 
 
+getUserById = (id) => {
+    return new Promise((resolve, reject) => {
+      mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+        .then(() => {
+          User.findById(id)
+            .then((User) => {
+            //  mongoose.disconnect();
+              resolve(User);
+            })
+            .catch((err) => {
+           //   mongoose.disconnect();
+              reject({ message: "Failed to retrieve product from database", error: err });
+            });
+        })
+        .catch((err) => {
+        //  mongoose.disconnect();
+          reject({ message: "Failed to connect to database", error: err });
+        });
+    });
+  };
+
 
 module.exports = {
     User,
@@ -559,6 +584,7 @@ module.exports = {
     getAllUsersBlocked,
     unblock,
     getAllUsersNotActiveCount,
+    getUserById,
 
 };
 
