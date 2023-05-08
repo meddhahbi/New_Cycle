@@ -30,20 +30,20 @@ export default function Sidebar(){
                             </li>
                             <li>
                                 <div className="category-list">
-                                    <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/meats.svg" className="blur-up lazyload" alt="" />
+                                    <img src="../../assets/User/images/logo/post.png" className="blur-up lazyload" alt="" />
                                     <h5>
                                     <Link to="/allPosts">All posts</Link>
                                     </h5>
                                 </div>
                             </li>
-                            <li>
+                            {/* <li>
                                 <div className="category-list">
-                                    <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/breakfast.svg" className="blur-up lazyload" alt="" />
+                                    <img src="../../assets/User/images/logo/post.png" className="blur-up lazyload" alt="" />
                                     <h5>
                                     <Link to="/allPostsAsso">All association posts</Link>
                                     </h5>
                                 </div>
-                            </li>
+                            </li> */}
                             <li>
                                 <div className="category-list">
                                     <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/frozen.svg" className="blur-up lazyload" alt="" />
