@@ -950,16 +950,15 @@ export default function Navbar(){
                                                     <li className="nav-item dropdown">
                                                         {/*<a className="nav-link dropdown-toggle" href="#"*/}
                                                         {/*   data-bs-toggle="dropdown">Product</a>*/}
-                                                        <Link className="nav-link dropdown-toggle" to="/AllProduit">Product</Link>
+                                                        <Link className="nav-link dropdown-toggle" to="/AllProduit">Shop </Link>
 
                                                     </li>
 
 
 
                                                     <li className="nav-item dropdown">
-                                                        <a className="nav-link dropdown-toggle" href="#"
-                                                           data-bs-toggle="dropdown">Blog</a>
-
+                                                    <Link className="nav-link dropdown-toggle" to="/scraped">Recommanded blogs </Link>
+                                                            
                                                     </li>
 
                                                     <li className="nav-item dropdown new-nav-item">

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 
 
 
@@ -32,12 +31,7 @@ function Scraped() {
 
     return (
         <div>
-
-
-
-
             <section class="breadscrumb-section pt-0">
-
                 <div class="container-fluid-lg">
                     <div class="row">
                         <div class="col-12">
@@ -87,14 +81,9 @@ function Scraped() {
                                                 <a href={article.link}  className="blog-button">
                                                     Read More <i className="fa-solid fa-right-long"></i>
                                                 </a>
-
-
-
                                             </div>
-
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>

@@ -43,8 +43,10 @@ import DashboardAssociation from './Components/UserInterface/Pages/Assosiation/D
 import ChatGeoLoc from "./Components/UserInterface/Pages/Chat/ChatGeoLoc";
 import MapContainerr from "./Components/UserInterface/Pages/Chat/MapContainer";
 import Mapp from "./Components/UserInterface/Pages/Chat/Osm-providers";
-import AllPosts from './Components/BlogInterface/AllPosts';
-import AllAssoPosts from './Components/BlogInterface/AssoPosts';
+import AllPosts from './Components/AdminInterface/Pages/AllPosts';
+import AllAssoPosts from './Components/AdminInterface/Pages/AssoPosts';
+import Categorie from './Components/AdminInterface/Pages/Categories';
+import AddCategory from './Components/AdminInterface/Pages/addCategory';
 
 
 
@@ -92,6 +94,7 @@ function App() {
 
           <Route exact path='/blog' element={<BlogList />} />
           <Route exact path='/addBlog' element={<AddBlog />} />
+          <Route exact path='/addCategory' element={<AddCategory />} />
           
           <Route path='/me' exact element={<UserProfile />} />
           <Route path='/edit_me' exact element={<ProfileForm />} />
@@ -121,6 +124,7 @@ function App() {
           <Route exact path='/association' element={<DashboardAssociation />} />
           <Route exact path='/allPosts' element={<AllPosts />} />
           <Route exact path='/allPostsAsso' element={<AllAssoPosts />} />
+          <Route exact path='/categorie' element={<Categorie />} />
           <Route exact path='/map' element={<Mapp />} />
           <Route  path='/UpdateProduct/:id' element={<UpdateProduct />} />
 
