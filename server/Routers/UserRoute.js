@@ -322,6 +322,11 @@ route.get('/count/notActive',(req,res,next)=>{
 })
 
 
+route.get('/count/reported',(req,res,next)=>{
+  userModel.getAllUsersReportedCount()
+  .then((doc)=>res.status(200).json(doc))
+  .catch((err)=>res.status(400).json(err))
+})
 
 
 // const storage = multer.diskStorage({

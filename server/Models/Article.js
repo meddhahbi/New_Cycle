@@ -227,6 +227,28 @@ const createArticle = (title, content, photo,userId) => {
         })
     })
 }
+
+
+getAllArticleCount = () => {
+  return new Promise((resolve, reject) => {
+    mongoose.connect(url, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    }).then(() => {
+      return Article.countDocuments();
+    }).then((count) => {
+      resolve(count);
+    }).catch((err) => {
+      reject(err);
+    })
+  })
+}
+
+
+
+
+
+
   
   module.exports = {
  Article,
@@ -238,6 +260,6 @@ const createArticle = (title, content, photo,userId) => {
  getLastThreeArticles,
  archive,
  getArticleArchived,
-
+ getAllArticleCount,
    
 };

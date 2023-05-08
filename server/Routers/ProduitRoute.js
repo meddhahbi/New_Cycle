@@ -1,11 +1,31 @@
 const express = require('express');
 const router = express.Router();
-const products = require('../Models/Produit');
+const products = require('../Models/Produit.js')
+const {createProduct, AllProducts, updateProduit, deleteProduct, getProductById, Product} = require('../Models/Produit.js')
 const multer = require('multer');
 const Sentiment = require('sentiment');
 var mlKnn = require('ml-knn');
 const path = require('path');
 const {protect} = require('../middleware/authmiddleware');
+const FormData = require('form-data');
+const axios = require('axios');
+
+
+// Get 6 most recent posts
+router.get('/prods_by_cat/:cat', protect,(req, res) => {
+
+  Product.find({restingQuantity:{$ne:0}, category:req.params.cat})
+      // .populate("association", "name")
+      .then(posts=>{
+        console.log(posts)
+        res.send(posts)
+      })
+      .catch((err)=>{
+        console.log(err)
+        res.status(401)
+      })
+});
+
 
 
 const storage = multer.diskStorage({
@@ -44,20 +64,21 @@ const trainModel = (products, category) => {
 };
 
 router.route('/').post(protect, upload.single('images'), async (req, res) => {
- console.log(req.user)
-  const { name, description, price, category,stock } = req.body;
+  console.log("req.user")
+  const { name, description, price, category, stock, city, region, country, latitude, longitude } = req.body;
   const images = req.file.path;
+  console.log(images)
   try {
     let product;
     if (price) {
-      product = await products.createProduct(name, description, price, category, images,stock,req.user._id);
+      product = await createProduct(name, description, price, category, stock, images, country, city, region, latitude, longitude , req.user._id);
     } else {
       const allProducts = await Product.AllProducts();
       const knn = trainModel(allProducts, category);
       const sentiment = new Sentiment();
       const { score } = sentiment.analyze(description);
       const estimatedPrice = knn.predict([[score]]);
-      product = await Product.createProduct(name, description, estimatedPrice[0], category, images,stock,req.user._id);
+      product = await Product.createProduct(name, description, estimatedPrice[0], category, images,req.user._id);
     }
 
     res.status(200).json({
@@ -73,7 +94,7 @@ router.route('/').post(protect, upload.single('images'), async (req, res) => {
 router.get('/estimate', async (req, res) => {
   try {
     const { description, category } = req.query;
-    const allProducts = await products.AllProducts();
+    const allProducts = await AllProducts();
     const knn = trainModel(allProducts, category);
     const sentiment = new Sentiment();
     const { score } = sentiment.analyze(description);
@@ -88,83 +109,66 @@ router.get('/estimate', async (req, res) => {
 // module.exports = router;
 
 
-router.put('/up/:productId', async (req, res) => {
-  try {
-    const productId = req.params.productId;
-    const newStock = req.body.stock;
-
-    const produit = await products.getProductById(productId);
-    if (!produit) {
-      return res.status(404).send('Produit non trouvé');
-    }
-
-    await produit.updateStock(newStock);
-    res.send('Stock de produit mis à jour');
-  } catch (error) {
-    console.log(error);
-    res.status(500).send('Erreur serveur');
-  }
-});
-
 
 
 // Delete a product
 router.delete('/:id', (req, res) => {
   const productId = req.params.id;
 
-  products.deleteProduct(productId)
-    .then(() => {
-      res.status(200).json({
-        success: true,
-        message: 'Product deleted successfully'
+  deleteProduct(productId)
+      .then(() => {
+        res.status(200).json({
+          success: true,
+          message: 'Product deleted successfully'
+        });
+      })
+      .catch((err) => {
+        res.status(500).json({
+          success: false,
+          message: 'Failed to delete product',
+          error: err.message
+        });
       });
-    })
-    .catch((err) => {
-      res.status(500).json({
-        success: false,
-        message: 'Failed to delete product',
-        error: err.message
-      });
-    });
 });
 
 // Update a product
 
 router.put('/:id', upload.single('images'), (req, res, next) => {
   //const images = req.file.path;
-  products.updateProduit(req.params.id, req.body.name, req.body.description, req.body.price, req.body.category,req.body.stock,{new:true})
-    .then((product) => res.status(200).json({
-      product: product,
-      msg: 'Product updated successfully'
-    }))
-    .catch((err) => res.status(400).json({ error: err }));
+  console.log("upd")
+  updateProduit(req.params.id, req.body.name, req.body.description, req.body.price, req.body.category,{new:true})
+      .then((product) => res.status(200).json({
+        product: product,
+        msg: 'Product updated successfully'
+      }))
+      .catch((err) => res.status(400).json({ error: err }));
 });
 
 router.get('/', (req, res, next) => {
-  products.AllProducts()
-    .then((products) => res.status(200).json({ products: products }))
-    .catch((err) => res.status(400).json({ error: err }));
+  AllProducts()
+      .then((products) => res.status(200).json({ products: products }))
+      .catch((err) => res.status(400).json({ error: err }));
 });
+
+
 
 
 
 // Get all products
 router.get('/all', (req, res, next) => {
-  products.AllProducts()
-    .then((products) => res.status(200).json({ products: products }))
-    .catch((err) => res.status(400).json({ error: err }));
+  AllProducts()
+      .then((products) => res.status(200).json({ products: products }))
+      .catch((err) => res.status(400).json({ error: err }));
 });
 
 // Get a product by ID
 router.get('/:id', (req, res, next) => {
   const productId = req.params.id;
-  
-  products.getProductById(productId)
-    .then((product) => res.status(200).json({ product: product }))
-    .catch((err) => res.status(400).json({ error: err }));
-});
 
-module.exports = router;
+  getProductById(productId)
+      .then((product) => res.status(200).json({ product: product }))
+      .catch((err) => res.status(400).json({ error: err }));
+});
 
 // var apiKey = process.env.OPENAI_SECRET_KEY;
 
@@ -184,36 +188,8 @@ module.exports = router;
 // });
 
 
-router.put('/accept/:_id',(req,res,next)=>{
-  console.log(req.body);
-  products.accepteProduit(req.params._id)
-  .then(()=>res.status(200).json({
-      msg:'Produit accepted successfully'
-  }))
-
-  .catch((err)=>res.status(400).json({msg:"Produit not found"}));
-
-});
 
 
-
-router.get('/notAccepted',(req,res,next)=>{
-  products.AllProductsNotAccepted()
-  .then((doc)=>res.status(200).json(doc))
-  .catch((err)=>res.status(400).json(err))
-});
-
-router.get('/accepted',(req,res,next)=>{
-  products.AllProducts()
-  .then((doc)=>res.status(200).json(doc))
-  .catch((err)=>res.status(400).json(err))
-});
-
-router.get('/latest',(req,res,next)=>{
-  products.getLatest()
-  .then((doc)=>res.status(200).json(doc))
-  .catch((err)=>res.status(400).json(err))
-});
 
 
 module.exports = router;

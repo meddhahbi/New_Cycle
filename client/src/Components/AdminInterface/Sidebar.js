@@ -15,7 +15,7 @@ export default function Sidebar(){
                                     <img src="../../assets/User/images/logo/shortlist.png" className="blur-up lazyload" alt="" />
                                     <h5>
 
-                                    <Link to="/admin">All users</Link>
+                                    <Link to="/admin">Users</Link>
 
                                     </h5>
                                 </div>
@@ -32,7 +32,7 @@ export default function Sidebar(){
                                 <div className="category-list">
                                     <img src="../../assets/User/images/logo/post.png" className="blur-up lazyload" alt="" />
                                     <h5>
-                                    <Link to="/allPosts">All posts</Link>
+                                    <Link to="/allPosts">Posts</Link>
                                     </h5>
                                 </div>
                             </li>
@@ -46,17 +46,17 @@ export default function Sidebar(){
                             </li> */}
                             <li>
                                 <div className="category-list">
-                                    <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/frozen.svg" className="blur-up lazyload" alt="" />
+                                    <img src="../../assets/User/images/logo/box.png" className="blur-up lazyload" alt="" />
                                     <h5>
-                                        <a href="shop-left-sidebar.html">Frozen Foods</a>
+                                        <Link to="/admin/products">Products</Link>
                                     </h5>
                                 </div>
                             </li>
                             <li>
                                 <div className="category-list">
-                                    <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/biscuit.svg" className="blur-up lazyload" alt="" />
+                                    <img src="../../assets/User/images/logo/report.png" className="blur-up lazyload" alt="" />
                                     <h5>
-                                        <a href="shop-left-sidebar.html">Biscuits & Snacks</a>
+                                    <Link to="/admin/reports">Reports</Link>
                                     </h5>
                                 </div>
                             </li>

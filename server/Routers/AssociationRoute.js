@@ -146,4 +146,12 @@ route.get('/getStatus/:email',async (req,res,next)=>{
 
 
 
+  route.get('/count/associationspending',(req,res,next)=>{
+    associationModel.getAllAssociationsPendingCount()
+    .then((doc)=>res.status(200).json(doc))
+    .catch((err)=>res.status(400).json(err))
+  })
+  
+
+
 module.exports = route;

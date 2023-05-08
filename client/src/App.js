@@ -16,8 +16,8 @@ import UserProfile from "./Components/UserInterface/Pages/UserProfile";
 import PageNotFound from './Components/UserInterface/PageNotFound';
 import RegisterAssociation from './Components/UserInterface/Pages/RegisterAssociation';
 import ProfileForm from "./Components/UserInterface/Pages/profileForm";
-import Wishlist from './Components/Produit/Pages/wishlist';
-import Comparer from './Components/Produit/Pages/Comparer';
+// import Wishlist from './Components/Produit/Pages/wishlist';
+// import Comparer from './Components/Produit/Pages/Comparer';
 
 import BlogList from './Components/BlogInterface/BlogList';
 import AddBlog from './Components/BlogInterface/addBlog'
@@ -47,6 +47,8 @@ import MapContainerr from "./Components/UserInterface/Pages/Chat/MapContainer";
 import Mapp from "./Components/UserInterface/Pages/Chat/Osm-providers";
 import AllPosts from './Components/BlogInterface/AllPosts';
 import AllAssoPosts from './Components/BlogInterface/AssoPosts';
+import Products from './Components/AdminInterface/Pages/Products';
+import Reports from './Components/AdminInterface/Pages/Reports';
 
 
 
@@ -125,8 +127,8 @@ function App() {
           <Route exact path='/allPostsAsso' element={<AllAssoPosts />} />
           <Route exact path='/map' element={<Mapp />} />
           <Route  path='/UpdateProduct/:id' element={<UpdateProduct />} />
-          <Route  path='/wishlist/:userId' element={<Wishlist />} />
-          <Route  path='/comparison/:id' element={<Comparer />} />
+          {/* <Route  path='/wishlist/:userId' element={<Wishlist />} />
+          <Route  path='/comparison/:id' element={<Comparer />} /> */}
 
       <Route path='/confirm/:activationCode' exact element={<ActivationPage />} />
   
@@ -155,6 +157,8 @@ function App() {
         
         <Route path='' exact element={<Dashboard />} />
         <Route path='associations' exact element={<Associations />}/>
+        <Route path='products' exact element={<Products />}  />
+        <Route path='reports' exact element={<Reports />}  />
 
         
        

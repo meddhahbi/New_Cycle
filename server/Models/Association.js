@@ -318,6 +318,23 @@ getAllAssociationCount = () => {
 
 
 
+getAllAssociationsPendingCount = () => {
+    return new Promise((resolve, reject) => {
+      mongoose.connect(url, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+      }).then(() => {
+        return Association.countDocuments({ isActive : false });
+      }).then((count) => {
+        resolve(count);
+      }).catch((err) => {
+        reject(err);
+      })
+    })
+  }
+
+
+
 
 module.exports = {
     Association,
@@ -329,4 +346,5 @@ module.exports = {
    getAllAssociationCount,
    getAssociationsNotActive,
    activate,
+   getAllAssociationsPendingCount,
 };

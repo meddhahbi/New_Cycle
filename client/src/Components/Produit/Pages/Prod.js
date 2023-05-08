@@ -2,13 +2,9 @@ import React from 'react';
 import axios from "axios";
 
 function Prod(props) {
-    
-    const config = {
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-    };
-    const {product, products, setProducts} = props;
+    const {product, cat, products, setProducts} = props;
+
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"))
     function deleteProduct(id) {
         if (window.confirm("Êtes-vous sûr de vouloir supprimer ce produit ?")) {
             axios
@@ -23,60 +19,6 @@ function Prod(props) {
         }
     }
 
-    const addToWishlistHandler = async (productId) => {
-
-
-        const response = await axios.get(`http://localhost:3001/produit/${productId}`);
-        const { product, userId } = response.data;
-        console.log('Product details:', product);
-        console.log('Product stock:', product.stock);
-        // Check if the product is in stock
-        if (product.stock > 0) {
-          // Decrement the stock value of the product
-          product.stock -= 1;
-          console.log('Product stock decremented:', product.stock);
-    
-          // Update the product in the database
-          const response2 = await axios.put(`http://localhost:3001/produit/up/${productId}`, product);
-          console.log('Product updated in the database:', response2.data);
-    
-          try {
-            const mail = localStorage.getItem('mail');
-            if (!mail) {
-              console.log('Email address not found in local storage');
-              return;
-            }
-            
-            const response = await axios.get(`http://localhost:3001/me/${mail}`);
-            const userId = response.data.userId;
-            const response2 = await axios.post('http://localhost:3001/wishlist', { productId, userId });
-            console.log(response2);
-          //  window.location.href = `http://localhost:3000/wishlist/${userId}`;
-           // console.log(response2.data.message);
-            // TODO: show a success message to the user
-          } catch (error) {
-            console.log(error);
-            // TODO: show an error message to the user
-          }
-        };
-    }
-    const addToComparisonHandler = async (productId) => {
-        try {
-            const response = await axios.post('http://localhost:3001/comparison', { products: [productId] }, config);
-            console.log('Product added to comparison:', response.data);
-    
-            // Set comparison ID cookie
-            document.cookie = `comparisonId=${response.data._id}; httpOnly`;
-    
-            // TODO: show a success message to the user
-        } catch (error) {
-            console.log(error);
-            // TODO: show an error message to the user
-        }
-    };
-      
-      
-      
 
     function updateProduct(id) {
         window.location.href = `/UpdateProduct/${id}`;
@@ -119,24 +61,13 @@ function Prod(props) {
                     height="300"
                 />
             )}
-             <button
-  className="btn btn-link position-absolute top-0 end-0"
-  onClick={() => addToWishlistHandler(product._id)}
->
-  <i className="bi bi-heart h1"></i>
-</button>
-
-<button className="btn btn-link position-absolute top-0 start-0" onClick={() => addToComparisonHandler(product._id)}>
-  <i className="bi bi-arrow-repeat h1"></i>
-</button>
-
             <div className="card-body">
                 <h5 className="card-title">{product.name}</h5>
                 <p className="card-text">{product.description}</p>
                 <h6 className="card-subtitle mb-2 text-muted">
                     {product.price}DT
                 </h6>
-                <p className="card-text">{product.category}</p>
+                {/*<p className="card-text">{cat.name}</p>*/}
                 <button
                     className="btn btn-success"
                     data-toggle="modal"
@@ -144,7 +75,12 @@ function Prod(props) {
                 >
                     Voir détails
                 </button>
-                <i className="fa fa-comment-dots" style={{marginLeft: "20px", color:"#00835a", fontSize:"xx-large", cursor:"pointer"}} onClick={sendMessage}/>
+                {product.productOwner._id !== userInfo._id?
+
+                    <i className="fa fa-comment-dots" style={{marginLeft: "20px", color:"#00835a", fontSize:"xx-large", cursor:"pointer"}} onClick={sendMessage}/>
+                    :
+                    ""
+                }
             </div>
 
             <div

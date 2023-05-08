@@ -5,7 +5,7 @@ const {User} = require("../../Models/User")
 const { protect, protectAdmin } = require("../../middleware/authmiddleware");
 const router = express.Router();
 const report = require("../../Models/Report/reportUser")
-router.route("/all").get(protectAdmin, async (req, res)=> {
+router.route("/all").get( async (req, res)=> {
     try {
         let reportUser = await ReportUser.find()
             .populate("reports", "reason reporter")
@@ -115,11 +115,11 @@ router.route("/check_reported").put(protect, async(req, res, next)=>{
 })
 
 
-router.get('/reports',(req,res,next)=>{
-    report.getReports()
-    .then((doc)=>res.status(200).json(doc))
-    .catch((err)=>res.status(400).json(err))
-  });
+// router.get('/reports',(req,res,next)=>{
+//     report.getReports()
+//     .then((doc)=>res.status(200).json(doc))
+//     .catch((err)=>res.status(400).json(err))
+//   });
 
 
 

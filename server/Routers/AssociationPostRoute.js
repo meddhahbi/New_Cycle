@@ -2,6 +2,7 @@ const express = require("express");
 const {User} = require("../Models/User")
 const {ArticleAssociation} = require("../Models/AssociationArticle")
 const { protectAssociation } = require("../middleware/authmiddleware");
+const associationPost = require('../Models/AssociationArticle');
 
 const router = express.Router();
 
@@ -73,6 +74,17 @@ router.delete('/:id', (req, res) => {
         });
       });
   });
+
+
+  router.get('/count/associationPost',(req,res,next)=>{
+    associationPost.getAllAssociationsPostCount()
+    .then((doc)=>res.status(200).json(doc))
+    .catch((err)=>res.status(400).json(err))
+  })
+  
+
+
+
 
 
 module.exports = router;

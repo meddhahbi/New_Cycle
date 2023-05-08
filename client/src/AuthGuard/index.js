@@ -21,9 +21,9 @@ export const isClient= ()=>{
 
 
 export const isSubs= ()=>{
-    const userInfo = localStorage.getItem('userInfo');
-    //const subscription = userInfo.subscription;
-    const subscriptionStatus = userInfo.subscription.status; 
+const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+const subscriptionStatus = userInfo.subscription.status;
+return subscriptionStatus;
 
-    return subscriptionStatus;
+   
 }
