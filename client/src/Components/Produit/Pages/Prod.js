@@ -137,14 +137,20 @@ function Prod(props) {
                     {product.price}DT
                 </h6>
                 <p className="card-text">{product.category}</p>
-                <button
-                    className="btn btn-success"
-                    data-toggle="modal"
-                    data-target={`#product-${product._id}`}
-                >
-                    Voir détails
-                </button>
-                <i className="fa fa-comment-dots" style={{marginLeft: "20px", color:"#00835a", fontSize:"xx-large", cursor:"pointer"}} onClick={sendMessage}/>
+
+                    <button
+                        className="btn btn-success"
+                        data-toggle="modal"
+                        data-target={`#product-${product._id}`}
+                    >
+                        Voir détails
+                    </button>
+                {product.productOwner._id !== userInfo._id?
+
+                    <i className="fa fa-comment-dots" style={{marginLeft: "20px", color:"#00835a", fontSize:"xx-large", cursor:"pointer"}} onClick={sendMessage}/>
+                    :
+                    ""
+                    }
             </div>
 
             <div
