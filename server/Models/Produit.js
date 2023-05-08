@@ -2,49 +2,51 @@ const mongoose = require('mongoose');
 const mlKnn = require('ml-knn');
 //const products = require('../models/Produit');
 
-let Product;
+const productSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true
+  },
+  description: {
+    type: String,
+    required: true
+  },
+  price: {
+    type: Number,
+    required: true
+  },
+  stock: {
+    type: Number,
+    required: true
+  },
+  category: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Category",
+    required:true
+  },
+  country: {
+    type: String
+  },
+  city: {
+    type: String
+  },
+  region: {
+    type: String
+  },
+  latitude: {
+    type: Number
+  },
+  longitude: {
+    type: Number
+  },
+  images: {type:String, required: true},
+  productOwner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+},
+});
 
-if (mongoose.models.Product) {
-  Product = mongoose.model('Product');
-} else {
-  const productSchema = new mongoose.Schema({
-    name: {
-      type: String,
-      required: true
-    },
-    description: {
-      type: String,
-      required: true
-    },
-    price: {
-      type: Number,
-      required: true
-    },
-    category: {
-      type: String,
-      required: true
-    },
-    images: {type:String, required: true},
-    productOwner: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
-    stock: {
-      type: Number,
-      required: true,
-    //  default: 0
-    }
-  });
-  
-  productSchema.methods.updateStock = async function (newStock) {
-    this.stock = newStock;
-    return this.save();
-  };
-  
-  Product = mongoose.model('Product', productSchema);
-  
-}
-
+const Product = mongoose.model('Product', productSchema);
 const url = process.env.URL;
 const k = 5; // number of nearest neighbors to use in regression
 
@@ -72,17 +74,23 @@ exports.estimatePrice = async (description, category) => {
 };
 
 // create a product with estimated price or provided price
-exports.createProduct = async (name, description, price, category, images, stock, idUser) => {
+const createProduct = async (name, description, price, category, stock, images, country, city, region, latitude, longitude, idUser) => {
   try {
-    console.log(idUser)
+    console.log(city)
     await mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
     let product = new Product({
       name: name,
       description: description,
       category: category,
       images: images.split("uploads")[1],
+      stock:stock,
+      country: country,
+      city: city,
+      region: region,
+      latitude: latitude,
+      longitude: longitude,
       productOwner: idUser,
-      stock: stock
+      
     });
 
     if (price) {
@@ -93,7 +101,10 @@ exports.createProduct = async (name, description, price, category, images, stock
       const knn = trainModel(allProducts, category);
       const estimatedPrice = knn.predict([[description.length]]);
       product.price = estimatedPrice[0];
-      await product.save();
+
+
+      let prod = await product.save();
+      console.log(prod)
     }
 
     //mongoose.disconnect();
@@ -109,14 +120,16 @@ exports.createProduct = async (name, description, price, category, images, stock
 
 
 
-
-exports.AllProducts = () => {
+const AllProducts = () => {
     return new Promise((resolve, reject) => {
       mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         .then(() => {
-          Product.find({})
+          Product.find({stock:{$ne:0}})
+              .populate("productOwner", "username image")
+              // .populate("Category", "name")
             .then((products) => {
              // mongoose.disconnect();
+              console.log(products)
               resolve(products);
             })
             .catch((err) => {
@@ -132,7 +145,7 @@ exports.AllProducts = () => {
   };
 
   
-  exports.getProductById = (id) => {
+  const getProductById = (id) => {
     return new Promise((resolve, reject) => {
       mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         .then(() => {
@@ -154,19 +167,19 @@ exports.AllProducts = () => {
   };
   
 
-  exports.updateProduit = (name, description, price, category, images,stock) => {
+  const updateProduit = (name, description, price, category, images) => {
     return new Promise((resolve, reject) => {
       mongoose.connect(url, {
         useNewUrlParser: true,
         useUnifiedTopology: true
       }).then(() => {
+        console.log("prod")
         Product.findByIdAndUpdate(id, {
           name: name,
           description: description,
           price: price,
           category:category,
-          images: images.split("uploads")[1],
-          stock: stock
+          images: images.split("uploads")[1]
         }, {new: true})
           .then((Product) => {
            // mongoose.disconnect();
@@ -184,7 +197,7 @@ exports.AllProducts = () => {
   };
   
 
-  exports.deleteProduct = (id) => {
+  const deleteProduct = (id) => {
     return new Promise((resolve, reject) => {
       mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         .then(() => {
@@ -204,16 +217,13 @@ exports.AllProducts = () => {
         });
     });
   };
-  
- exports.findProduit = (query) => {
-    return new Promise((resolve, reject) => {
-      Product.find(query)
-        .then((products) => {
-          resolve(products);
-        })
-        .catch((err) => {
-          reject({ message: "Failed to retrieve products from database", error: err });
-        });
-    });
-  };
-  
+
+
+  module.exports = {
+    Product,
+    createProduct,
+    AllProducts,
+    getProductById,
+    updateProduit,
+    deleteProduct
+  }

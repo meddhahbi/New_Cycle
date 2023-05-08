@@ -4,15 +4,15 @@ const {ReportUser} = require("../../Models/Report/reportUser")
 const {Report_User_Detail} = require("../../Models/Report/reportUserDetails")
 const { protect, protectAdmin } = require("../../middleware/authmiddleware");
 const router = express.Router();
-router.route("/all").get(protectAdmin, async (req, res)=> {
-    const {reportId} = req.body;
+router.route("/all/:reportId").get( async (req, res)=> {
+    const {reportId} = req.params;
 
     if (!reportId) {
         console.log("UserId param not sent with request");
         return res.sendStatus(400);
     }
     try {
-        Report_User_Detail.find({report:reportId}).then((reports)=>{
+        Report_User_Detail.find({report:reportId}).populate("reporter").then((reports)=>{
             res.status(200).send(reports);
         })
 

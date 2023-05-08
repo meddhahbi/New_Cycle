@@ -46,6 +46,15 @@ route.post('/',protect,upload.single('photo'),(req,res,next)=>{
     .catch((err)=>res.status(400).json({error:err}));
 })
 
+
+
+route.get('/count/article',(req,res,next)=>{
+  articles.getAllArticleCount()
+  .then((doc)=>res.status(200).json(doc))
+  .catch((err)=>res.status(400).json(err))
+})
+
+
 /*
 route.post('/',upload.single('photo'),(req,res,next)=>{
   const image = req.file.path;

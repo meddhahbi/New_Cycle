@@ -98,12 +98,29 @@ const deleteArticle = (id) => {
 };
 
 
+getAllAssociationsPostCount = () => {
+  return new Promise((resolve, reject) => {
+    mongoose.connect(url, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    }).then(() => {
+      return ArticleAssociation.countDocuments();
+    }).then((count) => {
+      resolve(count);
+    }).catch((err) => {
+      reject(err);
+    })
+  })
+}
+
+
 
   module.exports = {
     ArticleAssociation,
     createArticle,
     AllArticles,
     getRecent,
-    deleteArticle
+    deleteArticle,
+    getAllAssociationsPostCount,
    
 };

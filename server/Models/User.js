@@ -437,6 +437,22 @@ getAllUsersCount = () => {
   }
 
 
+  getAllUsersReportedCount = () => {
+    return new Promise((resolve, reject) => {
+      mongoose.connect(url, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+      }).then(() => {
+        return User.countDocuments({ isReported:true });
+      }).then((count) => {
+        resolve(count);
+      }).catch((err) => {
+        reject(err);
+      })
+    })
+  }
+
+
 
 
 
@@ -585,6 +601,7 @@ module.exports = {
     unblock,
     getAllUsersNotActiveCount,
     getUserById,
+    getAllUsersReportedCount,
 
 };
 

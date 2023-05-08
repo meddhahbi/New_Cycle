@@ -11,6 +11,32 @@ export default function Associations(){
 
     const [associations, setAssociations] = useState([]);
     const [notActiveAssociations,setNotActiveAssociations] = useState([]);
+    const [associationCount, setAssociationCount] = useState(0);
+    const [associationPendingCount, setAssociationPendingCount] = useState(0);
+    const [associationPostCount, setAssociationPost] = useState(0)
+
+    useEffect(()=>{
+        axios.get('http://localhost:3001/association/count')
+        .then(response => (setAssociationCount(response.data)))
+        .catch(error => console.log(error));
+      },[])
+
+
+      useEffect(()=>{
+        axios.get('http://localhost:3001/count/associationPost')
+        .then(response => (setAssociationPost(response.data)))
+        .catch(error => console.log(error));
+      },[])
+
+
+      useEffect(()=>{
+        axios.get('http://localhost:3001/count/associationspending')
+        .then(response => (setAssociationPendingCount(response.data)))
+        .catch(error => console.log(error));
+      },[])
+
+
+
 
 
 
@@ -66,13 +92,61 @@ export default function Associations(){
                                 aria-labelledby="pills-dashboard-tab">
                                 <div className="dashboard-home">
                                     <div className="title">
-                                        <h2>My Dashboard</h2>
+                                        <h2>Associations</h2>
                                         <span className="title-leaf">
                                             <svg className="icon-width bg-gray">
                                         
                                             </svg>
                                         </span>
                                     </div>
+
+                                      <div className="total-box">
+                                        <div className="row g-sm-4 g-3">
+                                          
+                                        <div className="col-xxl-4 col-lg-6 col-md-4 col-sm-6">
+                                                <div className="totle-contain">
+                                                    <img src="../../assets/User/images/icon/team.png"
+                                                        className="img-1 blur-up lazyload" alt="" />
+                                                    <img src="../../assets/User/images/icon/teamD.png" className="blur-up lazyload"
+                                                        alt="" />
+                                                    <div className="totle-detail">
+                                                        <h5>Total Associations</h5>
+                                                        <h3>{associationCount}</h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="col-xxl-4 col-lg-6 col-md-4 col-sm-6">
+                                                <div className="totle-contain">
+                                                    <img src="../../assets/User/images/icon/file.png"
+                                                        className="img-1 blur-up lazyload" alt="" />
+                                                    <img src="../../assets/User/images/icon/fileD.png" className="blur-up lazyload"
+                                                        alt="" />
+                                                    <div className="totle-detail">
+                                                        <h5>Total Associations Pending</h5>
+                                                        <h3> {associationPendingCount}</h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="col-xxl-4 col-lg-6 col-md-4 col-sm-6">
+                                                <div className="totle-contain">
+                                                    <img src="../../assets/User/images/icon/blog.png"
+                                                        className="img-1 blur-up lazyload" alt="" />
+                                                    <img src="../../assets/User/images/icon/blogD.png"
+                                                        className="blur-up lazyload" alt="" />
+                                                    <div className="totle-detail">
+                                                        <h5>Total Associations Posts</h5>
+                                                        <h3>{associationPostCount}</h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
                                     <div className="row g-4">
                                        
 
