@@ -23,6 +23,7 @@ route.post('/', protect, async (req, res) => {
 
 
 
+
   route.get('/',(req,res,next)=>{
 
     comment.getAllComment()

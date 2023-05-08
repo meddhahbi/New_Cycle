@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import SideBar from '../AdminInterface/Sidebar';
-import Navbar from '../AdminInterface/Navbar';
-import Style from '../AdminInterface/Pages/style/Posts.css'
+import SideBar from '../Sidebar';
+import Navbar from '../Navbar';
+import Style from '../Pages/style/Posts.css'
 
-function AllPosts() {
+function AllAssoPosts() {
   const [articles, setArticles] = useState([]);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -13,7 +13,7 @@ function AllPosts() {
     const confirmDelete = window.confirm("Are you sure you want to delete this post?");
     if (confirmDelete) {
       setIsDeleting(true);
-      axios.delete(`http://localhost:3001/article/${id}`)
+      axios.delete(`http://localhost:3001/association/${id}`)
         .then(res => {
           setArticles(articles.filter(article => article._id !== id));
           setIsDeleting(false);
@@ -26,7 +26,7 @@ function AllPosts() {
   };
 
   useEffect(() => {
-    axios.get('http://localhost:3001/article')
+    axios.get('http://localhost:3001/association/articles')
       .then((response) => {
         setArticles(response.data.articles);
       })
@@ -45,9 +45,10 @@ function AllPosts() {
             <thead>
               <tr>
                 <th>Title</th>
-                <th>Content</th>
+                <th>Description</th>
                 <th>Created At</th>
-                <th>Image</th>
+                <th>Quantity</th>
+                <th>Resting Quantity</th>
                 <th>Delete</th>
               </tr>
             </thead>
@@ -55,9 +56,10 @@ function AllPosts() {
               {articles.map(article => (
                 <tr key={article._id}>
                   <td>{article.title}</td>
-                  <td>{article.content}</td>
+                  <td>{article.description}</td>
                   <td>{article.createdAt}</td>
-                  {article.photo && <img width="120" height="120" src={`http://localhost:3001/${(article.photo)}`} />}
+                  <td>{article.quantity}</td>
+                  <td>{article.restingQuantity}</td>
                   <td><button class="btn btn-success"onClick={() => handleDelete(article._id)}>Delete</button></td>
                 </tr>
               ))}
@@ -69,4 +71,4 @@ function AllPosts() {
   );
 }
 
-export default AllPosts;
+export default AllAssoPosts;

@@ -5,7 +5,6 @@ import axios from 'axios';
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
 
-    const [author, setAuthor] = useState("");
 
     const [photo, setPhoto] = useState("");
    

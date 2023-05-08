@@ -88,7 +88,7 @@ export default function Sidebar(){
                                 <div className="category-list">
                                     <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/pet.svg" className="blur-up lazyload" alt="" />
                                     <h5>
-                                        <a href="shop-left-sidebar.html">Pet Foods</a>
+                                    <Link to="/categorie">Categories</Link>
                                     </h5>
                                 </div>
                             </li>

@@ -48,7 +48,9 @@ import Mapp from "./Components/UserInterface/Pages/Chat/Osm-providers";
 import AllPosts from './Components/BlogInterface/AllPosts';
 import AllAssoPosts from './Components/BlogInterface/AssoPosts';
 import Products from './Components/AdminInterface/Pages/Products';
-import Reports from './Components/AdminInterface/Pages/Reports';
+import Reports from './Components/AdminInterface/Pages/Reports';;
+import Categorie from './Components/AdminInterface/Pages/Categories';
+import AddCategory from './Components/AdminInterface/Pages/addCategory';
 
 
 
@@ -96,6 +98,7 @@ function App() {
 
           <Route exact path='/blog' element={<BlogList />} />
           <Route exact path='/addBlog' element={<AddBlog />} />
+          <Route exact path='/addCategory' element={<AddCategory />} />
           
           <Route path='/me' exact element={<UserProfile />} />
           <Route path='/edit_me' exact element={<ProfileForm />} />
@@ -125,6 +128,7 @@ function App() {
           <Route exact path='/association' element={<DashboardAssociation />} />
           <Route exact path='/allPosts' element={<AllPosts />} />
           <Route exact path='/allPostsAsso' element={<AllAssoPosts />} />
+          <Route exact path='/categorie' element={<Categorie />} />
           <Route exact path='/map' element={<Mapp />} />
           <Route  path='/UpdateProduct/:id' element={<UpdateProduct />} />
           {/* <Route  path='/wishlist/:userId' element={<Wishlist />} />
