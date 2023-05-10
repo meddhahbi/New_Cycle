@@ -1,137 +1,95 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
+import useFullPageLoader from "../../../../hooks/useFullPageLoader";
+// import { TableHeader, Pagination, Search } from "../../../DataTable";
+import   Pagination  from "../../../DataTable/Pagination";
+import   Header  from "../../../DataTable/Header";
+import   Search  from "../../../DataTable/Search";
 import NavbarAssociation from "./NavbarAssociation";
 import Footer from "../../Footer";
+import Swal from "sweetalert2";
 
 
 export default function DashboardAssociation(){
-
-
-    // const [association, setAssociation] = useState('');
-    // const [title, setTitle] = useState('');
-    // const [description, setDescription] = useState('');
-    // const [quantity, setQuantity] = useState('');
-  //  const [image, setImage] = useState(null);
-
-    // const [errors, setErrors] = useState(
-    //     {
-    //         title: '',
-    //         description: '',
-    //         quantity: '',
-    //       //  image:'',
-    //     }
-    // )
-
-
-    // const formValidation=()=>{
-
-    //     let status=true;
-    //     let localErrors={
-    //         title: '',
-    //         description: '',
-    //         quantity: '',
-    //       //  image: '',
-    //        // ...errors
-    //     }
-
-
-    //     if(title==""){
-    //         localErrors.title='Title is required';
-    //         status=false;
-    //     }
-    //     if(description==""){
-    //         localErrors.description='Description is required';
-    //         status=false;
-    //     }
-    //     if(quantity==""){
-    //         localErrors.quantity='quantity is required';
-    //         status=false;
-    //     }
-    //     // if(image==""){
-    //     //     localErrors.image='image is required';
-    //     //     status=false;
-    //     // }
-
-
-
-    //     setErrors(localErrors);
-    //     console.log(localErrors);
-    //     console.log(status);
-    //     return status;
-
-    // }
-
-
-    // const addPost=(e)=>{
-    //     e.preventDefault();
-    //     console.log("form submitted");
-    //     console.log("form data", title, description, quantity);
-
-    //     if(formValidation()){
-
-
-
-    //         const formData = new FormData();
-    //         formData.append('title', title);
-    //         formData.append('description', description);
-    //         formData.append('quantity', quantity);
-    //        // formData.append('image', image);
-
-
-    //         const url='http://localhost:3001/article/addPost'
-    //         axios.post(url, formData)
-    //         .then(response => {
-    //                     console.log(response.data); // Handle response data
-    //                     toast.success("User created successfuly...");
-    //                     setTitle('');
-    //                     setDescription('');
-    //                     setQuantity('');
-    //                    // setImage(null);
-    //                 })
-    //                 .catch(error => {
-    //                     console.log("test");
-    //                     console.error(error); // Handle error
-    //                     toast.error("Failed...");
-    //                 });
-    
-
-
-
-    //     }else{
-    //         console.log("from invalid");
-    //     }
-
-
-
-
-    // }
-    // const [association, setAssociation] = useState('');
     const [title, setTitle] = useState('');
+    const [cat, setCat] = useState('');
     const [recentPosts, setRecentPosts] = useState([]);
     const [allPosts, setAllPosts] = useState([]);
     const [description, setDescription] = useState('');
     const [quantity, setQuantity] = useState(0);
+    const [categories, setCategories] = useState([]);
+    const [loader, showLoader, hideLoader] = useFullPageLoader();
+    const [totalItems, setTotalItems] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [search, setSearch] = useState("");
+    const [sorting, setSorting] = useState({ field: "", order: "" });
     const config = {
         headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
     };
+    const ITEMS_PER_PAGE = 5;
+    const headers = [
+        { name: "No#", field: "id", sortable: false },
+        { name: "Title", field: "title", sortable: true },
+        { name: "Category", field: "category.name", sortable: false },
+        { name: "Description", field: "description", sortable: true },
+        { name: "Current quantity", field: "restingQuantity", sortable: false }
+
+    ];
+
+    const allPostsData = useMemo(() => {
+        // console.log("posts")
+        if (allPosts.length >0){
+
+        }
+        let computedComments = allPosts;
+
+        if (search) {
+            computedComments = computedComments.filter(
+                post =>
+                    post.title.toLowerCase().includes(search.toLowerCase()) ||
+                    // post.restingQuantity.toString().includes(search.toString()) ||
+                    post.description.toLowerCase().includes(search.toLowerCase())
+            );
+        }
+
+        setTotalItems(computedComments.length);
+
+        //Sorting posts
+        if (sorting.field) {
+            const reversed = sorting.order === "asc" ? 1 : -1;
+            computedComments = computedComments.sort(
+                (a, b) =>
+                    reversed * a[sorting.field].localeCompare(b[sorting.field])
+            );
+        }
+
+        //Current Page slice
+        return computedComments.slice(
+            (currentPage - 1) * ITEMS_PER_PAGE,
+            (currentPage - 1) * ITEMS_PER_PAGE + ITEMS_PER_PAGE
+        );
+    }, [allPosts, currentPage, search, sorting]);
+
 
     const handlePostSubmit = (e) => {
         e.preventDefault();
+        // console.log(cat)
       
         const data = {
             // association,
             title,
             description,
-            quantity
+            quantity,
+            category:cat
         };
       
         axios.post('http://localhost:3001/association_post',data, config)
           .then((res) => {
                 console.log(res);
-                window.location = "/association"
+                window.location.reload()
           })
           .catch((err) => {
             console.log(err);
@@ -144,20 +102,61 @@ export default function DashboardAssociation(){
         })
     }
     const getAllPosts = async()=>{
-        await axios.get('http://localhost:3001/association_post/my-all-posts', config).then((posts)=>{
+        showLoader();
+        await axios.get('http://localhost:3001/association_post/', config).then((posts)=>{
+            hideLoader();
+            console.log(posts.data)
             setAllPosts(posts.data)
             return posts
         })
     }
+    const getCats=()=> {
+        fetch(`http://localhost:3001/category/`)
+            .then(res => res.json())
+            .then(data => {
+                setCategories(data)
+                // console.log(data);
+            })
+    }
     useEffect( () => {
+
         getRecentPosts().then((p)=>{
-            console.log(p)
+            // console.log(p)
         })
         getAllPosts().then()
-    }, [getRecentPosts])
+        getCats()
+
+    }, [])
 
 
-return <div>
+    const delPost = async (id) =>{
+        console.log(id)
+        const url ="http://localhost:3001/association_post/del/"+id
+        Swal.fire({
+            title: 'Are you sure you want to delete this post?',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+        }).then(async (result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                await axios.get(url, config).then(p=>{
+                    setAllPosts(p.data)
+                })
+            }
+        })
+            .catch(error => {
+                console.log(error);
+            });
+
+    }
+
+
+    const getByCat=(e)=> {
+        console.log(e.target.value)
+        setCat(e.target.value);
+    }
+
+    return <div>
     <NavbarAssociation/>
 
     <section className="user-dashboard-section section-b-space">
@@ -448,21 +447,47 @@ return <div>
                                     <button className="btn btn-sm theme-bg-color text-white" data-bs-toggle="modal"
                                             data-bs-target="#edit-profile">Add Post
                                     </button>
-                                    <br></br>
+                                    <br/> <br/>
                                     <div className="table-responsive dashboard-bg-box">
+                                        <div className="row">
+                                            <div className="col-md-6">
+                                                <Pagination
+                                                    total={totalItems}
+                                                    itemsPerPage={ITEMS_PER_PAGE}
+                                                    currentPage={currentPage}
+                                                    onPageChange={page => setCurrentPage(page)}
+                                                />
+                                            </div>
+                                            <div className="col-md-6 d-flex flex-row-reverse">
+                                                <Search
+                                                    onSearch={value => {
+                                                        setSearch(value);
+                                                        setCurrentPage(1);
+                                                    }}
+                                                />
+                                            </div>
+
+                                        </div>
                                         <table className="table product-table">
-                                            <thead>
-                                            <tr>
-                                                <th scope="col">Images</th>
-                                                <th scope="col">title</th>
-                                                <th scope="col">description</th>
-                                                <th scope="col">total quantity</th>
-                                                <th scope="col">Sales</th>
-                                                <th scope="col">Edit / Delete</th>
-                                            </tr>
-                                            </thead>
+                                            <Header
+                                                headers={headers}
+                                                onSorting={(field, order) =>
+                                                    setSorting({ field, order })
+                                                }
+                                            />
+                                            {/*<thead>*/}
+                                            {/*<tr>*/}
+                                            {/*    <th scope="col">Images</th>*/}
+                                            {/*    <th scope="col">title</th>*/}
+                                            {/*    <th scope="col">description</th>*/}
+                                            {/*    <th scope="col">total quantity</th>*/}
+                                            {/*    <th scope="col">Sales</th>*/}
+                                            {/*    <th scope="col">Edit / Delete</th>*/}
+                                            {/*</tr>*/}
+                                            {/*</thead>*/}
                                             <tbody>
-                                            {allPosts.map(post=>(
+
+                                            {allPostsData&&allPostsData.map(post=>(
                                                 <tr>
                                                     <td className="product-image">
                                                         <img src="./../../../assets/User/images/vegetable/product/1.png"
@@ -472,17 +497,20 @@ return <div>
                                                         <h6>{post.title}</h6>
                                                     </td>
                                                     <td>
+                                                        <h6>{post.category.name}</h6>
+                                                    </td>
+                                                    <td>
                                                         <h6 className="theme-color fw-bold">{post.description}</h6>
                                                     </td>
-                                                    <td>
-                                                        <h6>{post.quantity}</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6>152</h6>
+                                                    <td style={post.restingQuantity === 0?
+                                                        {backgroundColor:"#79ffb7"}
+                                                        :{backgroundColor:"#ffd5d5"}}>
+                                                        <h6>{post.restingQuantity}/{post.quantity}</h6>
                                                     </td>
                                                     <td className="efit-delete">
-                                                        <i data-feather="edit" className="edit"></i>
-                                                        <i data-feather="trash-2" className="delete"></i>
+                                                        <button className="btn btn-outline-danger" onClick={() => delPost(post._id)} >
+                                                            <i data-feather="delete" className="fa fa-trash"/>
+                                                        </button>
                                                     </td>
                                                 </tr>
                                             ))}
@@ -591,15 +619,36 @@ return <div>
                         {/*           onChange={(e) => setAssociation(e.target.value)}/>*/}
                         {/*</div>*/}
                         <div className="mb-3">
+                            {/*<div className="dropdown-menu" aria-labelledby="dropdownMenuButton">*/}
+                            {/*    /!*<select className="form-select" aria-label="Default select example">*!/*/}
+                            {/*    {categories.map(*/}
+                            {/*        (c)=>(*/}
+                            {/*            <a onClick={()=>getByCat(c._id)} className="dropdown-item" href="#">{c.name}</a>*/}
+                            {/*        ))}*/}
+                            {/*    /!*</select>*!/*/}
+                            {/*</div>*/}
+
+                            <select name="" id="" className="form-control" value={cat} onChange={getByCat}>
+                                <option value="" disabled>select a category</option>
+                                {categories.map(
+                                    (c) => (
+                                        <option value={c._id}
+                                                className="dropdown-item">{c.name}</option>
+                                    )
+                                )}
+                            </select>
+                        </div>
+                        <div className="mb-3">
                             <label htmlFor="title" className="form-label">Title</label>
                             <input type="text" className="form-control" id="title" value={title}
                                    onChange={(e) => setTitle(e.target.value)}/>
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="description" className="form-label">Description</label>
-                            <textarea className="form-control" id="description" value={description}
-                                      onChange={(e) => setDescription(e.target.value)}/>
+                            <label htmlFor="title" className="form-label">Description</label>
+                            <textarea className="form-control" id="title" value={description}
+                                   onChange={(e) => setDescription(e.target.value)}/>
                         </div>
+
                         <div className="mb-3">
                             <label htmlFor="quantity" className="form-label">Quantity</label>
                             <input type="number" className="form-control" id="quantity" value={quantity}

@@ -81,6 +81,7 @@ router.route("/:chatId").get(protect,async (req, res) => {
             .populate("sender", "username email image")
             .populate("chat")
             .then((messages)=>{
+                // console.log("ms")
                 // console.log("your ip: "+req.ip)
                 for (message of messages){
                     message.content = filter.clean(message.content)

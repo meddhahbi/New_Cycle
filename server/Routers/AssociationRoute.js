@@ -4,6 +4,7 @@ const associationModel = require('../Models/Association');
 const path = require('path');
 const {Association} = require('../Models/Association');
 const multer = require('multer');
+const {ArticleAssociation} = require("../Models/AssociationArticle")
 const associationArticle = require('../Models/AssociationArticle')
 
 
@@ -100,9 +101,22 @@ route.get('/getStatus/:email',async (req,res,next)=>{
 
 
   route.get('/articles',(req,res,next)=>{
-    associationArticle.AllArticles()
-    .then((doc)=>res.status(200).json(doc))
-    .catch((err)=>res.status(400).json(err))
+    // associationArticle.AllArticles()
+    // .then((doc)=>res.status(200).json(doc))
+    // .catch((err)=>res.status(400).json(err))
+      ArticleAssociation.find({restingQuantity:{$ne:0}})
+          .populate("association", "name")
+          .populate("category", "name")
+          .sort({ createdAt: -1 })
+          .then(posts=>{
+              console.log(posts)
+              // console.log(posts)
+              res.json(posts)
+          })
+          .catch((err)=>{
+              console.log(err)
+              res.status(400).json(err)
+          })
   });
 
   route.get('/recent-posts', async (req, res) => {

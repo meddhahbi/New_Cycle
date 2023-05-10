@@ -1,10 +1,16 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import style from './style.css';
 import TimeAgo from "react-timeago";
 import axios from "axios";
 
-function Chat(props) {
+function ChatTrade(props) {
     const [checked, setChecked] = useState(false);
+    const [post, setPost] = useState(false);
+    const config = {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+    };
     const toggleChecked = () => {
         setChecked(!checked);
     }
@@ -12,27 +18,16 @@ function Chat(props) {
         props.onSetReported(other)
         setChecked(false)
         console.log(other)
-    //     const message = "user "+other.username+" is going to be reported!"
-    //     console.log(message)
-    //     const reportUserUrl = "/reportUser"
-    //     try{
-    //         const{data:reported} = await axios.post(reportUserUrl,{
-    //             userId:other._id
-    //         }, config)
-    //         console.log(reported)
-    //     }
-    //     catch (e) {
-    //         console.log(e.message)
-    //     }
-    //
-    //     setIsLoading(true)
-    //
-    //     setTimeout(()=>{
-    //         setIsLoading(false)
-    //     }, 1000)
-    //
+    }
+    const getPost = async()=>{
+        const urlPost = `http://localhost:3001/article/${chat.post}`
+        const {data:pos}=await axios.get(urlPost, config)
+        setPost(pos.article)
     }
     const {chat, setIsLoading, userInfo, other}= props;
+    useEffect(()=>{
+        getPost().then()
+    })
 
     return (
         <>
@@ -81,7 +76,7 @@ function Chat(props) {
                                 <strong className="mb-1">
                                 <span>
                                     {/*{chat.latestMessage?.sender.username}*/}
-                                    {chat.product && chat.product.name || chat.post && chat.post.title} ({chat.users[0]._id===userInfo._id?
+                                    {post && post.title} ({chat.users[0]._id===userInfo._id?
                                         chat.users[1].username
                                         :
                                         chat.users[0].username
@@ -133,4 +128,4 @@ function Chat(props) {
     );
 }
 
-export default Chat;
+export default ChatTrade;

@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const articleAssociationSchema = new mongoose.Schema({
   // associationName: { type: String, required: true },
   association: { type: mongoose.Schema.Types.ObjectId, ref: "Association" },
+  category: { type: mongoose.Schema.Types.ObjectId, ref: "Category" },
   title: { type: String, required: true },
   description: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
@@ -27,6 +28,7 @@ createArticle = (associationName,title, description,quantity) => {
         description: description,
         //image: image.split("uploads")[1],
         quantity: quantity,
+        restingQuantity: quantity,
       });
       article.save().then((article) => {
         resolve(article);
@@ -46,7 +48,7 @@ AllArticles=()=>{
           useUnifiedTopology: true
       }).then(()=>{
 
-          return ArticleAssociation.find();
+          return ArticleAssociation.find({restingQuantity:{$ne:0}});
 
       }).then((doc)=>{
           resolve(doc);
