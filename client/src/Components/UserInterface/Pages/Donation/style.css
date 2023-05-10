@@ -1,0 +1,9 @@
+/*.fa-trash:hover{*/
+/*    color: white;*/
+/*}*/
+/*.fa-trash{*/
+/*    color: #000000;*/
+/*}*/
+.list-group-item:hover{
+    background-color: rgba(0, 0, 0, 0.2);
+}

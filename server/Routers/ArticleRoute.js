@@ -154,7 +154,8 @@ route.get('/', (req, res, next) => {
   
   route.get('/:id', (req, res, next) => {
     const id = req.params.id;
-    articles.getArticleById(id)
+    Article.findOne({_id:id}).populate("commentList")
+    // articles.getArticleById(id)
       .then((article) => res.status(200).json({ article: article }))
       .catch((err) => res.status(400).json({ error: err }));
   });

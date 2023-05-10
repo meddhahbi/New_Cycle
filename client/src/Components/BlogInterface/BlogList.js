@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import Blog from "./Blog";
 import { isLoggedIn, isClient, isSubs } from '../../AuthGuard/index';
 //import jwt_decode from 'jwt-decode';
 // import TimeAgo from 'react-timeago'
@@ -16,17 +17,20 @@ function BlogList() {
     // const payload = JSON.parse(atob(parts[1]));
     // const userId = payload.id;
      const userId = JSON.parse(localStorage.getItem("userInfo"))
-    
 
 
     useEffect(() => {
 
         fetch(`http://localhost:3001/article`)
             .then(res => res.json())
-            .then(data => setArticles(data.articles)
+            .then(data => {
+                console.log("test")
+                    setArticles(data.articles)
+                }
             )
             .catch(error => console.log(error));
     }, []);
+
 
 
     const handleDelete = (id) => {
@@ -80,57 +84,45 @@ function BlogList() {
             <section class="blog-section section-b-space">
 
                 <div class="container-fluid-lg">
-
-
+                    <Link to="/addBlog" className="btn btn-success">New</Link>
                     {articles.map(article => (
-                        <div class="row g-4">
-                            <div class="col-xxl-9 col-xl-8 col-lg-7 order-lg-2">
-                                <div class="row g-4">
-
-                                    <div class="col-12">
-                                        <div class="blog-box blog-list wow fadeInUp" data-wow-delay="0.2s">
-                                            <a href="blog-detail.html" class="blog-image">
-
-
-                                                {article.photo && <img width="400" height="200" src={`http://localhost:3001/${(article.photo)}`} />}
+                    <Blog article={article} articles={articles} setArticles={setArticles} setIsDeleting={setIsDeleting}/>
 
 
 
-                                            </a>
-
-                                            <div class="blog-contain blog-contain-2">
-                                                <div class="blog-label">
-                                                    <span class="time"><i data-feather="clock"></i> <span>{article.createdAt}</span></span>
-
-                                                </div>
-                                                <a href="blog-detail.html">
-                                                    <h3>{article.title}</h3>
-
-                                                </a>
-                                                <p>{article.content}</p>
-
-                                                <Link to={{ pathname: `/getBlog/${article._id}` }} className="blog-button">
-                                                    Read More <i className="fa-solid fa-right-long"></i>
-                                                </Link>
-
-                                                <br />
-                                                <button class="btn btn-outline-danger" onClick={() => handleDelete(article._id)} hidden={article.user != userId._id}><i class="bi bi-trash"></i></button>
-
-
-                                                <Link to={`/updateBlog/${article._id}`} >
-                                                    <button hidden={article.user != userId._id}>Update Blog </button>
-                                                </Link>
-
-                                                <Link to={`/client_message_blog`} >
-                                                    <button className="btn btn-outline-behance" hidden={article.user === userId._id}><i className="fa fa-comment" style={{ fontSize: "xx-large" }} /></button>
-                                                </Link>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     ))}
+{/*                    <div class="blog-contain blog-contain-2">*/}
+{/*                        <div class="blog-label">*/}
+{/*                            <span class="time"><i data-feather="clock"></i> <span>{article.createdAt}</span></span>*/}
+
+{/*                        </div>*/}
+{/*                        <a href="blog-detail.html">*/}
+{/*                            <h3>{article.title}</h3>*/}
+
+{/*                        </a>*/}
+{/*                        <p>{article.content}</p>*/}
+
+{/*                        <Link to={{ pathname: `/getBlog/${article._id}` }} className="blog-button">*/}
+{/*                            Read More <i className="fa-solid fa-right-long"></i>*/}
+{/*                        </Link>*/}
+
+{/*                        <br />*/}
+{/*                        <button class="btn btn-outline-danger" onClick={() => handleDelete(article._id)} hidden={article.user != userId._id}><i class="bi bi-trash"></i></button>*/}
+
+
+{/*                        <Link to={`/updateBlog/${article._id}`} >*/}
+{/*                            <button hidden={article.user != userId._id}>Update Blog </button>*/}
+{/*                        </Link>*/}
+
+{/*                        <Link to={`/client_message_blog`} >*/}
+{/*                            <button className="btn btn-outline-behance" hidden={article.user === userId._id}><i className="fa fa-comment" style={{ fontSize: "xx-large" }} /></button>*/}
+{/*                        </Link>*/}
+{/*                    </div>*/}
+{/*                </div>*/}
+{/*        </div>*/}
+{/*</div>*/}
+{/*</div>*/}
+{/*</div>*/}
                 </div>
             </section>
         </div>

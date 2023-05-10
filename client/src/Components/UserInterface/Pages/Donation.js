@@ -1,15 +1,23 @@
 import React, {useEffect} from 'react';
 import { useState } from "react";
 import LoadingPage from "../../Loading";
+import Donationn from "./Donation/Donation";
+import ChatProduct from "./Chat/Item/ChatProduct";
+import Don from "./Donation/Don";
+import "./Donation/style.css"
 
 
 
 
 export default function Donation(){
 
+    const [products, setProducts] = useState([]);
 
     const [articles, setArticles] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [recents, setRecent] = useState([]);
+    const [cat, setCat] = useState();
+    const [post, setPost] = useState(null);
 
 
     const [isLoading, setIsLoading] = useState(true);
@@ -29,12 +37,23 @@ export default function Donation(){
     //    setQuantity(data.quantity)
     })
           .catch(error => console.log(error));
+
+        fetch(`http://localhost:3001/category/`)
+          .then(res => res.json() )
+          .then(data =>{
+              setCategories(data)
+            console.log(data);
+           // console.log(data.data.data.quantity)
+
+    //    setQuantity(data.quantity)
+    })
+          .catch(error => console.log(error));
       }, []);
 
 
     useEffect(() => {
     
-          fetch(`http://localhost:3001/association/recent-posts`)
+          fetch(`http://localhost:3001/association_post/recent_six`)
         .then(res => res.json() )
         .then(data =>{ setRecent(data)
           console.log(data);
@@ -43,9 +62,20 @@ export default function Donation(){
       }, []);
 
 
+    const getByCat=(_id)=> {
+        return undefined;
+    }
 
-
-
+    let handCat = (data)=>{
+        console.log(data)
+        setCat(data)
+    };
+    let handleProds=(data)=>{
+        setProducts(data)
+    };
+    let handlePost = (data)=>{
+        setPost(data)
+    };
     return <div>
  {isLoading ? <LoadingPage/> :
 <section className="blog-section section-b-space">
@@ -53,39 +83,67 @@ export default function Donation(){
             <div className="row g-4">
                 <div className="col-xxl-9 col-xl-8 col-lg-7 order-lg-2">
                     <div className="row g-4 ratio_65">
+                        <div className="dropdown rightside-menu">
+                            <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                filter
+                            </button>
+                            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a className="dropdown-item" href="#">All</a>
+                                <p style={{marginLeft:"5px"}}>categories:</p>
+                                {/*{!categories?*/}
+                                {/*    <h3>No Categories</h3>:*/}
+                                {/*    <>*/}
+                                {/*        {categories && categories.map(*/}
+                                {/*            (c)=>(*/}
+                                {/*                <a onClick={()=>getByCat(c._id)} className="dropdown-item" href="#">{c.name}</a>*/}
+                                {/*            )*/}
+                                {/*        )}*/}
+                                {/*    </>*/}
+                                {/*}*/}
+                                {/*<a className="dropdown-item" href="#">Action</a>*/}
+                                {/*<a className="dropdown-item" href="#">Another action</a>*/}
+                                {/*<a className="dropdown-item" href="#">Something else here</a>*/}
+                            </div>
+                        </div>
+
+                    {/*{articles.map(article => (*/}
+
+                    {/*    <div className="col-xxl-4 col-sm-6">*/}
+                    {/*        <div className="blog-box wow fadeInUp" data-wow-delay="0.05s">*/}
+                    {/*            /!* <div className="blog-image">*/}
+                    {/*                <a href="blog-detail.html">*/}
+                    {/*                    <img src="../../../../assets/User/images/inner-page/blog/2.jpg" className="bg-img" alt="" />*/}
+                    {/*                </a>*/}
+                    {/*            </div> *!/*/}
+
+                    {/*            <div className="blog-contain">*/}
+                    {/*                <div className="blog-label">*/}
+                    {/*                <span className="time"><i data-feather="clock"></i> <span>{new Date(article.createdAt).toLocaleString()}</span></span>*/}
+                    {/*                    <span className="super"><i data-feather="user"></i> <span>{article.associationName}</span></span>*/}
+                    {/*                </div>*/}
+                    {/*                <a href="blog-detail.html">*/}
+                    {/*                    <h3>{article.title}</h3>*/}
+                    {/*                </a>*/}
+                    {/*                */}
+                    {/*                <p>{article.description}</p>*/}
+                    {/*               */}
+
+                    {/*                        /!* <h4 className="quantity">quantity: {article.quantity}</h4> *!/*/}
+                    {/*                    */}
+                    {/*                <button  className="blog-button" data-bs-toggle="modal"*/}
+                    {/*                            data-bs-target="#edit-profile">Donate*/}
+                    {/*                    <i className="fa-solid fa-right-long"></i></button>*/}
+                    {/*            </div>*/}
+                    {/*               */}
+                    {/*        </div>*/}
+                    {/*    </div>*/}
+                    {/*))} */}
 
                     {articles.map(article => (
 
-                        <div className="col-xxl-4 col-sm-6">
-                            <div className="blog-box wow fadeInUp" data-wow-delay="0.05s">
-                                {/* <div className="blog-image">
-                                    <a href="blog-detail.html">
-                                        <img src="../../../../assets/User/images/inner-page/blog/2.jpg" className="bg-img" alt="" />
-                                    </a>
-                                </div> */}
-
-                                <div className="blog-contain">
-                                    <div className="blog-label">
-                                    <span className="time"><i data-feather="clock"></i> <span>{new Date(article.createdAt).toLocaleString()}</span></span>
-                                        <span className="super"><i data-feather="user"></i> <span>{article.associationName}</span></span>
-                                    </div>
-                                    <a href="blog-detail.html">
-                                        <h3>{article.title}</h3>
-                                    </a>
-                                    
-                                    <p>{article.description}</p>
-                                   
-
-                                            {/* <h4 className="quantity">quantity: {article.quantity}</h4> */}
-                                        
-                                    <button  className="blog-button" data-bs-toggle="modal"
-                                                data-bs-target="#edit-profile">Donate
-                                        <i className="fa-solid fa-right-long"></i></button>
-                                </div>
-                                   
-                            </div>
-                        </div>
-                    ))} 
+                        <Donationn cat={article.category._id} post={article} onSetPost={handlePost} onSetCat={handCat} onSetProducts={handleProds}/>
+                    ))}
                     </div>
 
                 
@@ -196,6 +254,13 @@ export default function Donation(){
                 </div>
             </div>
         </div>
+    <div className="modal fade theme-modal" id={"donate"} tabIndex="-1"
+         aria-labelledby="exampleModalLabel2"
+         aria-hidden="true">
+        <div className="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
+            <Don post={post} cat={cat} products={products}/>
+        </div>
+    </div>
     </section>
 
 }

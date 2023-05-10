@@ -45,8 +45,15 @@ import DashboardAssociation from './Components/UserInterface/Pages/Assosiation/D
 import ChatGeoLoc from "./Components/UserInterface/Pages/Chat/ChatGeoLoc";
 import MapContainerr from "./Components/UserInterface/Pages/Chat/MapContainer";
 import Mapp from "./Components/UserInterface/Pages/Chat/Osm-providers";
+
 import AllPosts from './Components/AdminInterface/Pages/AllPosts';
 import AllAssoPosts from './Components/AdminInterface/Pages/AssoPosts';
+
+import ChatsTrade from "./Components/UserInterface/Pages/Chat/ChatsTrade";
+import PostDonation from "./Components/UserInterface/Pages/Donation/PostDonation";
+// import AllPosts from './Components/BlogInterface/AllPosts';
+// import AllAssoPosts from './Components/BlogInterface/AssoPosts';
+
 import Products from './Components/AdminInterface/Pages/Products';
 import Reports from './Components/AdminInterface/Pages/Reports';
 import Categorie from './Components/AdminInterface/Pages/Categories';
@@ -87,7 +94,7 @@ function App() {
           <Route path='/edit_me' element={<ProfileForm />}/>
           <Route path='/subscribe' element={<Plan />} />
           <Route path='/client_messages' element={<Chats />} />
-          <Route path='/client_message_blog' element={<Chats />} />
+          <Route path='/client_messages_blog' element={<ChatsTrade />} />
 
 
 
@@ -96,6 +103,7 @@ function App() {
 
 
           <Route exact path='/blog' element={<BlogList />} />
+          <Route exact path='/PostDaonation' element={<PostDonation />} />
           <Route exact path='/addBlog' element={<AddBlog />} />
           <Route exact path='/addCategory' element={<AddCategory />} />
           
@@ -125,8 +133,8 @@ function App() {
 
 
           <Route exact path='/association' element={<DashboardAssociation />} />
-          <Route exact path='/allPosts' element={<AllPosts />} />
-          <Route exact path='/allPostsAsso' element={<AllAssoPosts />} />
+          {/*<Route exact path='/allPosts' element={<AllPosts />} />*/}
+          {/*<Route exact path='/allPostsAsso' element={<AllAssoPosts />} />*/}
           <Route exact path='/categorie' element={<Categorie />} />
           <Route exact path='/map' element={<Mapp />} />
           <Route  path='/UpdateProduct/:id' element={<UpdateProduct />} />
