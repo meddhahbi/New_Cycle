@@ -60,33 +60,10 @@ export default function Sidebar(){
                                     </h5>
                                 </div>
                             </li>
-                            <li>
-                                <div className="category-list">
-                                    <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/grocery.svg" className="blur-up lazyload" alt="" />
-                                    <h5>
-                                        <a href="shop-left-sidebar.html">Grocery & Staples</a>
-                                    </h5>
-                                </div>
-                            </li>
-                            <li>
-                                <div className="category-list">
-                                    <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/drink.svg" className="blur-up lazyload" alt="" />
-                                    <h5>
-                                        <a href="shop-left-sidebar.html">Wines & Alcohol Drinks</a>
-                                    </h5>
-                                </div>
-                            </li>
-                            <li>
-                                <div className="category-list">
-                                    <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/milk.svg" className="blur-up lazyload" alt="" />
-                                    <h5>
-                                        <a href="shop-left-sidebar.html">Milk & Dairies</a>
-                                    </h5>
-                                </div>
-                            </li>
+                           
                             <li className="pb-30">
                                 <div className="category-list">
-                                    <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/pet.svg" className="blur-up lazyload" alt="" />
+                                    <img src="../../assets/User/images/logo/categories.png" className="blur-up lazyload" alt="" />
                                     <h5>
                                     <Link to="/categorie">Categories</Link>
                                     </h5>

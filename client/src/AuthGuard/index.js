@@ -20,10 +20,10 @@ export const isClient= ()=>{
 }
 
 
-export const isSubs= ()=>{
-const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-const subscriptionStatus = userInfo.subscription.status;
-return subscriptionStatus;
+// export const isSubs= ()=>{
+// const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+// const subscriptionStatus = userInfo.subscription.status;
+// return subscriptionStatus;
 
    
-}
+// }

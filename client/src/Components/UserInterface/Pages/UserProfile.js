@@ -6,12 +6,68 @@ import {Link, Navigate} from "react-router-dom";
 import {toast, ToastContainer} from "react-toastify";
 // import {UserState} from "../../../Context/userProvider"
 import { isLoggedIn } from '../../../AuthGuard';
+import Swal from 'sweetalert2';
+
 export default function UserProfile() {
     const config = {
         headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
     };
+
+
+
+//! Erreur de fetch id
+   const handleDeleteFavoris=(id)=>{
+
+        Swal.fire({
+            title: 'Do you want to Delete this favoris from this list?',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+          }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                console.log(id)
+                axios.delete(`/wishlist/delete/${id}`)
+            //  window.location.reload();
+            }
+          })
+        .catch(error => {
+          console.log(error);
+        });
+
+
+    }
+
+
+
+    const token = localStorage.getItem("token");
+    const parts = token.split('.');
+    const payload = JSON.parse(atob(parts[1]));
+    const userId = payload.id;
+  
+  const [wishlist, setWishlist] = useState([]);
+
+
+
+  useEffect(() => {
+    const fetchWishlist = async () => {
+
+      try {
+        console.log(userId)
+        const response = await axios.get(`http://localhost:3001/wishlist/${userId}`);
+        console.log(response.data); 
+        //console.log('test')
+        setWishlist(response.data);
+        console.log(response.data)
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchWishlist()
+   
+  }, []);
+
 
 
     // console.log(url)
@@ -96,6 +152,10 @@ export default function UserProfile() {
 
 
     }
+
+
+
+
 
 
     const handleChangePass = async()=>{
@@ -273,13 +333,9 @@ export default function UserProfile() {
 
                                             <div className="dashboard-user-name">
                                                 <h6 className="text-content">Hello, <b className="text-title">
-                                                    {profile && profile.email}
+                                                    {profile && profile.username}
                                                 </b></h6>
-                                                <p className="text-content">From your My Account Dashboard you have the
-                                                    ability to
-                                                    view a snapshot of your recent account activity and update your
-                                                    account
-                                                    information. Select a link below to view or edit information.</p>
+                            
                                             </div>
 
                                             <div className="total-box">
@@ -417,14 +473,19 @@ export default function UserProfile() {
                                         </span>
                                             </div>
                                             <div className="row g-sm-4 g-3">
+
+                                            {wishlist ?
+                                                 wishlist.map((wishlist) => (
+
+
                                                 <div className="col-xxl-3 col-lg-6 col-md-4 col-sm-6">
                                                     <div className="product-box-3 theme-bg-white h-100">
                                                         <div className="product-header">
                                                             <div className="product-image">
-                                                                <a href="product-left-thumbnail.html">
-                                                                    <img src="../assets/images/cake/product/2.png"
+                                                               
+                                                                    <img src={`http://localhost:3001/${wishlist.images}`}
                                                                          className="img-fluid blur-up lazyload" alt=""/>
-                                                                </a>
+                                                              
 
                                                                 <div className="product-header-top">
                                                                     <button
@@ -437,482 +498,34 @@ export default function UserProfile() {
 
                                                         <div className="product-footer">
                                                             <div className="product-detail">
-                                                                <span className="span-name">Vegetable</span>
+                                                                <span className="name">{wishlist.name}</span>
                                                                 <a href="product-left-thumbnail.html">
-                                                                    <h5 className="name">Fresh Bread and Pastry Flour
-                                                                        200
-                                                                        g</h5>
+                                                                    <h5 className="span-name">{wishlist.description}</h5>
                                                                 </a>
-                                                                <p className="text-content mt-1 mb-2 product-content">Cheesy
-                                                                    feet
-                                                                    cheesy grin brie. Mascarpone cheese and wine hard
-                                                                    cheese
-                                                                    the
-                                                                    big cheese everyone loves smelly cheese macaroni
-                                                                    cheese
-                                                                    croque monsieur.</p>
-                                                                <h6 className="unit mt-1">250 ml</h6>
+                                                              
+                                                                <h6 className="unit mt-1">Stock : {wishlist.stock}</h6>
                                                                 <h5 className="price">
-                                                                    <span className="theme-color">$08.02</span>
-                                                                    <del>$15.15</del>
+                                                                    <span className="theme-color">${wishlist.price}</span>
+                                                                  
+                                                                   
                                                                 </h5>
                                                                 <div className="add-to-cart-box mt-2">
-                                                                    <button className="btn btn-add-cart addcart-button"
-                                                                            tabIndex="0">Add
+                                                                    <button onClick={()=>handleDeleteFavoris(wishlist._id)} className="btn btn-add-cart addcart-button"
+                                                                            tabIndex="0">Delete from Favoris
                                                                         <span className="add-icon">
-                                                                        <i className="fa-solid fa-plus"/>
+                                                                        <i className="fa-solid fa-minus"/>
                                                                     </span>
                                                                     </button>
-                                                                    <div className="cart_qty qty-box">
-                                                                        <div className="input-group">
-                                                                            <button type="button"
-                                                                                    className="qty-left-minus"
-                                                                                    data-type="minus" data-field="">
-                                                                                <i className="fa fa-minus"
-                                                                                   aria-hidden="true"/>
-                                                                            </button>
-                                                                            <input
-                                                                                className="form-control input-number qty-input"
-                                                                                type="text" name="quantity" value="0"/>
-                                                                            <button type="button"
-                                                                                    className="qty-right-plus"
-                                                                                    data-type="plus" data-field="">
-                                                                                <i className="fa fa-plus"
-                                                                                   aria-hidden="true"/>
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
+                                                                
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
+                                                    ))
+                                                    : ""
+                                                }
 
-                                                <div className="col-xxl-3 col-lg-6 col-md-4 col-sm-6">
-                                                    <div className="product-box-3 theme-bg-white h-100">
-                                                        <div className="product-header">
-                                                            <div className="product-image">
-                                                                <a href="product-left-thumbnail.html">
-                                                                    <img src="../assets/images/cake/product/3.png"
-                                                                         className="img-fluid blur-up lazyload" alt=""/>
-                                                                </a>
-
-                                                                <div className="product-header-top">
-                                                                    <button
-                                                                        className="btn wishlist-button close_button">
-                                                                        <i data-feather="x"></i>
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div className="product-footer">
-                                                            <div className="product-detail">
-                                                                <span className="span-name">Vegetable</span>
-                                                                <a href="product-left-thumbnail.html">
-                                                                    <h5 className="name">Peanut Butter Bite Premium
-                                                                        Butter
-                                                                        Cookies
-                                                                        600 g</h5>
-                                                                </a>
-                                                                <p className="text-content mt-1 mb-2 product-content">Feta
-                                                                    taleggio
-                                                                    croque monsieur swiss manchego cheesecake dolcelatte
-                                                                    jarlsberg. Hard cheese danish fontina boursin melted
-                                                                    cheese
-                                                                    fondue.</p>
-                                                                <h6 className="unit mt-1">350 G</h6>
-                                                                <h5 className="price">
-                                                                    <span className="theme-color">$04.33</span>
-                                                                    <del>$10.36</del>
-                                                                </h5>
-                                                                <div className="add-to-cart-box mt-2">
-                                                                    <button className="btn btn-add-cart addcart-button"
-                                                                            tabIndex="0">Add
-                                                                        <span className="add-icon">
-                                                                    <i className="fa-solid fa-plus"></i>
-                                                                </span>
-                                                                    </button>
-                                                                    <div className="cart_qty qty-box">
-                                                                        <div className="input-group">
-                                                                            <button type="button"
-                                                                                    className="qty-left-minus"
-                                                                                    data-type="minus" data-field="">
-                                                                                <i className="fa fa-minus"
-                                                                                   aria-hidden="true"></i>
-                                                                            </button>
-                                                                            <input
-                                                                                className="form-control input-number qty-input"
-                                                                                type="text" name="quantity" value="0"/>
-                                                                            <button type="button"
-                                                                                    className="qty-right-plus"
-                                                                                    data-type="plus" data-field="">
-                                                                                <i className="fa fa-plus"
-                                                                                   aria-hidden="true"></i>
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div className="col-xxl-3 col-lg-6 col-md-4 col-sm-6">
-                                                    <div className="product-box-3 theme-bg-white h-100">
-                                                        <div className="product-header">
-                                                            <div className="product-image">
-                                                                <a href="product-left-thumbnail.html">
-                                                                    <img src="../assets/images/cake/product/4.png"
-                                                                         className="img-fluid blur-up lazyload" alt=""/>
-                                                                </a>
-
-                                                                <div className="product-header-top">
-                                                                    <button
-                                                                        className="btn wishlist-button close_button">
-                                                                        <i data-feather="x"></i>
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div className="product-footer">
-                                                            <div className="product-detail">
-                                                                <span className="span-name">Snacks</span>
-                                                                <a href="product-left-thumbnail.html">
-                                                                    <h5 className="name">SnackAmor Combo Pack of Jowar
-                                                                        Stick
-                                                                        and
-                                                                        Jowar Chips</h5>
-                                                                </a>
-                                                                <p className="text-content mt-1 mb-2 product-content">Lancashire
-                                                                    hard cheese parmesan. Danish fontina mozzarella
-                                                                    cream
-                                                                    cheese
-                                                                    smelly cheese cheese and wine cheesecake dolcelatte
-                                                                    stilton.
-                                                                    Cream cheese parmesan who moved my cheese when the
-                                                                    cheese
-                                                                    comes out everybody's happy cream cheese red
-                                                                    leicester
-                                                                    ricotta edam.</p>
-                                                                <h6 className="unit mt-1">570 G</h6>
-                                                                <h5 className="price">
-                                                                    <span className="theme-color">$12.52</span>
-                                                                    <del>$13.62</del>
-                                                                </h5>
-                                                                <div className="add-to-cart-box mt-2">
-                                                                    <button className="btn btn-add-cart addcart-button"
-                                                                            tabIndex="0">Add
-                                                                        <span className="add-icon">
-                                                                    <i className="fa-solid fa-plus"></i>
-                                                                </span>
-                                                                    </button>
-                                                                    <div className="cart_qty qty-box">
-                                                                        <div className="input-group">
-                                                                            <button type="button"
-                                                                                    className="qty-left-minus"
-                                                                                    data-type="minus" data-field="">
-                                                                                <i className="fa fa-minus"
-                                                                                   aria-hidden="true"></i>
-                                                                            </button>
-                                                                            <input
-                                                                                className="form-control input-number qty-input"
-                                                                                type="text" name="quantity" value="0"/>
-                                                                            <button type="button"
-                                                                                    className="qty-right-plus"
-                                                                                    data-type="plus" data-field="">
-                                                                                <i className="fa fa-plus"
-                                                                                   aria-hidden="true"></i>
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div className="col-xxl-3 col-lg-6 col-md-4 col-sm-6">
-                                                    <div className="product-box-3 theme-bg-white h-100">
-                                                        <div className="product-header">
-                                                            <div className="product-image">
-                                                                <a href="product-left-thumbnail.html">
-                                                                    <img src="../assets/images/cake/product/5.png"
-                                                                         className="img-fluid blur-up lazyload" alt=""/>
-                                                                </a>
-
-                                                                <div className="product-header-top">
-                                                                    <button
-                                                                        className="btn wishlist-button close_button">
-                                                                        <i data-feather="x"></i>
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div className="product-footer">
-                                                            <div className="product-detail">
-                                                                <span className="span-name">Snacks</span>
-                                                                <a href="product-left-thumbnail.html">
-                                                                    <h5 className="name">Yumitos Chilli Sprinkled Potato
-                                                                        Chips 100 g
-                                                                    </h5>
-                                                                </a>
-                                                                <p className="text-content mt-1 mb-2 product-content">Cheddar
-                                                                    cheddar pecorino hard cheese hard cheese cheese and
-                                                                    biscuits
-                                                                    bocconcini babybel. Cow goat paneer cream cheese
-                                                                    fromage
-                                                                    cottage cheese cauliflower cheese jarlsberg.</p>
-                                                                <h6 className="unit mt-1">100 G</h6>
-                                                                <h5 className="price">
-                                                                    <span className="theme-color">$10.25</span>
-                                                                    <del>$12.36</del>
-                                                                </h5>
-                                                                <div className="add-to-cart-box mt-2">
-                                                                    <button className="btn btn-add-cart addcart-button"
-                                                                            tabIndex="0">Add
-                                                                        <span className="add-icon">
-                                                                    <i className="fa-solid fa-plus"></i>
-                                                                </span>
-                                                                    </button>
-                                                                    <div className="cart_qty qty-box">
-                                                                        <div className="input-group">
-                                                                            <button type="button"
-                                                                                    className="qty-left-minus"
-                                                                                    data-type="minus" data-field="">
-                                                                                <i className="fa fa-minus"
-                                                                                   aria-hidden="true"></i>
-                                                                            </button>
-                                                                            <input
-                                                                                className="form-control input-number qty-input"
-                                                                                type="text" name="quantity" value="0"/>
-                                                                            <button type="button"
-                                                                                    className="qty-right-plus"
-                                                                                    data-type="plus" data-field="">
-                                                                                <i className="fa fa-plus"
-                                                                                   aria-hidden="true"/>
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div className="col-xxl-3 col-lg-6 col-md-4 col-sm-6">
-                                                    <div className="product-box-3 theme-bg-white h-100">
-                                                        <div className="product-header">
-                                                            <div className="product-image">
-                                                                <a href="product-left-thumbnail.html">
-                                                                    <img src="../assets/images/cake/product/6.png"
-                                                                         className="img-fluid blur-up lazyload" alt=""/>
-                                                                </a>
-
-                                                                <div className="product-header-top">
-                                                                    <button
-                                                                        className="btn wishlist-button close_button">
-                                                                        <i data-feather="x"></i>
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div className="product-footer">
-                                                            <div className="product-detail">
-                                                                <span className="span-name">Vegetable</span>
-                                                                <a href="product-left-thumbnail.html">
-                                                                    <h5 className="name">Fantasy Crunchy Choco Chip
-                                                                        Cookies</h5>
-                                                                </a>
-                                                                <p className="text-content mt-1 mb-2 product-content">Bavarian
-                                                                    bergkase smelly cheese swiss cut the cheese
-                                                                    lancashire
-                                                                    who
-                                                                    moved my cheese manchego melted cheese. Red
-                                                                    leicester
-                                                                    paneer
-                                                                    cow when the cheese comes out everybody's happy
-                                                                    croque
-                                                                    monsieur goat melted cheese port-salut.</p>
-                                                                <h6 className="unit mt-1">550 G</h6>
-                                                                <h5 className="price">
-                                                                    <span className="theme-color">$14.25</span>
-                                                                    <del>$16.57</del>
-                                                                </h5>
-                                                                <div className="add-to-cart-box mt-2">
-                                                                    <button className="btn btn-add-cart addcart-button"
-                                                                            tabIndex="0">Add
-                                                                        <span className="add-icon">
-                                                                    <i className="fa-solid fa-plus"></i>
-                                                                </span>
-                                                                    </button>
-                                                                    <div className="cart_qty qty-box">
-                                                                        <div className="input-group">
-                                                                            <button type="button"
-                                                                                    className="qty-left-minus"
-                                                                                    data-type="minus" data-field="">
-                                                                                <i className="fa fa-minus"
-                                                                                   aria-hidden="true"></i>
-                                                                            </button>
-                                                                            <input
-                                                                                className="form-control input-number qty-input"
-                                                                                type="text" name="quantity" value="0"/>
-                                                                            <button type="button"
-                                                                                    className="qty-right-plus"
-                                                                                    data-type="plus" data-field="">
-                                                                                <i className="fa fa-plus"
-                                                                                   aria-hidden="true"></i>
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div className="col-xxl-3 col-lg-6 col-md-4 col-sm-6">
-                                                    <div className="product-box-3 theme-bg-white h-100">
-                                                        <div className="product-header">
-                                                            <div className="product-image">
-                                                                <a href="product-left-thumbnail.html">
-                                                                    <img src="../assets/images/cake/product/7.png"
-                                                                         className="img-fluid blur-up lazyload" alt=""/>
-                                                                </a>
-
-                                                                <div className="product-header-top">
-                                                                    <button
-                                                                        className="btn wishlist-button close_button">
-                                                                        <i data-feather="x"/>
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div className="product-footer">
-                                                            <div className="product-detail">
-                                                                <span className="span-name">Vegetable</span>
-                                                                <a href="product-left-thumbnail.html">
-                                                                    <h5 className="name">Fresh Bread and Pastry Flour
-                                                                        200
-                                                                        g</h5>
-                                                                </a>
-                                                                <p className="text-content mt-1 mb-2 product-content">Melted
-                                                                    cheese
-                                                                    babybel chalk and cheese. Port-salut port-salut
-                                                                    cream
-                                                                    cheese
-                                                                    when the cheese comes out everybody's happy cream
-                                                                    cheese
-                                                                    hard cheese cream cheese red leicester.</p>
-                                                                <h6 className="unit mt-1">1 Kg</h6>
-                                                                <h5 className="price">
-                                                                    <span className="theme-color">$12.68</span>
-                                                                    <del>$14.69</del>
-                                                                </h5>
-                                                                <div className="add-to-cart-box mt-2">
-                                                                    <button className="btn btn-add-cart addcart-button"
-                                                                            tabIndex="0">Add
-                                                                        <span className="add-icon">
-                                                                    <i className="fa-solid fa-plus"></i>
-                                                                </span>
-                                                                    </button>
-                                                                    <div className="cart_qty qty-box">
-                                                                        <div className="input-group">
-                                                                            <button type="button"
-                                                                                    className="qty-left-minus"
-                                                                                    data-type="minus" data-field="">
-                                                                                <i className="fa fa-minus"
-                                                                                   aria-hidden="true"></i>
-                                                                            </button>
-                                                                            <input
-                                                                                className="form-control input-number qty-input"
-                                                                                type="text" name="quantity" value="0"/>
-                                                                            <button type="button"
-                                                                                    className="qty-right-plus"
-                                                                                    data-type="plus" data-field="">
-                                                                                <i className="fa fa-plus"
-                                                                                   aria-hidden="true"></i>
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div className="col-xxl-3 col-lg-6 col-md-4 col-sm-6">
-                                                    <div className="product-box-3 theme-bg-white h-100">
-                                                        <div className="product-header">
-                                                            <div className="product-image">
-                                                                <a href="product-left-thumbnail.html">
-                                                                    <img src="../assets/images/cake/product/2.png"
-                                                                         className="img-fluid blur-up lazyload" alt=""/>
-                                                                </a>
-
-                                                                <div className="product-header-top">
-                                                                    <button
-                                                                        className="btn wishlist-button close_button">
-                                                                        <i data-feather="x"></i>
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div className="product-footer">
-                                                            <div className="product-detail">
-                                                                <span className="span-name">Vegetable</span>
-                                                                <a href="product-left-thumbnail.html">
-                                                                    <h5 className="name">Fresh Bread and Pastry Flour
-                                                                        200
-                                                                        g</h5>
-                                                                </a>
-                                                                <p className="text-content mt-1 mb-2 product-content">Squirty
-                                                                    cheese
-                                                                    cottage cheese cheese strings. Red leicester paneer
-                                                                    danish
-                                                                    fontina queso lancashire when the cheese comes out
-                                                                    everybody's happy cottage cheese paneer.</p>
-                                                                <h6 className="unit mt-1">250 ml</h6>
-                                                                <h5 className="price">
-                                                                    <span className="theme-color">$08.02</span>
-                                                                    <del>$15.15</del>
-                                                                </h5>
-                                                                <div className="add-to-cart-box mt-2">
-                                                                    <button className="btn btn-add-cart addcart-button"
-                                                                            tabIndex="0">Add
-                                                                        <span className="add-icon">
-                                                                    <i className="fa-solid fa-plus"></i>
-                                                                </span>
-                                                                    </button>
-                                                                    <div className="cart_qty qty-box">
-                                                                        <div className="input-group">
-                                                                            <button type="button"
-                                                                                    className="qty-left-minus"
-                                                                                    data-type="minus" data-field="">
-                                                                                <i className="fa fa-minus"
-                                                                                   aria-hidden="true"></i>
-                                                                            </button>
-                                                                            <input
-                                                                                className="form-control input-number qty-input"
-                                                                                type="text" name="quantity" value="0"/>
-                                                                            <button type="button"
-                                                                                    className="qty-right-plus"
-                                                                                    data-type="plus" data-field="">
-                                                                                <i className="fa fa-plus"
-                                                                                   aria-hidden="true"></i>
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>

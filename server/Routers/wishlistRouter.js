@@ -24,4 +24,25 @@ router.get('/:userId', async (req, res, next) => {
 });
 
 
+router.delete('/delete/:id', (req, res) => {
+  const favorisId = req.params.id;
+
+  wishlistController.deleteFavoris(favorisId)
+      .then(() => {
+        res.status(200).json({
+          success: true,
+          message: 'Favoris deleted successfully'
+        });
+      })
+      .catch((err) => {
+        res.status(500).json({
+          success: false,
+          message: 'Failed to delete favoris',
+          error: err.message
+        });
+      });
+});
+
+
+
 module.exports = router;

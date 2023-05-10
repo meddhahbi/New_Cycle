@@ -275,26 +275,43 @@ route.put('/unblock/:_id',(req,res,next)=>{
 
 });
 
-route.get('/verifySubs/:email',(req,res,next)=>{
-  userModel.verifySubscription(req.params.email)
-  .then((status)=>{
-    if(status){
-      res.status(200).json({
-        subscribed:true
-      })
-    }else{
-      res.status(200).json({
-        subscribed:false
-      })
+// route.get('/verifySubs/:email',(req,res,next)=>{
+//   userModel.verifySubscription(req.params.email)
+//   .then((status)=>{
+//     if(status){
+//       res.status(200).json({
+//         subscribed:true
+//       })
+//     }else{
+//       res.status(200).json({
+//         subscribed:false
+//       })
      
-    }
-  }).catch((err)=>{
-    res.status(400).json({
-      error:err
-    })
-  })
-});
+  //   }
+  // }).catch((err)=>{
+  //   res.status(400).json({
+  //     error:err
+//     })
+//   })
+// });
 
+
+route.get('/verifySubs/:email', (req, res) => {
+  const { email } = req.params;
+
+  userModel.verifySubscription(email)
+    .then((subscription) => {
+      if (subscription.status) {
+        res.status(200).send('User is subscribed');
+      } else {
+        res.status(200).send('User is not subscribed');
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Internal server error');
+    });
+});
 
 route.get('/users',(req,res,next)=>{
   userModel.getAllUsers()

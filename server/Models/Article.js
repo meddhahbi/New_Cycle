@@ -244,8 +244,20 @@ getAllArticleCount = () => {
   })
 }
 
-
-
+const getArticleCountByUserId = (userId) => {
+  return new Promise((resolve, reject) => {
+    mongoose.connect(url, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    }).then(() => {
+      return Article.countDocuments({ user: userId });
+    }).then((count) => {
+      resolve(count);
+    }).catch((err) => {
+      reject(err);
+    });
+  });
+};
 
 
 
@@ -261,5 +273,6 @@ getAllArticleCount = () => {
  archive,
  getArticleArchived,
  getAllArticleCount,
+ getArticleCountByUserId,
    
 };

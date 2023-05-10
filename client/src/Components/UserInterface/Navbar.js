@@ -4,7 +4,7 @@ import React, {useEffect, useState} from "react";
 import navbar from "./Pages/style/navbar.css"
 import {useLocation, useNavigate} from "react-router";
 import axios from "axios";
-import { isLoggedIn, isSubs } from "../../AuthGuard";
+import { isLoggedIn } from "../../AuthGuard";
 
 export default function Navbar(){
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
@@ -82,6 +82,26 @@ export default function Navbar(){
 
 
     },[]);
+
+
+
+    const [subscriptionStatus, setSubscriptionStatus] = useState(false);
+
+
+    useEffect(() => {
+        const url="https://localhost:3001/verifySubs/" + localStorage.getItem("mail");
+        fetch(url)
+          .then((res) => res.json())
+          .then((data) => {
+            setSubscriptionStatus(data.subscription.status);
+            console.log(subscriptionStatus)
+          })
+          .catch((err) => console.error(err));
+      }, []);
+    
+
+
+
   //  const [isSubscribed, setIsSubscribed] = useState(false);
 
   // const url="https://localhost:3001/verifySubs/" + localStorage.getItem("mail");
@@ -1036,11 +1056,13 @@ export default function Navbar(){
                                                             >Home</Link>
                                                         </li>
 
+
                                                         <li className="nav-item dropdown">
                                                             {/*<a className="nav-link dropdown-toggle" href="#"*/}
                                                             {/*   data-bs-toggle="dropdown">Shop</a>*/}
                                                             <Link className="nav-link dropdown-toggle" to="/donate">Donate!</Link>
                                                         </li>
+
 
                                                         <li className="nav-item dropdown">
                                                             {/*<a className="nav-link dropdown-toggle" href="#"*/}
