@@ -358,7 +358,7 @@ verifySubscription=(email)=>{
         }).then(()=>{
             return User.findOne({email: email});
         }).then((user)=>{
-          resolve(user.subscription.status);
+          resolve(user.subscription);
         }).catch((err)=>{
             reject(err);
         })
@@ -560,6 +560,10 @@ deleteUser = (id) =>{
         });
     });
 }
+
+
+
+
 
 
 getUserById = (id) => {

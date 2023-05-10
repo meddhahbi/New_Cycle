@@ -58,7 +58,31 @@ const getWishlist = async (userId) => {
 };
 
 
+
+deleteFavoris = (id) =>{
+  return new Promise((resolve, reject) => {
+      mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+      .then(() => {
+        Wishlist.findByIdAndDelete(id)
+          .then(() => {
+         //     mongoose.disconnect();
+              resolve();
+          })
+          .catch((err) => {
+       //       mongoose.disconnect();
+              reject({ message: "Failed to delete user from database", error: err });
+          });
+      })
+      .catch((err) => {
+      //    mongoose.disconnect();
+          reject({ message: "Failed to connect to database", error: err });
+      });
+  });
+}
+
+
 module.exports = {
   addToWishlist,
   getWishlist,
+  deleteFavoris,
 };

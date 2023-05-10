@@ -45,13 +45,12 @@ import DashboardAssociation from './Components/UserInterface/Pages/Assosiation/D
 import ChatGeoLoc from "./Components/UserInterface/Pages/Chat/ChatGeoLoc";
 import MapContainerr from "./Components/UserInterface/Pages/Chat/MapContainer";
 import Mapp from "./Components/UserInterface/Pages/Chat/Osm-providers";
-import AllPosts from './Components/BlogInterface/AllPosts';
-import AllAssoPosts from './Components/BlogInterface/AssoPosts';
+import AllPosts from './Components/AdminInterface/Pages/AllPosts';
+import AllAssoPosts from './Components/AdminInterface/Pages/AssoPosts';
 import Products from './Components/AdminInterface/Pages/Products';
-import Reports from './Components/AdminInterface/Pages/Reports';;
+import Reports from './Components/AdminInterface/Pages/Reports';
 import Categorie from './Components/AdminInterface/Pages/Categories';
 import AddCategory from './Components/AdminInterface/Pages/addCategory';
-
 
 
 

@@ -41,6 +41,42 @@ function Prod(props) {
             window.location = "/client_messages"
         })
     }
+
+
+
+    const addToWishlistHandler = async (productId) => {
+
+        //? get product id
+        const response = await axios.get(`http://localhost:3001/produit/${productId}`);
+        const { product, userId } = response.data;
+        console.log('Product details:', product);
+        console.log('Product stock:', product.stock);
+    
+    
+          try {
+            //? get user id
+            const mail = localStorage.getItem('mail');
+            if (!mail) {
+              console.log('Email address not found in local storage');
+              return;
+            }
+            
+            const response = await axios.get(`http://localhost:3001/me/${mail}`);
+            const userId = response.data.userId;
+            const response2 = await axios.post('http://localhost:3001/wishlist', { productId, userId });
+            console.log(response2);
+          //  window.location.href = `http://localhost:3000/wishlist/${userId}`;
+           // console.log(response2.data.message);
+           
+          } catch (error) {
+            console.log(error);
+        
+          }
+       
+    }
+
+
+
     return (
         <div key={product._id} className="card" style={{ display: 'inline-block', width: '300px', margin: '10px' }}>
             <div className="card-body">
@@ -62,6 +98,14 @@ function Prod(props) {
                     height="300"
                 />
             )}
+
+                <button
+                className="btn btn-link position-absolute top-0 end-0"
+                onClick={() => addToWishlistHandler(product._id)}
+                >
+                <i className="bi bi-heart h1"></i>
+                </button>
+
             <div className="card-body">
                 <h5 className="card-title">{product.name}</h5>
                 <p className="card-text">{product.description}</p>
@@ -116,8 +160,8 @@ function Prod(props) {
                                 height="500"
                             />
                             <p>{product.description}</p>
-                            <p>Prix: {product.price}DT</p>
-                            <p>Catégorie: {product.category}</p>
+                            <p>Price: {product.price}DT</p>
+                            <p>Category: {product.category}</p>
                         </div>
                         <div className="modal-footer">
                             <button
@@ -125,14 +169,14 @@ function Prod(props) {
                                 className="btn btn-success"
                                 data-dismiss="modal"
                             >
-                                Fermer
+                                Close
                             </button>
                             <button
                                 type="button"
                                 className="btn btn-success"
                                 onClick={() => updateProduct(product._id)}
                             >
-                                Modifier
+                                Update
                             </button>
                             <button
                                 type="button"
@@ -140,7 +184,7 @@ function Prod(props) {
                                 onClick={() => deleteProduct(product._id)}
 
                             >
-                                Supprimer
+                                Delete
                             </button>
                         </div>
                     </div>

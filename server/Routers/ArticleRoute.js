@@ -180,6 +180,14 @@ route.get('/', (req, res, next) => {
   });
 
 
+
+  route.get('/count/:userId',(req,res,next)=>{
+    const id = req.params.user;
+    articles.getArticleCountByUserId(id)
+    .then((doc)=>res.status(200).json(doc))
+    .catch((err)=>res.status(400).json(err))
+  });
+
  
 
 module.exports = route;
