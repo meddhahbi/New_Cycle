@@ -16,9 +16,12 @@ import UserProfile from "./Components/UserInterface/Pages/UserProfile";
 import PageNotFound from './Components/UserInterface/PageNotFound';
 import RegisterAssociation from './Components/UserInterface/Pages/RegisterAssociation';
 import ProfileForm from "./Components/UserInterface/Pages/profileForm";
+// import Wishlist from './Components/Produit/Pages/wishlist';
+// import Comparer from './Components/Produit/Pages/Comparer';
 
 import BlogList from './Components/BlogInterface/BlogList';
 import AddBlog from './Components/BlogInterface/addBlog'
+
 
 
 import GetBlog from './Components/BlogInterface/getBlog'
@@ -28,6 +31,8 @@ import Plan from './Components/UserInterface/Pages/Plan';
 import authMiddleware from "./middleware/middleware";
 import Chats from "./Components/UserInterface/Pages/Chat/Chats";
 import Dashboard from './Components/AdminInterface/Pages/Dashboard';
+import Associations from './Components/AdminInterface/Pages/Associations';
+
 import Donation from './Components/UserInterface/Pages/Donation';
 
 import { useState, useEffect } from 'react';
@@ -42,6 +47,12 @@ import MapContainerr from "./Components/UserInterface/Pages/Chat/MapContainer";
 import Mapp from "./Components/UserInterface/Pages/Chat/Osm-providers";
 import ChatsTrade from "./Components/UserInterface/Pages/Chat/ChatsTrade";
 import PostDonation from "./Components/UserInterface/Pages/Donation/PostDonation";
+// import AllPosts from './Components/BlogInterface/AllPosts';
+// import AllAssoPosts from './Components/BlogInterface/AssoPosts';
+import Products from './Components/AdminInterface/Pages/Products';
+import Reports from './Components/AdminInterface/Pages/Reports';
+import Categorie from './Components/AdminInterface/Pages/Categories';
+import AddCategory from './Components/AdminInterface/Pages/addCategory';
 
 
 
@@ -90,6 +101,7 @@ function App() {
           <Route exact path='/blog' element={<BlogList />} />
           <Route exact path='/PostDaonation' element={<PostDonation />} />
           <Route exact path='/addBlog' element={<AddBlog />} />
+          <Route exact path='/addCategory' element={<AddCategory />} />
           
           <Route path='/me' exact element={<UserProfile />} />
           <Route path='/edit_me' exact element={<ProfileForm />} />
@@ -108,6 +120,8 @@ function App() {
           <Route path='/donate' exact element={<Donation />} />
 
           <Route exact path='/scraped' element={<Scraped />} />
+          
+          
 
       </Route>
 
@@ -115,8 +129,13 @@ function App() {
 
 
           <Route exact path='/association' element={<DashboardAssociation />} />
+          {/*<Route exact path='/allPosts' element={<AllPosts />} />*/}
+          {/*<Route exact path='/allPostsAsso' element={<AllAssoPosts />} />*/}
+          <Route exact path='/categorie' element={<Categorie />} />
           <Route exact path='/map' element={<Mapp />} />
-  <Route  path='/UpdateProduct/:id' element={<UpdateProduct />} />
+          <Route  path='/UpdateProduct/:id' element={<UpdateProduct />} />
+          {/* <Route  path='/wishlist/:userId' element={<Wishlist />} />
+          <Route  path='/comparison/:id' element={<Comparer />} /> */}
 
       <Route path='/confirm/:activationCode' exact element={<ActivationPage />} />
   
@@ -129,6 +148,7 @@ function App() {
 
 
       <Route exact path='/reset/:id' element={<ResetPassword />}/>
+      
 
      
      
@@ -141,7 +161,11 @@ function App() {
      
             
         <Route path="admin" exact element={<Admin />}>
+        
         <Route path='' exact element={<Dashboard />} />
+        <Route path='associations' exact element={<Associations />}/>
+        <Route path='products' exact element={<Products />}  />
+        <Route path='reports' exact element={<Reports />}  />
 
         
        

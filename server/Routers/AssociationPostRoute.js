@@ -1,8 +1,12 @@
 const express = require("express");
 const {User} = require("../Models/User")
 const {ArticleAssociation} = require("../Models/AssociationArticle")
+// <<<<<<< HEAD
 const {Product} = require("../Models/Produit")
-const { protect, protectAssociation } = require("../middleware/authmiddleware");
+const { protect } = require("../middleware/authmiddleware");
+// =======
+const { protectAssociation } = require("../middleware/authmiddleware");
+const associationPost = require('../Models/AssociationArticle');
 
 const router = express.Router();
 
@@ -162,6 +166,36 @@ router.get('/', protectAssociation, (req, res) => {
             res.status(401)
         })
 });
+
+router.delete('/:id', (req, res) => {
+    const articleId = req.params.id;
+  
+    ArticleAssociation.deleteArticle(articleId)
+      .then(() => {
+        res.status(200).json({
+          success: true,
+          message: 'Article deleted successfully'
+        });
+      })
+      .catch((err) => {
+        res.status(500).json({
+          success: false,
+          message: 'Failed to delete article',
+          error: err.message
+        });
+      });
+  });
+
+
+  router.get('/count/associationPost',(req,res,next)=>{
+    associationPost.getAllAssociationsPostCount()
+    .then((doc)=>res.status(200).json(doc))
+    .catch((err)=>res.status(400).json(err))
+  })
+  
+
+
+
 
 
 module.exports = router;

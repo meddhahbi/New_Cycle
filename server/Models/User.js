@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { sendConfirmationEmail, sendResetPassword } = require('../Config/nodemailer');
+const { sendConfirmationEmail, sendResetPassword, sendBlockAvertissement } = require('../Config/nodemailer');
 const moment = require('moment');
 const { resolve } = require('path');
 //const stripe = require('../Config/stripe.js')
@@ -28,6 +28,10 @@ let schemaUser = mongoose.Schema({
     },
     image:{type:String, default:"default.jpg"},
     lastActive: { type: Date, default: Date.now },
+    wishlist: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Wishlist',
+      }],
     role: { type: String, enum: ['client', 'admin'], default: 'client' }
 
 });
@@ -417,6 +421,38 @@ getAllUsersCount = () => {
   }
 
 
+  getAllUsersNotActiveCount = () => {
+    return new Promise((resolve, reject) => {
+      mongoose.connect(url, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+      }).then(() => {
+        return User.countDocuments({ role: 'client', isActive:false });
+      }).then((count) => {
+        resolve(count);
+      }).catch((err) => {
+        reject(err);
+      })
+    })
+  }
+
+
+  getAllUsersReportedCount = () => {
+    return new Promise((resolve, reject) => {
+      mongoose.connect(url, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+      }).then(() => {
+        return User.countDocuments({ isReported:true });
+      }).then((count) => {
+        resolve(count);
+      }).catch((err) => {
+        reject(err);
+      })
+    })
+  }
+
+
 
 
 
@@ -464,7 +500,7 @@ const block = async (_id) => {
         const updatedUser = await user.save();
 
        // mongoose.disconnect();
-
+       sendBlockAvertissement(user.email);
         return updatedUser;
     } catch (err) {
         console.log(err);
@@ -526,6 +562,27 @@ deleteUser = (id) =>{
 }
 
 
+getUserById = (id) => {
+    return new Promise((resolve, reject) => {
+      mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+        .then(() => {
+          User.findById(id)
+            .then((User) => {
+            //  mongoose.disconnect();
+              resolve(User);
+            })
+            .catch((err) => {
+           //   mongoose.disconnect();
+              reject({ message: "Failed to retrieve product from database", error: err });
+            });
+        })
+        .catch((err) => {
+        //  mongoose.disconnect();
+          reject({ message: "Failed to connect to database", error: err });
+        });
+    });
+  };
+
 
 module.exports = {
     User,
@@ -542,6 +599,9 @@ module.exports = {
     deleteUser,
     getAllUsersBlocked,
     unblock,
+    getAllUsersNotActiveCount,
+    getUserById,
+    getAllUsersReportedCount,
 
 };
 

@@ -33,7 +33,7 @@ const Chats = (props) => {
     const [finalDeal, setFinalDeal] = useState();
     const [dealt, setDealt] = useState(false);
     const navigate = useNavigate();
-    const userInfo = JSON.parse(localStorage.getItem("userInfo"))
+     const userInfo = JSON.parse(localStorage.getItem("userInfo"))
     const elementRef = useRef();
     const chatId = localStorage.getItem("chats")
     const config = {
@@ -263,6 +263,7 @@ const Chats = (props) => {
             scrollToBottom()
             if (!userInfo) {
                 // authMiddleware(navigate)
+           
                 navigate("/login",{});
 
 

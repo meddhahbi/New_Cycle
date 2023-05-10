@@ -126,8 +126,15 @@ route.get('/getStatus/:email',async (req,res,next)=>{
   });
 
 
-  route.get('/associations',(req,res,next)=>{
+  route.get('/',(req,res,next)=>{
     associationModel.getAllAssociations()
+    .then((doc)=>res.status(200).json(doc))
+    .catch((err)=>res.status(400).json(err))
+  });
+
+
+  route.get('/notActive',(req,res,next)=>{
+    associationModel.getAssociationsNotActive()
     .then((doc)=>res.status(200).json(doc))
     .catch((err)=>res.status(400).json(err))
   });
@@ -138,6 +145,27 @@ route.get('/getStatus/:email',async (req,res,next)=>{
     .then((doc)=>res.status(200).json(doc))
     .catch((err)=>res.status(400).json(err))
   })
+
+
+  route.put('/activate/:_id',(req,res,next)=>{
+    console.log(req.body);
+    associationModel.activate(req.params._id)
+    .then(()=>res.status(200).json({
+        msg:'association activated successfully'
+    }))
+  
+    .catch((err)=>res.status(400).json({msg:"association not found"}));
+  
+  });
+
+
+
+  route.get('/count/associationspending',(req,res,next)=>{
+    associationModel.getAllAssociationsPendingCount()
+    .then((doc)=>res.status(200).json(doc))
+    .catch((err)=>res.status(400).json(err))
+  })
+  
 
 
 module.exports = route;

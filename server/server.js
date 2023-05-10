@@ -13,6 +13,7 @@ const associationPostRoute = require('./Routers/AssociationPostRoute')
 var cors = require('cors');
 const passport = require("passport");
 const { Connect } = require("./Config/connect");
+const Category = require("./Routers/CategoryRoute");
 //const googleAuth = require("./routes/index");
 const multer = require('multer');
 
@@ -23,6 +24,8 @@ const articleRoutes = require('./Routers/ArticleRoute');
 const commentRoutes = require('./Routers/commentRouter');
 const produitRoutes = require('./Routers/ProduitRoute');
 const AuditLog = require('./Models/AuditLogging');
+const wishlistRouter = require('./Routers/wishlistRouter');
+const ComparaisonRouter = require('./Routers/ComparaisonRouter');
  
 //const app = express();
 
@@ -82,6 +85,10 @@ app.use('/reportUser', reportUserRoute);
 app.use('/reportUserDetail', reportUserDetailRoute);
 
 app.use('/association_post', associationPostRoute);
+app.use('/wishlist', wishlistRouter)
+app.use('/comparison', ComparaisonRouter)
+
+app.use('/category', Category);
 
 
 // app.use((req, res, next) => {

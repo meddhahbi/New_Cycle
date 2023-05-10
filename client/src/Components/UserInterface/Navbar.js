@@ -4,6 +4,7 @@ import React, {useEffect, useState} from "react";
 import navbar from "./Pages/style/navbar.css"
 import {useLocation, useNavigate} from "react-router";
 import axios from "axios";
+import { isLoggedIn, isSubs } from "../../AuthGuard";
 
 export default function Navbar(){
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));

@@ -18,3 +18,12 @@ export const isClient= ()=>{
     let role = localStorage.getItem("role");
     return role === "client";
 }
+
+
+export const isSubs= ()=>{
+const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+const subscriptionStatus = userInfo.subscription.status;
+return subscriptionStatus;
+
+   
+}

@@ -115,11 +115,11 @@ router.route("/check_reported").put(protect, async(req, res, next)=>{
 })
 
 
-router.get('/reports',(req,res,next)=>{
-    report.getReports()
-    .then((doc)=>res.status(200).json(doc))
-    .catch((err)=>res.status(400).json(err))
-  });
+// router.get('/reports',(req,res,next)=>{
+//     report.getReports()
+//     .then((doc)=>res.status(200).json(doc))
+//     .catch((err)=>res.status(400).json(err))
+//   });
 
 
 

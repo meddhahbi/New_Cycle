@@ -1,3 +1,4 @@
+// <<<<<<< HEAD
 const mongoose = require('mongoose');
 const mlKnn = require('ml-knn');
 //const products = require('../models/Produit');
@@ -227,3 +228,19 @@ const AllProducts = () => {
     updateProduit,
     deleteProduct
   }
+
+
+
+
+
+
+
+
+  // module.exports = {
+  //   Product,
+  //   createProduct,
+  //   AllProducts,
+  //   getProductById,
+  //   updateProduit,
+  //   deleteProduct
+  // }

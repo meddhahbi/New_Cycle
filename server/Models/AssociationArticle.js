@@ -76,11 +76,53 @@ getRecent=()=>{
 })
 }
 
+const deleteArticle = (id) => {
+
+
+
+  return new Promise((resolve, reject) => {
+    mongoose.connect(url, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    }).then(() => {
+      ArticleAssociation.findByIdAndDelete(id).then((article) => {
+        //mongoose.disconnect();
+        resolve(article);
+      }).catch((err) => {
+       // mongoose.disconnect();
+        reject(err);
+      });
+    }).catch((err) => {
+     // mongoose.disconnect();
+      reject(err);
+    });
+  });
+};
+
+
+getAllAssociationsPostCount = () => {
+  return new Promise((resolve, reject) => {
+    mongoose.connect(url, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    }).then(() => {
+      return ArticleAssociation.countDocuments();
+    }).then((count) => {
+      resolve(count);
+    }).catch((err) => {
+      reject(err);
+    })
+  })
+}
+
+
 
   module.exports = {
     ArticleAssociation,
     createArticle,
     AllArticles,
     getRecent,
+    deleteArticle,
+    getAllAssociationsPostCount,
    
 };

@@ -91,13 +91,16 @@ export default function Donation(){
                             <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <a className="dropdown-item" href="#">All</a>
                                 <p style={{marginLeft:"5px"}}>categories:</p>
-                                {!categories?
-                                    <h3>No Categories</h3>:
-                                    categories.map(
-                                    (c)=>(
-                                        <a onClick={()=>getByCat(c._id)} className="dropdown-item" href="#">{c.name}</a>
-                                    )
-                                )}
+                                {/*{!categories?*/}
+                                {/*    <h3>No Categories</h3>:*/}
+                                {/*    <>*/}
+                                {/*        {categories && categories.map(*/}
+                                {/*            (c)=>(*/}
+                                {/*                <a onClick={()=>getByCat(c._id)} className="dropdown-item" href="#">{c.name}</a>*/}
+                                {/*            )*/}
+                                {/*        )}*/}
+                                {/*    </>*/}
+                                {/*}*/}
                                 {/*<a className="dropdown-item" href="#">Action</a>*/}
                                 {/*<a className="dropdown-item" href="#">Another action</a>*/}
                                 {/*<a className="dropdown-item" href="#">Something else here</a>*/}

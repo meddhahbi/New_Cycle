@@ -97,7 +97,10 @@ route.put("/setOffline",protect ,async(req, res, next)=>{
 route.get("/me/:mail", async (req, res, next)=>{
      userModel.currentUser(req.params.mail)
          .then((user)=>res.status(200).json({
+        // user:user,
+        // msg:'User'
         user:user,
+        userId: user._id,
         msg:'User'
     }))
     
@@ -305,13 +308,25 @@ route.get('/bloked',(req,res,next)=>{
   .catch((err)=>res.status(400).json(err))
 });
 
-route.get('/users/count',(req,res,next)=>{
+route.get('/count',(req,res,next)=>{
   userModel.getAllUsersCount()
   .then((doc)=>res.status(200).json(doc))
   .catch((err)=>res.status(400).json(err))
 })
 
 
+route.get('/count/notActive',(req,res,next)=>{
+  userModel.getAllUsersNotActiveCount()
+  .then((doc)=>res.status(200).json(doc))
+  .catch((err)=>res.status(400).json(err))
+})
+
+
+route.get('/count/reported',(req,res,next)=>{
+  userModel.getAllUsersReportedCount()
+  .then((doc)=>res.status(200).json(doc))
+  .catch((err)=>res.status(400).json(err))
+})
 
 
 // const storage = multer.diskStorage({
@@ -416,6 +431,8 @@ route.delete('/delete/:id', (req, res) => {
         });
       });
 });
+
+
 
 
 module.exports = route;
