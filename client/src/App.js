@@ -40,6 +40,8 @@ import DashboardAssociation from './Components/UserInterface/Pages/Assosiation/D
 import ChatGeoLoc from "./Components/UserInterface/Pages/Chat/ChatGeoLoc";
 import MapContainerr from "./Components/UserInterface/Pages/Chat/MapContainer";
 import Mapp from "./Components/UserInterface/Pages/Chat/Osm-providers";
+import ChatsTrade from "./Components/UserInterface/Pages/Chat/ChatsTrade";
+import PostDonation from "./Components/UserInterface/Pages/Donation/PostDonation";
 
 
 
@@ -77,7 +79,7 @@ function App() {
           <Route path='/edit_me' element={<ProfileForm />}/>
           <Route path='/subscribe' element={<Plan />} />
           <Route path='/client_messages' element={<Chats />} />
-          <Route path='/client_message_blog' element={<Chats />} />
+          <Route path='/client_messages_blog' element={<ChatsTrade />} />
 
 
 
@@ -86,6 +88,7 @@ function App() {
 
 
           <Route exact path='/blog' element={<BlogList />} />
+          <Route exact path='/PostDaonation' element={<PostDonation />} />
           <Route exact path='/addBlog' element={<AddBlog />} />
           
           <Route path='/me' exact element={<UserProfile />} />

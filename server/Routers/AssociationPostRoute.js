@@ -1,7 +1,8 @@
 const express = require("express");
 const {User} = require("../Models/User")
 const {ArticleAssociation} = require("../Models/AssociationArticle")
-const { protectAssociation } = require("../middleware/authmiddleware");
+const {Product} = require("../Models/Produit")
+const { protect, protectAssociation } = require("../middleware/authmiddleware");
 
 const router = express.Router();
 
@@ -9,18 +10,20 @@ router.route("/").post(protectAssociation, async (req, res)=>{
     const {
         title,
         description,
-        quantity
+        quantity,
+        category
     } = req.body;
     let newPost = {
         association:req.user._id,
         title:  title,
         description: description,
         quantity: quantity,
-        restingQuantity: quantity
+        restingQuantity: quantity,
+        category:category
     }
     await ArticleAssociation.create(newPost).then((post)=>{
         console.log(post)
-        res.status(post)
+        res.send(post)
     })
 })
 
@@ -39,11 +42,116 @@ router.get('/my-recent-posts', protectAssociation, (req, res) => {
         })
 });
 
-// Get 5 most recent posts by current user
-router.get('/my-all-posts', protectAssociation, (req, res) => {
+// Get 6 most recent posts
+router.get('/recent_six', (req, res) => {
+    ArticleAssociation.find({restingQuantity:{$ne:0}})
+        .populate("association", "name")
+        .populate("category", "name")
+        .sort({ createdAt: -1 })
+        .limit(6)
+        .then(posts=>{
+            // console.log(posts)
+            res.send(posts)
+        })
+        .catch((err)=>{
+            console.log(err)
+            res.status(401)
+        })
+});
 
+// Get 6 most recent posts
+router.get('/by_cat/:cat', (req, res) => {
+    ArticleAssociation.find({restingQuantity:{$ne:0}, category:req.params.cat})
+        .populate("association", "name")
+        .populate("category", "name")
+        .sort({ createdAt: -1 })
+        .limit(6)
+        .then(posts=>{
+            // console.log(posts)
+            res.send(posts)
+        })
+        .catch((err)=>{
+            console.log(err)
+            res.status(401)
+        })
+});
+
+
+
+
+// Get 6 most recent posts
+router.get('/:id', (req, res) => {
+    ArticleAssociation.findOne({_id:req.params.id})
+        .populate("association", "name")
+        .populate("category", "name")
+        .then(posts=>{
+            res.send(posts)
+        })
+        .catch((err)=>{
+            console.log(err)
+            res.status(401)
+        })
+});
+
+
+
+
+// Get 6 most recent posts
+router.put('/', protect, (req, res) => {
+    const {postId, productId, donated} = req.body
+    console.log(postId)
+    console.log(productId)
+    console.log(donated)
+    ArticleAssociation.findOne({_id:postId})
+        // .populate("association", "name")
+        // .populate("category", "name")
+        .then(post=>{
+            console.log("post")
+            post.restingQuantity-=donated
+            post.save()
+            Product.findOne({_id:productId}).then((product)=>{
+                console.log("product")
+                console.log(product)
+                product.stock-=donated
+                product.save()
+                res.send(product)
+            })
+        })
+        .catch((err)=>{
+            console.log(err)
+            res.status(401)
+        })
+});
+
+
+
+// Get 6 most recent posts
+router.get('/del/:id', protectAssociation,async (req, res) => {
+    try {
+        console.log(req.params.id)
+        await ArticleAssociation.findOne({_id:req.params.id}).then((art)=>{
+            console.log(art)
+        })
+        // ArticleAssociation.deleteOne({_id:req.params.id}).then(()=>{
+        //     console.log("deleted")
+        // })
+
+        // const posts = ArticleAssociation.find({
+        //     association:req.user.id
+        // })
+        // res.send(posts);
+    } catch (err) {
+        console.error(err);
+    }
+
+});
+
+// all posts by current user
+router.get('/', protectAssociation, (req, res) => {
+    console.log("posts")
 
     ArticleAssociation.find({ association: req.user.id })
+        .populate("category", "name")
         .sort({ createdAt: -1 })
         .then(posts=>{
             // console.log(posts)

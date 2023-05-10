@@ -2,7 +2,7 @@ import React from 'react';
 import axios from "axios";
 
 function Prod(props) {
-    const {product, products, setProducts} = props;
+    const {product, cat, products, setProducts} = props;
 
     const userInfo = JSON.parse(localStorage.getItem("userInfo"))
     function deleteProduct(id) {
@@ -67,7 +67,7 @@ function Prod(props) {
                 <h6 className="card-subtitle mb-2 text-muted">
                     {product.price}DT
                 </h6>
-                <p className="card-text">{product.category}</p>
+                {/*<p className="card-text">{cat.name}</p>*/}
                 <button
                     className="btn btn-success"
                     data-toggle="modal"

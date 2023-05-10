@@ -12,7 +12,9 @@ router.route("/all").get(protectAdmin, async (req, res)=> {
         return res.sendStatus(400);
     }
     try {
-        Report_User_Detail.find({report:reportId}).then((reports)=>{
+        Report_User_Detail.find({report:reportId})
+            .populate("reporter")
+            .then((reports)=>{
             res.status(200).send(reports);
         })
 

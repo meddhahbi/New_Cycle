@@ -15,15 +15,29 @@ const productSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  category: {
-    type: String,
+  stock: {
+    type: Number,
     required: true
+  },
+  category: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Category",
+    required:true
+  },
+  country: {
+    type: String
   },
   city: {
     type: String
   },
   region: {
     type: String
+  },
+  latitude: {
+    type: Number
+  },
+  longitude: {
+    type: Number
   },
   images: {type:String, required: true},
   productOwner: {
@@ -60,7 +74,7 @@ exports.estimatePrice = async (description, category) => {
 };
 
 // create a product with estimated price or provided price
-exports.createProduct = async (name, description, price, category, images,city, region, idUser) => {
+const createProduct = async (name, description, price, category, stock, images, country, city, region, latitude, longitude, idUser) => {
   try {
     console.log(city)
     await mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -69,8 +83,12 @@ exports.createProduct = async (name, description, price, category, images,city, 
       description: description,
       category: category,
       images: images.split("uploads")[1],
+      stock:stock,
+      country: country,
       city: city,
       region: region,
+      latitude: latitude,
+      longitude: longitude,
       productOwner: idUser,
       
     });
@@ -102,11 +120,13 @@ exports.createProduct = async (name, description, price, category, images,city, 
 
 
 
-exports.AllProducts = () => {
+const AllProducts = () => {
     return new Promise((resolve, reject) => {
       mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         .then(() => {
-          Product.find({}).populate("productOwner", "username image")
+          Product.find({stock:{$ne:0}})
+              .populate("productOwner", "username image")
+              // .populate("Category", "name")
             .then((products) => {
              // mongoose.disconnect();
               console.log(products)
@@ -125,7 +145,7 @@ exports.AllProducts = () => {
   };
 
   
-  exports.getProductById = (id) => {
+  const getProductById = (id) => {
     return new Promise((resolve, reject) => {
       mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         .then(() => {
@@ -147,7 +167,7 @@ exports.AllProducts = () => {
   };
   
 
-  exports.updateProduit = (name, description, price, category, images) => {
+  const updateProduit = (name, description, price, category, images) => {
     return new Promise((resolve, reject) => {
       mongoose.connect(url, {
         useNewUrlParser: true,
@@ -177,7 +197,7 @@ exports.AllProducts = () => {
   };
   
 
-  exports.deleteProduct = (id) => {
+  const deleteProduct = (id) => {
     return new Promise((resolve, reject) => {
       mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         .then(() => {
@@ -197,3 +217,13 @@ exports.AllProducts = () => {
         });
     });
   };
+
+
+  module.exports = {
+    Product,
+    createProduct,
+    AllProducts,
+    getProductById,
+    updateProduit,
+    deleteProduct
+  }

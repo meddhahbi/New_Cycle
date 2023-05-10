@@ -63,7 +63,8 @@ import mapboxgl from 'mapbox-gl';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 
-function Mapp() {
+function Mapp(props) {
+    const {lng, lat} = props;
     const [map, setMap] = useState(null);
 
     useEffect(() => {
@@ -74,8 +75,8 @@ function Mapp() {
         const newMap = new mapboxgl.Map({
             container: 'your-div-id', // Specify the id of the div to add the map to
             style: 'mapbox://styles/mapbox/streets-v11', // Set the map style
-            center: [10.181667, 36.806389], // Set the initial center of the map
-            zoom: 7 // Set the initial zoom level
+            center: [lng, lat], // Set the initial center of the map
+            zoom: 14 // Set the initial zoom level
         });
 
         newMap.on('load', () => {
@@ -87,7 +88,7 @@ function Mapp() {
                     geometry: {
                         type: 'LineString',
                         coordinates: [
-                            [10.181667, 36.806389],
+                            [lng, lat],
                             [-122.483482, 37.833174],
                         ]
                     }
@@ -150,10 +151,10 @@ function Mapp() {
     return (
 
         <>
-            <div className="buttons" style={{display:"flex", justifyContent:"center"}}>
-                <button onClick={handleZoomIn}>Zoom In</button>
-                <button onClick={handleZoomOut}>Zoom Out</button>
-            </div>
+            {/*<div className="buttons" style={{display:"flex", justifyContent:"center"}}>*/}
+            {/*    <button onClick={handleZoomIn}>Zoom In</button>*/}
+            {/*    <button onClick={handleZoomOut}>Zoom Out</button>*/}
+            {/*</div>*/}
             <div style={{display:"flex", justifyContent:"center"}}>
 
 

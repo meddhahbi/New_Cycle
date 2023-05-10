@@ -5,7 +5,7 @@ const {User} = require("../../Models/User")
 const { protect, protectAdmin } = require("../../middleware/authmiddleware");
 const router = express.Router();
 const report = require("../../Models/Report/reportUser")
-router.route("/all").get(protectAdmin, async (req, res)=> {
+router.route("/all").get( async (req, res)=> {
     try {
         let reportUser = await ReportUser.find()
             .populate("reports", "reason reporter")

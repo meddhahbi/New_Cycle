@@ -8,24 +8,23 @@ import Message from "./Message";
 import Chat from "./Chat";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Map, {Marker, NavigationControl} from "react-map-gl";
 import maplibregl from "maplibre-gl";
 import {MapContainer} from "react-leaflet";
 import MapContainerr from "./MapContainer";
 import Mapp from "./Osm-providers";
 import ChatProduct from "./Item/ChatProduct";
 import ChatTrade from "./ChatTrade";
-import useFullPageLoader from "../../../../hooks/useFullPageLoader";
-const Chats = (props) => {
+const ChatsTrade = (props) => {
     const location = useLocation().pathname
     const [isLoading, setIsLoading] = useState(true);
     const [messages, setMessages] = useState([]);
     const [chats, setChats] = useState([]);
-    const [product, setProduct] = useState();
+    // const [product, setProduct] = useState();
     const [post, setPost] = useState();
     const [chatt, setChatt] = useState();
     const [newMessage, setnewMessage] = useState();
     const [selectedReason, setSelectedReason] = useState();
-    const [loader, showLoader, hideLoader] = useFullPageLoader();
     const messagesEndRef = useRef(null);
     const textAreaRef = useRef(null);
     const [other, setOther] = useState();
@@ -81,51 +80,55 @@ const Chats = (props) => {
     }
 
     const getMessages = async ()=>{
-        // showLoader();
         // let url = `http://localhost:3001/message/${chatId}?page=${currentPage}&limit=${limit}`
-        console.log("msgs")
+        // console.log("msgs")
         let url = `http://localhost:3001/message/${chatId}`
-        console.log(url)
-        await axios.get(url, config).then(msgs=>{
-            hideLoader();
-
-            console.log(msgs)
-            // console.log(msgs)
-            setMessages(msgs.data)
-            // setMessages(messages);
-            return messages.data
-        })
+        // console.log(url)
+        const {data:msgs}=await axios.get(url, config)
+        // console.log(msgs)
+        // console.log(msgs)
+        setMessages(msgs)
+        // setMessages(messages);
+        return messages
     }
 
     const getChat = async ()=>{
-        let url = `http://localhost:3001/chat/get_chat/${chatId}`
-        console.log("chat.post")
+        let url = `http://localhost:3001/chat/get_chat_post/${chatId}`
         // console.log(chat)
-        const {data:cha}=await axios.get(url, config)
+        const cha=await axios.get(url, config).then(async (p)=>{
+            // console.log("chat.post")
+            // console.log(p.data)
+            setChatt(p.data)
+            const urlPost = `http://localhost:3001/article/${p.data.post}`
+            const {data:pos}=await axios.get(urlPost, config)
+            // setPost(pos.article)
+            setPost(pos.article)
+            return p
+        })
         // console.log("prod")
         // console.log(chat.product)
-        console.log(cha.product)
-        setProduct(cha.product)
+        // console.log(chat.post)
+        // setProduct(chat.product)
         // console.log("chat.post")
         // console.log(chat)
         // console.log(chat.product)
         // setPost(chat.post)
-        setChatt(cha)
-        // setMessages(messages);
-        return cha
-    }
 
-    const getPost = async (c)=>{
-        let url = `http://localhost:3001/article/${c}`
-        console.log(url)
-        const {data:chat}=await axios.get(url, config)
-        // console.log("prod")
-        console.log(chat.article)
-        setPost(chat)
-        setPost(chat.article)
         // setMessages(messages);
-        return chat
+        // return cha
     }
+    // const getPost = async (c)=>{
+    //     let url = `http://localhost:3001/article/${c}`
+    //     console.log(url)
+    //     const {data:pos}=await axios.get(url, config)
+    //     console.log("pos")
+    //     console.log(pos)
+    //     console.log(pos.article)
+    //     // setPost(pos.article)
+    //     setPost(pos.article)
+    //     // setMessages(messages);
+    //     return pos
+    // }
 
     const getDeal = async ()=>{
 
@@ -157,14 +160,16 @@ const Chats = (props) => {
             console.error(e.message)
         }
     }
-    const getChats = async ()=>{
-        const { data:chats } = await axios.get("http://localhost:3001/chat", config);
-        setChats(chats);
-        return chats
-    }
+    // const getChats = async ()=>{
+    //     const { data:chats } = await axios.get("http://localhost:3001/chat/post", config);
+    //     setChats(chats);
+    //     return chats
+    // }
     const getChatsBlogged = async ()=>{
         const { data:chats } = await axios.get("http://localhost:3001/chat/post", config);
-        // setChats(chats);
+        // console.log("chats")
+        // console.log(chats)
+        setChats(chats);
         return chats
     }
     const getOther = async ()=>{
@@ -226,17 +231,22 @@ const Chats = (props) => {
     };
     useEffect(()=>{
 
+        getMessages().then()
 
         getDeal().then()
         getOther().then(()=>{})
-        getChats().then()
-        // getFinalDeal().then()
+        getChatsBlogged().then()
+        // // getFinalDeal().then()
+        //
 
         getChat().then((c)=>{
-            getPost(c.post).then(p=>{
-                // console.log(p)
-            })
+            // console.log("c")
+            // console.log(c)
+            // getPost(c.data.post).then(p=>{
+            //     // console.log(p)
+            // })
         })
+        getChatsBlogged().then()
 
         if(isLoading){
 
@@ -285,7 +295,6 @@ const Chats = (props) => {
             // count+=1;
             // console.log("message" + count)
             getFinalDeal().then()
-            getMessages().then()
             // console.log("compare users")
             // console.log(chatt.users[0])
             // console.log(userInfo._id)
@@ -431,21 +440,23 @@ const Chats = (props) => {
                                 {chats?.map((chat) => (
                                     <div key={chat._id}>
                                         {chat.latestMessage?
-                                            <ChatTrade
-                                                post={post}
-                                                chat={chat}
-                                                setIsLoading={setIsLoading}
-                                                setFinalDeal={setFinalDeal}
-                                                isLoading={isLoading}
-                                                userInfo={userInfo}
-                                                onSetReported={handleSetReported}
-                                                other = {
-                                                    chat.users[0]._id===userInfo._id?
+                                            <>
+                                                <ChatTrade
+                                                    chat={chat}
+                                                    setIsLoading={setIsLoading}
+                                                    setFinalDeal={setFinalDeal}
+                                                    isLoading={isLoading}
+                                                    userInfo={userInfo}
+                                                    onSetReported={handleSetReported}
+                                                    other = {
+                                                        chat.users[0]._id===userInfo._id?
                                                             chat.users[1]
                                                             :
                                                             chat.users[0]
-                                                }
-                                            />
+                                                    }
+                                                />
+                                            </>
+
 
                                             :
                                             ""
@@ -464,30 +475,30 @@ const Chats = (props) => {
                         <div className="right sticky-logos" style={{height: "25px"}}>
                             {!dealt ?
                                 <>
-                                {product ?
-                                    <>
+                                {/*{product ?*/}
+                                {/*    <>*/}
 
-                                        <div className=""
-                                             style={{cursor:"pointer", backgroundColor:"tomato", color:"white", borderRadius:"10px", width:"25px"}}
-                                             data-bs-toggle="modal"
-                                             data-bs-target="#dealUser"
-                                             title={"deal for" + product.name}
-                                        >
-                                            <i className="fa fa-times" title={"deal for "}
-                                               style={{fontSize: "large", marginTop: "5px"}}/>
+                                {/*        <div className=""*/}
+                                {/*             style={{cursor:"pointer", backgroundColor:"tomato", color:"white", borderRadius:"10px", width:"25px"}}*/}
+                                {/*             data-bs-toggle="modal"*/}
+                                {/*             data-bs-target="#dealUser"*/}
+                                {/*             title={"deal for" + product.name}*/}
+                                {/*        >*/}
+                                {/*            <i className="fa fa-times" title={"deal for "}*/}
+                                {/*               style={{fontSize: "large", marginTop: "5px"}}/>*/}
 
-                                        </div>
-                                        <div className=""
-                                             style={{cursor:"pointer", backgroundColor:"#10d685", color:"white", borderRadius:"10px", width:"25px", padding:"3px", marginLeft:"10px"}}
-                                             data-bs-toggle="modal"
-                                             data-bs-target="#prod"
-                                        >
-                                            <i className="fa fa-hand-dots " title="show product" style={{fontSize:"large"}} />
-                                        </div>
-                                    </>
-                                    :
-                                    ""
-                                }
+                                {/*        </div>*/}
+                                {/*        <div className=""*/}
+                                {/*             style={{cursor:"pointer", backgroundColor:"#10d685", color:"white", borderRadius:"10px", width:"25px", padding:"3px", marginLeft:"10px"}}*/}
+                                {/*             data-bs-toggle="modal"*/}
+                                {/*             data-bs-target="#prod"*/}
+                                {/*        >*/}
+                                {/*            <i className="fa fa-hand-dots " title="show product" style={{fontSize:"large"}} />*/}
+                                {/*        </div>*/}
+                                {/*    </>*/}
+                                {/*    :*/}
+                                {/*    ""*/}
+                                {/*}*/}
                                     {post?
                                         <>
 
@@ -518,24 +529,24 @@ const Chats = (props) => {
                                          style={{backgroundColor:"green", color:"white", borderRadius:"10px", width:"25px"}}
                                     ><i className="fa fa-check" style={{fontSize:"large", marginTop:"5px"}}/>
                                     </div>
-                                    {product ?
-                                        <div className="" title={"you already dealt to exchange" + product.name}
-                                             style={{
-                                                 cursor: "pointer",
-                                                 backgroundColor: "#10d685",
-                                                 color: "white",
-                                                 borderRadius: "10px",
-                                                 width: "25px",
-                                                 padding: "3px",
-                                                 marginLeft: "10px"
-                                             }}
-                                             data-bs-toggle="modal"
-                                             data-bs-target="#prod"
-                                        >
-                                            <i className="fa fa-hand-dots " title="show product"
-                                               style={{fontSize: "large"}}/>
-                                        </div>
-                                        : post?
+                                    {/*{product ?*/}
+                                    {/*    <div className="" title={"you already dealt to exchange" + product.name}*/}
+                                    {/*         style={{*/}
+                                    {/*             cursor: "pointer",*/}
+                                    {/*             backgroundColor: "#10d685",*/}
+                                    {/*             color: "white",*/}
+                                    {/*             borderRadius: "10px",*/}
+                                    {/*             width: "25px",*/}
+                                    {/*             padding: "3px",*/}
+                                    {/*             marginLeft: "10px"*/}
+                                    {/*         }}*/}
+                                    {/*         data-bs-toggle="modal"*/}
+                                    {/*         data-bs-target="#prod"*/}
+                                    {/*    >*/}
+                                    {/*        <i className="fa fa-hand-dots " title="show product"*/}
+                                    {/*           style={{fontSize: "large"}}/>*/}
+                                    {/*    </div>*/}
+                                    { post?
                                             <div className="" title={"you already dealt to exchange" + post.title}
                                                  style={{
                                                      cursor: "pointer",
@@ -567,32 +578,32 @@ const Chats = (props) => {
                                     {chatt.users[0]._id===userInfo._id?
 
                                         <div>
-                                            {product ?
-                                            <div style={{backgroundColor:"#b3d4bf", padding:"10px"}}>
-                                                <h2>you have already dealt!</h2>
-                                                <div className="row">
-                                                    <h3 className="col-9">product's location </h3>
-                                                    <div className="col-1">
+                                            {/*{product ?*/}
+                                            {/*<div style={{backgroundColor:"#b3d4bf", padding:"10px"}}>*/}
+                                            {/*    <h2>you have already dealt!</h2>*/}
+                                            {/*    <div className="row">*/}
+                                            {/*        <h3 className="col-9">product's location </h3>*/}
+                                            {/*        <div className="col-1">*/}
 
-                                                        <div
-                                                            style={{cursor:"pointer", backgroundColor:"#2f9fff", color:"white", borderRadius:"10px", width:"25px", padding:"5px"}}
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#map"
-                                                            title={"view location"}
-                                                        >
+                                            {/*            <div*/}
+                                            {/*                style={{cursor:"pointer", backgroundColor:"#2f9fff", color:"white", borderRadius:"10px", width:"25px", padding:"5px"}}*/}
+                                            {/*                data-bs-toggle="modal"*/}
+                                            {/*                data-bs-target="#map"*/}
+                                            {/*                title={"view location"}*/}
+                                            {/*            >*/}
 
-                                                            <i className="fa fa-map-marker" title={"deal for "+product.name} style={{fontSize:"large", marginTop:"5px"}}/>
+                                            {/*                <i className="fa fa-map-marker" title={"deal for "+product.name} style={{fontSize:"large", marginTop:"5px"}}/>*/}
 
-                                                        </div>
+                                            {/*            </div>*/}
 
-                                                    </div>
+                                            {/*        </div>*/}
 
-                                                </div>
-                                                <strong>city: </strong><span>{product.city}</span><br/>
-                                                <strong>region: </strong><span>{product.region}</span>
+                                            {/*    </div>*/}
+                                            {/*    <strong>city: </strong><span>{product.city}</span><br/>*/}
+                                            {/*    <strong>region: </strong><span>{product.region}</span>*/}
 
-                                            </div>
-                                                : post?
+                                            {/*</div>*/}
+                                            { post?
                                                     <div style={{backgroundColor:"#b3d4bf", padding:"10px"}}>
                                                         <h2>you have already dealt!</h2>
                                                         <div className="row">
@@ -631,7 +642,6 @@ const Chats = (props) => {
                         {messages?.sort((a,b)=>b.createdAt - a.createdAt).map((message) => (
                             <Message message={message}/>
                         ))}
-                        {loader}
 
 
 
@@ -729,19 +739,19 @@ const Chats = (props) => {
                  aria-hidden="true">
                 <div className="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
                     <div className="modal-content">
-                                {
-                                    product?
-                                        <div className="modal-header">
-                                            <h5 className="modal-title" id="exampleModalLabel2">Requested Product</h5>
-                                            <div style={{display:"flex", justifyContent:"center", width:"100%"}}>
-                                                <ChatProduct prod={product}/>
-                                            </div>
-                                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                                                <i className="fa-solid fa-xmark"></i>
-                                            </button>
-                                        </div>
-                                        :
-                                        post?
+                                {/*{*/}
+                                {/*    product?*/}
+                                {/*        <div className="modal-header">*/}
+                                {/*            <h5 className="modal-title" id="exampleModalLabel2">Requested Product</h5>*/}
+                                {/*            <div style={{display:"flex", justifyContent:"center", width:"100%"}}>*/}
+                                {/*                <ChatProduct prod={product}/>*/}
+                                {/*            </div>*/}
+                                {/*            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close">*/}
+                                {/*                <i className="fa-solid fa-xmark"></i>*/}
+                                {/*            </button>*/}
+                                {/*        </div>*/}
+                                {/*        :*/}
+                        {post?
 
                                             <div className="modal-header">
                                                 <h5 className="modal-title" id="exampleModalLabel2">Requested Product to trade</h5>
@@ -797,13 +807,13 @@ const Chats = (props) => {
                 <div className="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title" id="exampleModalLabel2">Requested Product</h5>
-                            {
-                                product?
-                                <Mapp
-                                lng={product?product.longitude:36.9007}
-                                lat={product?product.latitude:10.1857}
-                            />:""}
+                            {/*<h5 className="modal-title" id="exampleModalLabel2">Requested Product</h5>*/}
+                            {/*{*/}
+                            {/*    product?*/}
+                            {/*    <Mapp*/}
+                            {/*    lng={product?product.longitude:36.9007}*/}
+                            {/*    lat={product?product.latitude:10.1857}*/}
+                            {/*/>:""}*/}
 
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                 <i className="fa-solid fa-xmark"></i>
@@ -824,4 +834,4 @@ const Chats = (props) => {
     );
 }
 
-export default Chats;
+export default ChatsTrade;

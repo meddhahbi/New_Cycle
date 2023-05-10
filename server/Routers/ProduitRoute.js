@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const products = require('../Models/Produit.js')
+const {createProduct, AllProducts, updateProduit, deleteProduct, getProductById, Product} = require('../Models/Produit.js')
 const multer = require('multer');
 const Sentiment = require('sentiment');
 var mlKnn = require('ml-knn');
@@ -10,6 +11,20 @@ const FormData = require('form-data');
 const axios = require('axios');
 
 
+// Get 6 most recent posts
+router.get('/prods_by_cat/:cat', protect,(req, res) => {
+
+  Product.find({restingQuantity:{$ne:0}, category:req.params.cat})
+      // .populate("association", "name")
+      .then(posts=>{
+        console.log(posts)
+        res.send(posts)
+      })
+      .catch((err)=>{
+        console.log(err)
+        res.status(401)
+      })
+});
 
 
 
@@ -50,12 +65,13 @@ const trainModel = (products, category) => {
 
 router.route('/').post(protect, upload.single('images'), async (req, res) => {
   console.log("req.user")
-  const { name, description, price, category, city, region } = req.body;
+  const { name, description, price, category, stock, city, region, country, latitude, longitude } = req.body;
   const images = req.file.path;
+  console.log(images)
   try {
     let product;
     if (price) {
-      product = await products.createProduct(name, description, price, category, images, city, region, req.user._id);
+      product = await createProduct(name, description, price, category, stock, images, country, city, region, latitude, longitude , req.user._id);
     } else {
       const allProducts = await Product.AllProducts();
       const knn = trainModel(allProducts, category);
@@ -78,7 +94,7 @@ router.route('/').post(protect, upload.single('images'), async (req, res) => {
 router.get('/estimate', async (req, res) => {
   try {
     const { description, category } = req.query;
-    const allProducts = await products.AllProducts();
+    const allProducts = await AllProducts();
     const knn = trainModel(allProducts, category);
     const sentiment = new Sentiment();
     const { score } = sentiment.analyze(description);
@@ -99,7 +115,7 @@ router.get('/estimate', async (req, res) => {
 router.delete('/:id', (req, res) => {
   const productId = req.params.id;
 
-  products.deleteProduct(productId)
+  deleteProduct(productId)
       .then(() => {
         res.status(200).json({
           success: true,
@@ -120,7 +136,7 @@ router.delete('/:id', (req, res) => {
 router.put('/:id', upload.single('images'), (req, res, next) => {
   //const images = req.file.path;
   console.log("upd")
-  products.updateProduit(req.params.id, req.body.name, req.body.description, req.body.price, req.body.category,{new:true})
+  updateProduit(req.params.id, req.body.name, req.body.description, req.body.price, req.body.category,{new:true})
       .then((product) => res.status(200).json({
         product: product,
         msg: 'Product updated successfully'
@@ -129,16 +145,18 @@ router.put('/:id', upload.single('images'), (req, res, next) => {
 });
 
 router.get('/', (req, res, next) => {
-  products.AllProducts()
+  AllProducts()
       .then((products) => res.status(200).json({ products: products }))
       .catch((err) => res.status(400).json({ error: err }));
 });
 
 
 
+
+
 // Get all products
 router.get('/all', (req, res, next) => {
-  products.AllProducts()
+  AllProducts()
       .then((products) => res.status(200).json({ products: products }))
       .catch((err) => res.status(400).json({ error: err }));
 });
@@ -147,7 +165,7 @@ router.get('/all', (req, res, next) => {
 router.get('/:id', (req, res, next) => {
   const productId = req.params.id;
 
-  products.getProductById(productId)
+  getProductById(productId)
       .then((product) => res.status(200).json({ product: product }))
       .catch((err) => res.status(400).json({ error: err }));
 });

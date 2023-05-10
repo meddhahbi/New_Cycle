@@ -8,6 +8,8 @@ const CreateProduct = () => {
   const [category, setCategory] = useState("");
   const [images, setImages] = useState("");
   const [manualPrice, setManualPrice] = useState(null);
+  const [stock, setStock] = useState("");
+  const [categories, setCategories] = useState([]);
   const [created, setCreated] = useState(false);
   const [city, setCity] = useState("");
   const getLocation = async () => {
@@ -24,23 +26,38 @@ const CreateProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const location = await axios.get("https://ipapi.co/json");
+    const formData = new FormData();
+    // setTimeout(async ()=>{
+
+    const location = await axios.get("https://ipapi.co/json").then(loc=>{
+      console.log(loc)
+    });
     console.log(location)
     let city = location ? location.data.city : "tunis"
+    let country = location ? location.data.country_name : "tunisia"
     let region = location ? location.data.region : "el ghazala"
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("description", description);
-    formData.append("price", manualPrice !== null ? manualPrice : price || 0); // add a default value of 0 for price
-    formData.append("category", category);
-    formData.append("city", city);
-    formData.append("region", region);
+    let latitude = location ? location.data.latitude : 36.8232
+    let longitude = location ? location.data.longitude : 10.1701
+
+      formData.append("name", name);
+      formData.append("description", description);
+      formData.append("price", manualPrice !== null ? manualPrice : price || 0); // add a default value of 0 for price
+      formData.append("category", category);
+      formData.append("country", country);
+      formData.append("city", city);
+      formData.append("region", region);
+      formData.append("latitude", latitude);
+      formData.append("longitude", longitude);
+      formData.append("stock", stock);
 
       formData.append("images", images);
-    
+    // }, 2000)
+
     try {
-      const res = await axios.post("http://localhost:3001/produit", formData, config);
-      console.log(res.data);
+
+        const res = await axios.post("http://localhost:3001/produit", formData, config);
+        console.log(res.data);
+
       setCreated(true);
       window.location.href = "AllProduit";
     } catch (err) {
@@ -59,9 +76,9 @@ const CreateProduct = () => {
 
   const handleCategoryChange = (e) => {
     setCategory(e.target.value);
-    if (manualPrice !== null) {
-      setManualPrice(null);
-    }
+    // if (manualPrice !== null) {
+    //   setManualPrice(null);
+    // }
   };
 
 
@@ -70,8 +87,17 @@ const CreateProduct = () => {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
 };
+  const getCats=()=> {
+    fetch(`http://localhost:3001/category/`)
+        .then(res => res.json())
+        .then(data => {
+          setCategories(data)
+          // console.log(data);
+        })
+  }
 
   useEffect(() => {
+    getCats()
     const fetchPrice = async () => {
       try {
         const res = await axios.get("http://localhost:3001/produit/estimate", {
@@ -135,20 +161,29 @@ const CreateProduct = () => {
       )}
     </div>
   
-    <div className="mb-3">
-      <label htmlFor="category" className="form-label">Category</label>
-      <select
-        className="form-select"
-        id="category"
-        value={category}
-        onChange={handleCategoryChange}
-      >
-        <option value="">Select a category</option>
-        <option value="electronics">Electronics</option>
-        <option value="clothing">Clothing</option>
-        <option value="books">Books</option>
+    {/*<div className="mb-3">*/}
+    {/*  <label htmlFor="category" className="form-label">Category</label>*/}
+    {/*  <select*/}
+    {/*    className="form-select"*/}
+    {/*    id="category"*/}
+    {/*    value={category}*/}
+    {/*    onChange={handleCategoryChange}*/}
+    {/*  >*/}
+    {/*    <option value="">Select a category</option>*/}
+    {/*    <option value="electronics">Electronics</option>*/}
+    {/*    <option value="clothing">Clothing</option>*/}
+    {/*    <option value="books">Books</option>*/}
+    {/*  </select>*/}
+    {/*</div>*/}
+      <select name="" id="" className="form-control" value={category} onChange={handleCategoryChange}>
+        <option value="" disabled>select a category</option>
+        {categories.map(
+            (c) => (
+                <option value={c._id}
+                        className="dropdown-item">{c.name}</option>
+            )
+        )}
       </select>
-    </div>
   
     {manualPrice && (
       <div className="mb-3">
@@ -176,6 +211,16 @@ const CreateProduct = () => {
         </div>
       </div>
     )}
+      <div className="mb-3">
+        <label htmlFor="name" className="form-label">Stock</label>
+        <input
+            type="number"
+            className="form-control"
+            id="name"
+            value={stock}
+            onChange={(e) => setStock(e.target.value)}
+        />
+      </div>
   
     <div className="mb-3">
       <label htmlFor="images" className="form-label">Photo</label>

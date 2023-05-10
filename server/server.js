@@ -8,6 +8,7 @@ const messageRoute = require('./Routers/Chat/MessageRoute');
 const reportUserRoute = require('./Routers/Report/ReportUserRoute');
 const reportUserDetailRoute = require('./Routers/Report/ReportUserDetailRoute');
 const associationRoute = require('./Routers/AssociationRoute')
+const categoryRoute = require('./Routers/CategoryRoute')
 const associationPostRoute = require('./Routers/AssociationPostRoute')
 var cors = require('cors');
 const passport = require("passport");
@@ -60,6 +61,7 @@ connection();
 
 app.use('/',userRoute);
 app.use('/association',associationRoute);
+app.use('/category',categoryRoute);
 
 
 app.use(passport.initialize());

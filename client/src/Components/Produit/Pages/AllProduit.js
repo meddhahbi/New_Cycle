@@ -8,7 +8,7 @@ function AllProducts() {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [pageNumber, setPageNumber] = useState(0);
-  const productsPerPage = 6;
+  const productsPerPage = 3;
   const pagesVisited = pageNumber * productsPerPage;
   const location = useLocation().pathname
 
@@ -74,97 +74,10 @@ function AllProducts() {
   const displayProducts = searchResults
       .slice(pagesVisited, pagesVisited + productsPerPage)
       .map((product) => (
-          // <div key={product._id} className="card" style={{ display: 'inline-block', width: '300px', margin: '10px' }}>
-          //   {product.images && (
-          //       <img
-          //           className="card-img-top"
-          //           src={`http://localhost:3001/${product.images}`}
-          //           alt={product.name}
-          //           width="300"
-          //           height="300"
-          //       />
-          //   )}
-          //   <div className="card-body">
-          //     <h5 className="card-title">{product.name}</h5>
-          //     <p className="card-text">{product.description}</p>
-          //     <h6 className="card-subtitle mb-2 text-muted">
-          //       {product.price}DT
-          //     </h6>
-          //     <p className="card-text">{product.category}</p>
-          //     <button
-          //         className="btn btn-success"
-          //         data-toggle="modal"
-          //         data-target={`#product-${product._id}`}
-          //     >
-          //       Voir détails
-          //     </button>
-          //   </div>
-          //
-          //   <div
-          //       className="modal fade"
-          //       id={`product-${product._id}`}
-          //       tabIndex="-1"
-          //       role="dialog"
-          //       aria-labelledby={`product-${product._id}-label`}
-          //       aria-hidden="true"
-          //   >
-          //     <div className="modal-dialog" role="document">
-          //       <div className="modal-content">
-          //         <div className="modal-header">
-          //           <h5 className="modal-title" id={`product-${product._id}-label`}>
-          //             {product.name}
-          //           </h5>
-          //           <button
-          //               type="button"
-          //               className="close"
-          //               data-dismiss="modal"
-          //               aria-label="Close"
-          //           >
-          //             <span aria-hidden="true">&times;</span>
-          //           </button>
-          //         </div>
-          //         <div className="modal-body">
-          //           <img
-          //               className="img-fluid mb-3"
-          //               src={`http://localhost:3001/${product.images}`}
-          //               alt={product.name}
-          //               width="500"
-          //               height="500"
-          //           />
-          //           <p>{product.description}</p>
-          //           <p>Prix: {product.price}DT</p>
-          //           <p>Catégorie: {product.category}</p>
-          //         </div>
-          //         <div className="modal-footer">
-          //           <button
-          //               type="button"
-          //               className="btn btn-success"
-          //               data-dismiss="modal"
-          //           >
-          //             Fermer
-          //           </button>
-          //           <button
-          //               type="button"
-          //               className="btn btn-success"
-          //               onClick={() => updateProduct(product._id)}
-          //           >
-          //             Modifier
-          //           </button>
-          //           <button
-          //               type="button"
-          //               className="btn btn-danger"
-          //               onClick={() => deleteProduct(product._id)}
-          //
-          //           >
-          //             Supprimer
-          //           </button>
-          //         </div>
-          //       </div>
-          //     </div>
-          //   </div>
-          // </div>
+
           <Prod
           product={product}
+          cat={product.cat}
           products={products}
           setProducts={setProducts}
           />
@@ -216,7 +129,7 @@ function AllProducts() {
           </div>
         </section>
 
-        <div className="card-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>{displayProducts}</div>
+        <div className="card-container con" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>{displayProducts}</div>
         <button className="btn btn-success" onClick={() => CreateProduct()}>new</button>
         <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
           <ReactPaginate
