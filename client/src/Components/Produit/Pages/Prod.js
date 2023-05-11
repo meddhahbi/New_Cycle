@@ -1,6 +1,7 @@
 
 import React from 'react';
 import axios from "axios";
+import {isLoggedIn} from "../../../AuthGuard";
 
 function Prod(props) {
     const {product, cat, products, setProducts} = props;
@@ -76,12 +77,19 @@ function Prod(props) {
                 >
                     Voir détails
                 </button>
-                {product.productOwner._id !== userInfo._id?
+                {isLoggedIn()?
+                    <>
+                        {product.productOwner._id !== userInfo._id?
 
-                    <i className="fa fa-comment-dots" style={{marginLeft: "20px", color:"#00835a", fontSize:"xx-large", cursor:"pointer"}} onClick={sendMessage}/>
-                    :
+                            <i className="fa fa-comment-dots" style={{marginLeft: "20px", color:"#00835a", fontSize:"xx-large", cursor:"pointer"}} onClick={sendMessage}/>
+                            :
+                            ""
+                        }
+                    </>:
                     ""
                 }
+
+
             </div>
 
             <div

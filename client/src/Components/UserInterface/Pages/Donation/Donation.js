@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
+import {isLoggedIn} from "../../../../AuthGuard";
+import {Link} from "react-router-dom";
 
 
 function Donationn(props) {
@@ -111,11 +113,15 @@ function Donationn(props) {
                         </div>
                         <div style={{display:"flex"}}>
 
-                            <button
+                            {isLoggedIn()?<button
                                 className="blog-button"
                                 data-bs-toggle="modal"
                                 data-bs-target={"#donate"} onClick={handleDonate}>Donate
-                                <i className="fa-solid fa-right-long"/></button>
+                                <i className="fa-solid fa-right-long"/></button>:
+                                <Link
+                                    className="blog-button" to="/login">Login To Donate
+                                    <i className="fa-solid fa-right-long"/></Link>
+                            }
                         </div>
                     </div>
                 </div>

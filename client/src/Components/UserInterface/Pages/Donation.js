@@ -5,6 +5,7 @@ import Donationn from "./Donation/Donation";
 import ChatProduct from "./Chat/Item/ChatProduct";
 import Don from "./Donation/Don";
 import "./Donation/style.css"
+import {isLoggedIn} from "../../../AuthGuard";
 
 
 
@@ -25,23 +26,31 @@ export default function Donation(){
         setTimeout(()=>setIsLoading(false), 1500);
     })
 
+    const getArticles= async  ()=>{
+        await fetch(`http://localhost:3001/association/articles`)
+            .then(res => res.json() )
+            .then(data =>{ setArticles(data)
+                // console.log(data);
+                return data;
+                // console.log(data.data.data.quantity)
+
+                //    setQuantity(data.quantity)
+            })
+            .catch(error => console.log(error));
+    }
+
 
     useEffect(() => {
-    
-        fetch(`http://localhost:3001/association/articles`)
-          .then(res => res.json() )
-          .then(data =>{ setArticles(data)
-            console.log(data);
-           // console.log(data.data.data.quantity)
 
-    //    setQuantity(data.quantity)
-    })
-          .catch(error => console.log(error));
+        getArticles().then()
+
+    
+
 
         fetch(`http://localhost:3001/category/`)
           .then(res => res.json() )
           .then(data =>{
-              setCategories(data)
+              setCategories(data.cats)
             console.log(data);
            // console.log(data.data.data.quantity)
 
@@ -63,7 +72,7 @@ export default function Donation(){
 
 
     const getByCat=(_id)=> {
-        return undefined;
+        localStorage.setItem()
     }
 
     let handCat = (data)=>{
@@ -91,16 +100,16 @@ export default function Donation(){
                             <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <a className="dropdown-item" href="#">All</a>
                                 <p style={{marginLeft:"5px"}}>categories:</p>
-                                {/*{!categories?*/}
-                                {/*    <h3>No Categories</h3>:*/}
-                                {/*    <>*/}
-                                {/*        {categories && categories.map(*/}
-                                {/*            (c)=>(*/}
-                                {/*                <a onClick={()=>getByCat(c._id)} className="dropdown-item" href="#">{c.name}</a>*/}
-                                {/*            )*/}
-                                {/*        )}*/}
-                                {/*    </>*/}
-                                {/*}*/}
+                                {!categories?
+                                    <h3>No Categories</h3>:
+                                    <>
+                                        {categories && categories.map(
+                                            (c)=>(
+                                                <a onClick={()=>getByCat(c._id)} className="dropdown-item" href="#">{c.name}</a>
+                                            )
+                                        )}
+                                    </>
+                                }
                                 {/*<a className="dropdown-item" href="#">Action</a>*/}
                                 {/*<a className="dropdown-item" href="#">Another action</a>*/}
                                 {/*<a className="dropdown-item" href="#">Something else here</a>*/}
@@ -258,7 +267,7 @@ export default function Donation(){
          aria-labelledby="exampleModalLabel2"
          aria-hidden="true">
         <div className="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
-            <Don post={post} cat={cat} products={products}/>
+            {isLoggedIn()?<Don post={post} cat={cat} products={products}/>:""}
         </div>
     </div>
     </section>
